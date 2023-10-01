@@ -1,0 +1,67 @@
+name: note
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  #ui库
+  getwidget: ^4.0.0
+  #视频组件
+  media_kit: ^1.1.8                              # Primary package.
+  media_kit_video: ^1.2.0                        # For video rendering.
+  media_kit_libs_video: ^1.0.3                   # Native video dependencies.
+  #markdown组件
+  flutter_markdown: ^0.6.17+2
+  #路由组件
+  get: ^4.6.5
+  #webview组件
+  #  webview_flutter: ^4.2.3
+  #持久化组件
+  shared_preferences: ^2.2.1
+  #路径组件
+  path_provider: ^2.1.0
+  #文件选择
+  file_picker: ^5.3.4
+
+  # 国际化
+  flutter_localizations:
+    sdk: flutter
+  #权限组件
+  permission_handler: ^11.0.0
+  #吐司
+  fluttertoast: ^8.2.2
+  #分享
+  share_plus: ^7.1.0
+  #设备信息
+  device_info_plus: ^9.0.3
+  #日志
+  logger: ^2.0.1
+
+  url_launcher: ^6.1.12
+  #崩溃信息
+#  sentry_flutter: ^7.9.0
+  #悬浮按钮
+  flutter_speed_dial: ^7.0.0
+  #弹窗
+  # awesome_dialog: ^3.1.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+#  json_serializable: ^6.7.1
+flutter:
+
+  uses-material-design: true
+flutter_intl:
+  enabled: true
+
