@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+
+import 'package:note/pages/home/index.dart';
 import 'package:note/pages/main/controller.dart';
-import 'package:note/pages/main/widgets/main_float_btn.dart';
+
+import 'package:note/pages/home/widgets/home_float_btn.dart';
+import 'package:note/pages/my/controller.dart';
+import 'package:note/pages/my/index.dart';
+import 'package:note/pages/videonote/index.dart';
 
 class MainShow extends GetView<MainController> {
   MainShow({Key? key}) : super(key: key);
+  //必须在此注册子视图的控制器否则会有null异常
+  final HomeController homeController = Get.put(HomeController());
+  final MyController myController = Get.put(MyController());
 
-  final List<Widget> viewList = [
-    Text('1111'),
-    Text('6666'),
-  ];
+  final List<Widget> viewList = [HomePage(), MyPage()];
 
   final List<BottomNavigationBarItem> navigationBarItemList = [
     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'.tr),
-    BottomNavigationBarItem(icon: Icon(Icons.mail), label: 'my'.tr),
+    BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'my'.tr),
   ];
 
   @override
@@ -27,10 +32,6 @@ class MainShow extends GetView<MainController> {
             onTap: (index) => {
               controller.state.pageIndex = index,
             },
-          )),
-      floatingActionButton: Obx(() => Visibility(
-            visible: controller.state.pageIndex == 0,
-            child: MainFloatBtn(),
           )),
     );
   }
