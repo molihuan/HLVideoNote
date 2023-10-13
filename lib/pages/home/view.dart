@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:note/pages/main/widgets/main_show.dart';
+import 'package:note/pages/home/widgets/home_show.dart';
 
 import 'index.dart';
+import 'widgets/widgets.dart';
 
-class MainPage extends GetView<MainController> {
-  const MainPage({Key? key}) : super(key: key);
+class HomePage extends GetView<HomeController> {
+  const HomePage({Key? key}) : super(key: key);
 
   // 主视图
   Widget _buildView() {
-    return MainShow();
+    return HomeShow();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MainController>(
+    return GetBuilder<HomeController>(
       builder: (_) {
         return Scaffold(
           body: SafeArea(

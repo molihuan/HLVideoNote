@@ -3,6 +3,7 @@
 part of 'app_pages.dart';
 
 abstract class AppRoutes {
+  static const Main = '/main';
   static const Home = '/home';
   static const VideoNote = '/videonote';
 }
