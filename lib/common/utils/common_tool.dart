@@ -27,26 +27,26 @@ class CommonTool {
   /**
    * 保存图片
    */
-  static Future<bool> saveImage(
+  static Future<String?> saveImage(
       Uint8List? imageBytes, String path, String fileName) async {
     if (imageBytes == null) {
       print("imageBytes is null");
-      return false;
+      return null;
     }
     // 获取图片保存目录
     Directory directory = Directory(path);
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
     }
-
-    File imageFile = File(path + fileName);
+    String absolutePath = path + fileName;
+    File imageFile = File(absolutePath);
 
     try {
       await imageFile.writeAsBytes(imageBytes); // 将图片数据写入文件
-      return true; // 返回保存的图片路径
+      return absolutePath; // 返回保存的图片路径
     } catch (e) {
       print('保存图片出错：$e');
-      return false;
+      return null;
     }
   }
 }
