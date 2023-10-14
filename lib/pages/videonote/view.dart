@@ -34,6 +34,7 @@ class VideoNotePage extends GetView<VideoNoteController> {
     return GetBuilder<VideoNoteController>(
       builder: (_) {
         return Scaffold(
+          appBar: AppBar(),
           body: SafeArea(
             child: _buildView(),
           ),

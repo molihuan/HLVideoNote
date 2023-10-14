@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:note/common/utils/permission_tool.dart';
 
 import 'index.dart';
 
@@ -25,6 +26,8 @@ class MainController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    //申请权限
+    PermissionTool.requestStoragePermission();
   }
 
   /// 在 [onDelete] 方法之前调用。

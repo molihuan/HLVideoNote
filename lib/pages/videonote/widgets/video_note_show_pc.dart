@@ -25,6 +25,7 @@ class VideoNoteShowPC extends BaseVideoNoteShow {
                 flex: (controller.dividerPosition * 100).round(),
                 child: VideoArea(),
               ),
+              //中间线
               GestureDetector(
                 onHorizontalDragUpdate: (details) {
                   controller.updateDividerPosition(
