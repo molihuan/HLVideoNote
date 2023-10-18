@@ -10,7 +10,7 @@ class MyPage extends GetView<MyController> {
 
   // 主视图
   Widget _buildView() {
-    return DragDividerPage();
+    return HelloWidget();
   }
 
   @override
