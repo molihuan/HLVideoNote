@@ -18,31 +18,29 @@ class VideoNoteShowPC extends BaseVideoNoteShow {
   Widget build(BuildContext context) {
     return GetBuilder<VideoNoteController>(
       builder: (controller) {
-        return Expanded(
-          child: Row(
-            children: [
-              Expanded(
-                flex: (controller.dividerPosition * 100).round(),
-                child: VideoArea(),
+        return Row(
+          children: [
+            Expanded(
+              flex: (controller.dividerPosition * 100).round(),
+              child: VideoArea(),
+            ),
+            //中间线
+            GestureDetector(
+              onHorizontalDragUpdate: (details) {
+                controller.updateDividerPosition(
+                    details.delta.dx / context.size!.width);
+                controller.update();
+              },
+              child: Container(
+                width: 4.0,
+                color: Colors.grey,
               ),
-              //中间线
-              GestureDetector(
-                onHorizontalDragUpdate: (details) {
-                  controller.updateDividerPosition(
-                      details.delta.dx / context.size!.width);
-                  controller.update();
-                },
-                child: Container(
-                  width: 4.0,
-                  color: Colors.grey,
-                ),
-              ),
-              Expanded(
-                flex: ((1 - controller.dividerPosition) * 100).round(),
-                child: NoteArea(),
-              ),
-            ],
-          ),
+            ),
+            Expanded(
+              flex: ((1 - controller.dividerPosition) * 100).round(),
+              child: NoteArea(),
+            ),
+          ],
         );
       },
     );

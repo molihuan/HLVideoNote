@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_drawing_board/flutter_drawing_board.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:getwidget/components/radio_list_tile/gf_radio_list_tile.dart';
@@ -21,6 +22,14 @@ class _MyAccordionState extends State<HelloWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column();
+    return DrawingBoard(
+      background: Container(width: 400, height: 400, color: Colors.white),
+      showDefaultActions: true,
+
+      /// 开启默认操作选项
+      showDefaultTools: true,
+
+      /// 开启默认工具栏
+    );
   }
 }
