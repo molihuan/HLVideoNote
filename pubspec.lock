@@ -161,6 +161,22 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
+  extended_image:
+    dependency: "direct main"
+    description:
+      name: extended_image
+      sha256: e77d18f956649ba6e5ecebd0cb68542120886336a75ee673788145bd4c3f0767
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "8.0.2"
+  extended_image_library:
+    dependency: transitive
+    description:
+      name: extended_image_library
+      sha256: af3ff1c09c23ca7663f94272313d63499a6bd19121e99378e375e0cf2ac7a3e4
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.5.2"
   fake_async:
     dependency: transitive
     description:
@@ -437,6 +453,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.13.6"
+  http_client_helper:
+    dependency: transitive
+    description:
+      name: http_client_helper
+      sha256: "14c6e756644339f561321dab021215475ba4779aa962466f59ccb3ecf66b36c3"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.4"
   http_parser:
     dependency: transitive
     description:

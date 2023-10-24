@@ -7,10 +7,10 @@ class HomeState {
   final _title = "".obs;
   set title(value) => _title.value = value;
   get title => _title.value;
-  // 创建视频笔记单选类型
-  final _videoTypeGroupValue = Object().obs;
-  set videoTypeGroupValue(value) => _videoTypeGroupValue.value = value;
-  get videoTypeGroupValue => _videoTypeGroupValue.value;
+  // 创建视频笔记类型
+  final _videoType = Object().obs;
+  set videoType(value) => _videoType.value = value;
+  get videoType => _videoType.value;
   // noteDataList
   final _noteDataList = <NoteData>[].obs;
   set noteDataList(value) => _noteDataList.value = value;

@@ -15,36 +15,21 @@ enum VideoSourceType { LOCAL, NETWORK }
 class CreateNoteVideoDialog extends GetView<HomeController> {
   CreateNoteVideoDialog({Key? key}) : super(key: key) {}
 
+  final controller = Get.find<HomeController>();
+
+  VideoSourceType videoSourceType = VideoSourceType.LOCAL;
+
   final localExpansionTileController = ExpansionTileController();
   final networkExpansionTileController = ExpansionTileController();
 
-  TextEditingController editingController = TextEditingController();
-  TextEditingController noteSavePathEditController = TextEditingController();
-
-  final controller = Get.find<HomeController>();
-
   String? videoPath;
-  String? url;
+  String? videoUrl;
 
-  void _select({VideoSourceType videoSourceType = VideoSourceType.LOCAL}) {
-    switch (videoSourceType) {
-      case VideoSourceType.LOCAL:
-        localExpansionTileController.expand();
-        networkExpansionTileController.collapse();
-
-        break;
-      case VideoSourceType.NETWORK:
-        networkExpansionTileController.expand();
-        localExpansionTileController.collapse();
-        break;
-      default:
-        localExpansionTileController.expand();
-        networkExpansionTileController.collapse();
-    }
-    editingController.text = "";
-    controller.state.videoTypeGroupValue = videoSourceType;
-    controller.update();
-  }
+  final TextEditingController noteNameEditController = TextEditingController();
+  final TextEditingController noteSavePathEditController =
+      TextEditingController();
+  final TextEditingController videoPathEditController = TextEditingController();
+  final TextEditingController videoUrlEditController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +37,16 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
       title: Text('创建视频笔记'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "笔记设置",
-            style: TextStyle(color: Colors.blue, fontSize: 18),
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              "笔记设置",
+              style: TextStyle(color: Colors.blue, fontSize: 18),
+            ),
           ),
           SafeArea(
-            minimum: EdgeInsets.all(10),
+            // minimum: EdgeInsets.all(10),
             child: Column(
               children: [
                 Padding(
@@ -71,7 +58,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                         borderSide: BorderSide(width: 1, color: Colors.grey),
                       ),
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 3, vertical: 0),
+                          EdgeInsets.symmetric(horizontal: 3, vertical: 1),
                       labelText: "笔记名称",
                     ),
                   ),
@@ -109,109 +96,82 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
               ],
             ),
           ),
-          Text(
-            "视频来源",
-            style: TextStyle(color: Colors.blue, fontSize: 18),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              "视频来源",
+              style: TextStyle(color: Colors.blue, fontSize: 18),
+            ),
           ),
-          GetBuilder<HomeController>(
-            builder: (controller) {
-              return RadioListTile(
-                value: VideoSourceType.LOCAL,
-                groupValue: controller.state.videoTypeGroupValue,
-                onChanged: (value) {
-                  print(value);
-                  _select(videoSourceType: value as VideoSourceType);
-                },
-                title: ExpansionTile(
-                  title: Text(
-                    '本地',
+          ExpansionTile(
+            title: Text('本地'),
+            trailing: SizedBox.shrink(),
+            controller: localExpansionTileController,
+            initiallyExpanded: videoSourceType == VideoSourceType.LOCAL,
+            onExpansionChanged: (value) {
+              if (value) {
+                networkExpansionTileController.collapse();
+                controller.state.videoType = VideoSourceType.LOCAL;
+                videoSourceType = VideoSourceType.LOCAL;
+              }
+            },
+            children: [
+              GFTextField(
+                controller: videoPathEditController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(width: 1, color: Colors.grey),
                   ),
-                  children: [
-                    Container(
-                      width: 200,
-                      child: GFTextField(
-                        controller: editingController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 1, color: Colors.grey),
-                          ),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 3, vertical: 0),
-                          hintText: '视频路径',
-                        ),
-                      ),
-                    ),
-                    GFButton(
-                      text: "选择",
-                      size: GFSize.SMALL,
-                      onPressed: () async {
-                        // 选择本地视频文件
-                        FilePickerResult? result =
-                            await FilePicker.platform.pickFiles();
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 3, vertical: 0),
+                  hintText: '视频路径',
+                ),
+              ),
+              GFButton(
+                text: "选择",
+                size: GFSize.SMALL,
+                onPressed: () async {
+                  // 选择本地视频文件
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles();
 
-                        if (result != null) {
-                          PlatformFile file = result.files.first;
-                          print('文件路径： ${file.path}');
-                          editingController.text = file.path ?? "";
-                        } else {
-                          // 用户取消了选择文件操作
-                        }
-                      },
-                    )
-                  ],
-                  trailing: SizedBox.shrink(),
-                  controller: localExpansionTileController,
-                  onExpansionChanged: (value) {
-                    if (value) {
-                      _select(videoSourceType: VideoSourceType.LOCAL);
-                    }
-                  },
-                ),
-              );
-            },
-          ),
-          GetBuilder<HomeController>(
-            builder: (controller) {
-              return RadioListTile(
-                value: VideoSourceType.NETWORK,
-                groupValue: controller.state.videoTypeGroupValue,
-                onChanged: (value) {
-                  print(value);
-                  _select(videoSourceType: value as VideoSourceType);
+                  if (result != null) {
+                    PlatformFile file = result.files.first;
+                    print('文件路径： ${file.path}');
+                    videoPathEditController.text = file.path ?? "";
+                  } else {
+                    // 用户取消了选择文件操作
+                  }
                 },
-                title: ExpansionTile(
-                  title: Text(
-                    '网络',
-                  ),
-                  children: [
-                    Container(
-                      width: 200,
-                      child: GFTextField(
-                        controller: editingController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 1, color: Colors.grey),
-                          ),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 3, vertical: 0),
-                          hintText: '视频地址',
-                        ),
-                      ),
-                    ),
-                  ],
-                  trailing: SizedBox.shrink(),
-                  controller: networkExpansionTileController,
-                  onExpansionChanged: (value) {
-                    if (value) {
-                      _select(videoSourceType: VideoSourceType.NETWORK);
-                    }
-                  },
-                ),
-              );
+              )
+            ],
+          ),
+          ExpansionTile(
+            title: Text('网络'),
+            trailing: SizedBox.shrink(),
+            controller: networkExpansionTileController,
+            initiallyExpanded: videoSourceType == VideoSourceType.NETWORK,
+            onExpansionChanged: (value) {
+              if (value) {
+                localExpansionTileController.collapse();
+                controller.state.videoType = VideoSourceType.NETWORK;
+                videoSourceType = VideoSourceType.NETWORK;
+              }
             },
-          )
+            children: [
+              GFTextField(
+                controller: videoUrlEditController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(width: 1, color: Colors.grey),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 3, vertical: 0),
+                  hintText: '视频地址',
+                ),
+              ),
+            ],
+          ),
         ],
       ),
       actions: <Widget>[
@@ -221,8 +181,10 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
 
             //视频类型、视频路径或地址
             Get.toNamed(AppRoutes.VideoNote, arguments: {
-              'videoType': controller.state.videoTypeGroupValue,
-              'videoSource': editingController.text
+              'videoType': videoSourceType,
+              'videoSource': videoSourceType == VideoSourceType.LOCAL
+                  ? videoPathEditController.text
+                  : videoUrlEditController.text
             });
           },
           child: Text('创建'),

@@ -6,7 +6,7 @@ import 'package:note/common/langs/translation_service.dart';
 import 'common/routes/app_pages.dart';
 
 Future<void> main() async {
-  // 初始化 GetX
+  // 插件初始化
   WidgetsFlutterBinding.ensureInitialized();
   // Necessary initialization for package:media_kit.
   MediaKit.ensureInitialized();

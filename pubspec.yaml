@@ -63,7 +63,9 @@ dependencies:
   #白板工具
   flutter_drawing_board: ^0.5.0
   # 图片工具
-  # extended_image: ^8.1.1
+  extended_image: 8.0.2
+  # image_editor: any
+  # photo_manager: any
 
 
 dev_dependencies:
