@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:note/common/utils/file_tool.dart';
 import 'package:note/pages/my/ImageGestureResize.dart';
 import 'package:note/pages/my/widgets/DragDividerPage.dart';
 import 'package:note/pages/my/widgets/ext.dart';
@@ -13,7 +14,7 @@ class MyPage extends GetView<MyController> {
 
   // 主视图
   Widget _buildView() {
-    return Text("555");
+    return Text("66");
   }
 
   @override
