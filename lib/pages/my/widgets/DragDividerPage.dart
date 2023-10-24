@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//可以拖拽的布局
 class DragDividerPage extends StatefulWidget {
   @override
   _DragDividerPageState createState() => _DragDividerPageState();

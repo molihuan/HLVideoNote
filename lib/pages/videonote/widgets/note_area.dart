@@ -13,11 +13,16 @@ class NoteArea extends GetView<VideoNoteController> {
   final controller = Get.find<VideoNoteController>();
   late final quillController = controller.quillController;
   late final quillEditor = controller.quillEditor;
-  late final quillToolbar = controller.quillToolbar;
+  late final quillToolbar;
 
   @override
   Widget build(BuildContext context) {
+    initData(context);
     return buildQuillView();
+  }
+
+  void initData(BuildContext context) {
+    quillToolbar = controller.buildQuillToolbar(context);
   }
 
   Widget buildQuillView() {

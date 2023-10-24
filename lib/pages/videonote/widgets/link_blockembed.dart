@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:getwidget/getwidget.dart';
+import 'package:note/pages/my/ImageGestureResize.dart';
 
+//使用时必须在QuillEditor的embedBuilders中注册
 class LinkBlockEmbed extends Embeddable {
   LinkBlockEmbed({
     required this.editValue,
@@ -48,7 +50,7 @@ class LinkEmbedBuilder extends EmbedBuilder {
   ) {
     return Row(
       children: [
-        const Icon(Icons.access_time_rounded),
+        Icon(Icons.access_time_rounded),
         GestureDetector(
           onTap: () {
             print(node.value.data[LinkBlockEmbed.editValueKey] as String);
