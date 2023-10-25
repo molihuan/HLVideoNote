@@ -1,12 +1,10 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/common/routes/app_pages.dart';
+import 'package:note/common/utils/file_tool.dart';
 
 import '../index.dart';
 
@@ -52,7 +50,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: GFTextField(
-                    controller: TextEditingController(),
+                    controller: noteNameEditController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderSide: BorderSide(width: 1, color: Colors.grey),
@@ -178,14 +176,28 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
+            //创建笔记文件
+            String noteSavePath = noteSavePathEditController.text;
+            String noteNameNoSuffix = noteNameEditController.text;
 
+            // String? noteFilePath =
+            //     FileTool.createNoteProjectFile(noteSavePath, noteNameNoSuffix);
+
+            // if (noteFilePath != null) {
             //视频类型、视频路径或地址
             Get.toNamed(AppRoutes.VideoNote, arguments: {
               'videoType': videoSourceType,
               'videoSource': videoSourceType == VideoSourceType.LOCAL
                   ? videoPathEditController.text
-                  : videoUrlEditController.text
+                  : videoUrlEditController.text,
+              'noteFilePath': null,
             });
+            // } else {
+            //   print("hl  创建笔记工程失败");
+            //   Fluttertoast.showToast(
+            //     msg: "创建笔记工程失败",
+            //   );
+            // }
           },
           child: Text('创建'),
         ),

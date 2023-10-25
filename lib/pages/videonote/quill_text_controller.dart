@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_quill_extensions/shims/dart_ui_real.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:note/common/utils/file_tool.dart';
 import 'package:note/pages/home/widgets/create_note_video_dialog.dart';
 import 'package:note/pages/videonote/controller.dart';
 import 'package:note/pages/videonote/insert_image_dialog.dart';
@@ -43,7 +45,7 @@ class QuillTextController {
   // );
 
   //创建富文本控制器
-  late final QuillController quillController = QuillController.basic();
+  late QuillController quillController = QuillController.basic();
 
   final FocusNode _focusNode = FocusNode();
 
@@ -52,6 +54,26 @@ class QuillTextController {
 
   VideoPlayerController getVideoPlayerController() {
     return videoNoteController.videoPlayerController;
+  }
+
+  /**
+   * 加载笔记数据
+   */
+  void loadNoteFileData(String noteFilePath) {
+    final noteFile = File(noteFilePath);
+    try {
+      // final result = await rootBundle.loadString(isDesktop()
+      //     ? 'assets/sample_data_nomedia.json'
+      //     : 'assets/sample_data.json');
+      final contents = noteFile.readAsStringSync();
+      final doc = Document.fromJson(jsonDecode(contents));
+      quillController = QuillController(
+          document: doc, selection: const TextSelection.collapsed(offset: 0));
+    } catch (error) {
+      final doc = Document()..insert(0, '读取文件错误,文件不是Delta格式');
+      quillController = QuillController(
+          document: doc, selection: const TextSelection.collapsed(offset: 0));
+    }
   }
 
   /**
@@ -237,7 +259,11 @@ class QuillTextController {
             insertVideoBlockEmbed(
                 quillController, "http://file.cccyun.cc/Demo/mv.mp4");
           }),
-      QuillCustomButton(icon: Icons.save, onTap: () {}),
+      QuillCustomButton(
+          icon: Icons.save,
+          onTap: () {
+            saveNote();
+          }),
     ];
 
     var toolbar = QuillToolbar.basic(
@@ -291,6 +317,14 @@ class QuillTextController {
           customButtons: customQuillCustomButtons);
     }
     return toolbar;
+  }
+
+  /**
+   * 保存笔记
+   */
+  bool saveNote() {
+    var json = quillController.document.toDelta().toJson();
+    return FileTool.writeJson(state.noteFilePath, json);
   }
 
   /**
@@ -384,8 +418,23 @@ class QuillTextController {
     return quillEditor;
   }
 
+  //获取视频地址或路径
+  String? getNoteFilePath() {
+    Map? arguments = videoNoteController.getArguments();
+    if (arguments == null) {
+      return null;
+    }
+    var noteFilePath = arguments['noteFilePath'];
+    return noteFilePath == null ? null : noteFilePath as String;
+  }
+
   /// 在 widget 内存中分配后立即调用。
-  void onInit() {}
+  void onInit() {
+    // state.noteFilePath = getNoteFilePath();
+    // if (state.noteFilePath != null) {
+    //   loadNoteFileData(state.noteFilePath);
+    // }
+  }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所
 

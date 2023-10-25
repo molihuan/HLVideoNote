@@ -1,23 +1,13 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_quill/extensions.dart';
+
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
-import 'package:flutter_quill_extensions/shims/dart_ui_real.dart';
+
 import 'package:get/get.dart';
-import 'package:getwidget/components/toast/gf_toast.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
-import 'package:note/common/utils/common_tool.dart';
+
 import 'package:note/pages/videonote/quill_text_controller.dart';
 import 'package:note/pages/videonote/video_player_controller.dart';
-import 'package:note/pages/videonote/widgets/link_blockembed.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'index.dart';
 
@@ -43,6 +33,15 @@ class VideoNoteController extends GetxController {
   //创建富文本控制器
   late final QuillController quillController =
       quillTextController.quillController;
+
+  //传入页面的参数
+  Map? getArguments() {
+    if (Get.arguments != null) {
+      final arguments = Get.arguments as Map;
+      return arguments;
+    }
+    return null;
+  }
 
   //页面调整
   RxDouble _dividerPosition = 0.5.obs;
@@ -134,12 +133,6 @@ class VideoNoteController extends GetxController {
     super.onInit();
     videoPlayerController.onInit();
     quillTextController.onInit();
-
-    var videoSource = getVideoSource();
-
-    if (videoSource != null) {
-      playerOpen(videoSource);
-    }
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所

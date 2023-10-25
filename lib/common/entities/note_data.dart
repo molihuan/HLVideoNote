@@ -1,6 +1,6 @@
 /**
  * --noteName1
- *   --noteName1.json
+ *   --noteName1.hl
  *   --resource
  *     --img(存放图片、截图)
  *     --config(是什么模式的笔记，存放白板数据)
@@ -10,7 +10,7 @@
 
 class NoteData {
   //笔记父文件夹路径
-  String? noteParentDirPath;
+  String? noteProjectPath;
   //笔记文件的路径
   String? noteFilePath;
 
@@ -19,7 +19,7 @@ class NoteData {
   DateTime time;
 
   NoteData({
-    this.noteParentDirPath,
+    this.noteProjectPath,
     this.noteFilePath,
     required this.title,
     required this.description,

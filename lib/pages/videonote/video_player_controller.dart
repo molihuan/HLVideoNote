@@ -28,11 +28,11 @@ class VideoPlayerController {
 
   //获取视频地址或路径
   String? getVideoSource() {
-    if (Get.arguments != null) {
-      final arguments = Get.arguments as Map;
-      return arguments['videoSource'] as String;
+    Map? arguments = videoNoteController.getArguments();
+    if (arguments == null) {
+      return null;
     }
-    return null;
+    return arguments['videoSource'] as String;
   }
 
   //视频播放
@@ -44,6 +44,12 @@ class VideoPlayerController {
    * 初始化播放器设置
    */
   Future<void> initPlayerSetting() async {
+    var videoSource = getVideoSource();
+
+    if (videoSource != null) {
+      playerOpen(videoSource);
+    }
+
     await player.setPlaylistMode(PlaylistMode.single);
     playerlisten();
   }
