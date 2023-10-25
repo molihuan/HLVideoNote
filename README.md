@@ -63,3 +63,17 @@ Tools • Dart 3.0.6 • DevTools 2.23.1
 [√] Android Studio (version 2022.3)
 
 [√] Connected device (3 available)
+
+错误:
+Error waiting for a debug connection: The log reader stopped unexpectedly, or never started.
+Error launching application on Windows.
+清空缓存:flutter clean
+删除windows目录
+flutter create .
+重新添加
+
+注意必须为链接
+windows\flutter\ephemeral\.plugin_symlinks
+linux\flutter\ephemeral\.plugin_symlinks
+
+

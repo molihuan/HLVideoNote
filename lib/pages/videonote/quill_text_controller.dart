@@ -424,13 +424,16 @@ class QuillTextController {
     if (arguments == null) {
       return null;
     }
-    return arguments['noteFilePath'] as String;
+    var noteFilePath = arguments['noteFilePath'];
+    return noteFilePath == null ? null : noteFilePath as String;
   }
 
   /// 在 widget 内存中分配后立即调用。
   void onInit() {
-    state.noteFilePath = getNoteFilePath();
-    loadNoteFileData(state.noteFilePath);
+    // state.noteFilePath = getNoteFilePath();
+    // if (state.noteFilePath != null) {
+    //   loadNoteFileData(state.noteFilePath);
+    // }
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所
