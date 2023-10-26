@@ -38,10 +38,10 @@ class FileTool {
     }
   }
 
-  static bool writeJson(String filePath, contents) {
+  static bool writeJson(String filePath, dynamic strContent) {
     final file = File(filePath);
     try {
-      final jsonString = jsonEncode(contents);
+      final jsonString = jsonEncode(strContent);
       file.writeAsStringSync(jsonString);
       return true;
     } catch (e) {
@@ -50,8 +50,20 @@ class FileTool {
     }
   }
 
+  static Map? readJson(String filePath) {
+    final file = File(filePath);
+    try {
+      var jsonString = file.readAsStringSync();
+      Map jsonObj = jsonDecode(jsonString);
+      return jsonObj;
+    } catch (e) {
+      print('444: $e');
+      return null;
+    }
+  }
+
   static String? createNoteProjectFile(
-      String noteSavePath, String noteNameNoSuffix) {
+      String noteSavePath, String noteNameNoSuffix, String videoSource) {
     //TODO 判断权限是否足够
     String noteProjectPath =
         noteSavePath + Platform.pathSeparator + noteNameNoSuffix;
@@ -80,6 +92,12 @@ class FileTool {
     for (String item in resourceClass) {
       String itemPath = noteResourcePath + item;
       Directory(itemPath).createSync(recursive: true);
+      if (item == FILE_NAME_CONFIG) {
+        Map<String, dynamic> con = {
+          'videoSource': videoSource,
+        };
+        writeJson(itemPath + Platform.pathSeparator + "base.json", con);
+      }
     }
 
     bool createResult = createFile(noteFilePath);
@@ -88,6 +106,11 @@ class FileTool {
     }
 
     return null;
+  }
+
+  static String getParentPath(String path) {
+    int endIndex = path.lastIndexOf(Platform.pathSeparator);
+    return path.substring(0, endIndex);
   }
 
   static bool createFile(String filePath) {

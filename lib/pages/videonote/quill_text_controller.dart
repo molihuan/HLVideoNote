@@ -8,9 +8,7 @@ import 'package:flutter_quill/extensions.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_quill_extensions/shims/dart_ui_real.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:note/common/utils/file_tool.dart';
-import 'package:note/pages/home/widgets/create_note_video_dialog.dart';
 import 'package:note/pages/videonote/controller.dart';
 import 'package:note/pages/videonote/insert_image_dialog.dart';
 import 'package:note/pages/videonote/state.dart';
@@ -30,6 +28,7 @@ enum _SelectionType {
  */
 class QuillTextController {
   QuillTextController({required this.videoNoteController, required this.state});
+
   VideoNoteController videoNoteController;
   VideoNoteState state;
 
@@ -216,6 +215,7 @@ class QuillTextController {
    * 是否为桌面
    */
   bool _isDesktop() => !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
+
   /**
    * 构建富文本工具栏
    */
@@ -430,10 +430,10 @@ class QuillTextController {
 
   /// 在 widget 内存中分配后立即调用。
   void onInit() {
-    // state.noteFilePath = getNoteFilePath();
-    // if (state.noteFilePath != null) {
-    //   loadNoteFileData(state.noteFilePath);
-    // }
+    state.noteFilePath = getNoteFilePath();
+    if (state.noteFilePath != null) {
+      loadNoteFileData(state.noteFilePath);
+    }
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所

@@ -1,5 +1,7 @@
 {
   "dart.flutterSdkPath": ".fvm/flutter_sdk",
+  "dart.flutterRunLogFile": "flutter_run.log",
+  "dart.flutterRunLogVerbose": true,
   // or "dart.flutterSdkPaths": [".fvm/flutter_sdk"]
   // Remove .fvm files from search
   "search.exclude": {
