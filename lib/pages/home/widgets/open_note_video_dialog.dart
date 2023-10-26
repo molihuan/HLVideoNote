@@ -1,10 +1,8 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/common/routes/app_pages.dart';
 import 'package:note/common/utils/file_tool.dart';
@@ -118,16 +116,26 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
             String noteFileSource = noteFileSourceType == FileSourceType.LOCAL
                 ? noteFilePathEditController.text
                 : noteFileUrlEditController.text;
+
             //从配置文件中获取视频的路径
+            String noteProjectPath = FileTool.getParentPath(noteFileSource);
+            var baseJsonPath = noteProjectPath +
+                Platform.pathSeparator +
+                FileTool.FILE_NAME_RESOURCE +
+                Platform.pathSeparator +
+                FileTool.FILE_NAME_CONFIG +
+                Platform.pathSeparator +
+                "base.json";
+            var jsonObj = FileTool.readJson(baseJsonPath)!;
 
             //
             Get.toNamed(AppRoutes.VideoNote, arguments: {
               'noteFileSourceType': noteFileSourceType,
-              'videoSource': "",
+              'videoSource': jsonObj["videoSource"],
               'noteFilePath': noteFileSource,
             });
           },
-          child: Text('创建'),
+          child: Text('打开'),
         ),
         TextButton(
           onPressed: () {

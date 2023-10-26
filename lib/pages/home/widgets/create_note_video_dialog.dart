@@ -179,25 +179,26 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
             //创建笔记文件
             String noteSavePath = noteSavePathEditController.text;
             String noteNameNoSuffix = noteNameEditController.text;
+            String videoSource = videoSourceType == VideoSourceType.LOCAL
+                ? videoPathEditController.text
+                : videoUrlEditController.text;
 
-            // String? noteFilePath =
-            //     FileTool.createNoteProjectFile(noteSavePath, noteNameNoSuffix);
+            String? noteFilePath = FileTool.createNoteProjectFile(
+                noteSavePath, noteNameNoSuffix, videoSource);
 
-            // if (noteFilePath != null) {
-            //视频类型、视频路径或地址
-            Get.toNamed(AppRoutes.VideoNote, arguments: {
-              'videoType': videoSourceType,
-              'videoSource': videoSourceType == VideoSourceType.LOCAL
-                  ? videoPathEditController.text
-                  : videoUrlEditController.text,
-              'noteFilePath': null,
-            });
-            // } else {
-            //   print("hl  创建笔记工程失败");
-            //   Fluttertoast.showToast(
-            //     msg: "创建笔记工程失败",
-            //   );
-            // }
+            if (noteFilePath != null) {
+              //视频类型、视频路径或地址
+              Get.toNamed(AppRoutes.VideoNote, arguments: {
+                'videoType': videoSourceType,
+                'videoSource': videoSource,
+                'noteFilePath': noteFilePath,
+              });
+            } else {
+              print("hl  创建笔记工程失败");
+              Fluttertoast.showToast(
+                msg: "创建笔记工程失败",
+              );
+            }
           },
           child: Text('创建'),
         ),
