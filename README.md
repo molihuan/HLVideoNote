@@ -79,9 +79,9 @@ flutter/ephemeral/.plugin_symlinks/media_kit_libs_windows_video/windows/CMakeLis
 Exception: Unable to generate build files
 ```
 
-请前往https://github.com/media-kit/libmpv-win32-video-build/releases/下载对应的文件并拷贝覆盖到项目目录的build/windows下(上面代码是mpv-dev-x86_64-20230924-git-652a1dd.7z拉取不下来)
+(上面代码是mpv-dev-x86_64-20230924-git-652a1dd.7z拉取不下来)请前往https://github.com/media-kit/libmpv-win32-video-build/releases/  下载对应的文件并拷贝覆盖到项目目录的build/windows下
 
-media_kit依赖https://github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES所以还会报错
+media_kit依赖https://github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES  所以还会报错
 
 ```
 Launching lib\main.dart on Windows in debug mode...
@@ -95,7 +95,7 @@ flutter/ephemeral/.plugin_symlinks/media_kit_libs_windows_video/windows/CMakeLis
 Exception: Unable to generate build files
 ```
 
-请前往https://github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES/releases/download/v1.0.0/ANGLE.7z下载对应的文件并拷贝覆盖到项目目录的build/windows下(上面代码是ANGLE.7z拉取不下来)
+(上面代码是ANGLE.7z拉取不下来)请前往https://github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES/releases/download/v1.0.0/ANGLE.7z  下载对应的文件并拷贝覆盖到项目目录的build/windows下
 
 还可能出现错误:
 
@@ -111,6 +111,10 @@ Error launching application on Windows.
 ~~linux\flutter\ephemeral\.plugin_symlinks~~
 
 #### Android
+
+**PS：请一定要开启AS->settings->Languages&Frameworks->Flutter->Enable verbose logging**
+
+**可以查看输出日志，方便调试**
 
 权限问题AndroidManifest.xml
 
@@ -132,8 +136,5 @@ Error launching application on Windows.
 
 运行时依赖很可能拉取不下来，主要是media_kit的依赖
 
-请前往[https://github.com/media-kit/libmpv-android-video-build/releases](https://github.com/media-kit/libmpv-android-video-build/releases)下载对应的文件并拷贝覆盖到项目目录的build/media_kit_libs_android_video/{$版本号 如v1.1.5}下(一般是default-arm64-v8a.jar、default-armeabi-v7a.jar、default-x86.jar、default-x86_64.jar拉取不下来)
+请前往[https://github.com/media-kit/libmpv-android-video-build/releases](https://github.com/media-kit/libmpv-android-video-build/releases) 下载对应的文件并拷贝覆盖到项目目录的build/media_kit_libs_android_video/{$版本号 如v1.1.5}下(一般是default-arm64-v8a.jar、default-armeabi-v7a.jar、default-x86.jar、default-x86_64.jar拉取不下来)
 
-请一定要开启AS->settings->Languages&Frameworks->Flutter->Enable verbose logging
-
-可以查看输出日志，方便调试
