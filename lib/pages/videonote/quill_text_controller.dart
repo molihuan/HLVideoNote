@@ -8,7 +8,7 @@ import 'package:flutter_quill/extensions.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_quill_extensions/shims/dart_ui_real.dart';
-import 'package:note/common/utils/file_tool.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:note/pages/videonote/controller.dart';
 import 'package:note/pages/videonote/insert_image_dialog.dart';
 import 'package:note/pages/videonote/state.dart';
@@ -76,6 +76,38 @@ class QuillTextController {
   }
 
   /**
+   * 保存笔记
+   */
+  bool saveNote() {
+    var deltaJson = quillController.document.toDelta().toJson();
+    print(deltaJson);
+
+    String jsonString = jsonEncode(deltaJson);
+
+    final file = File(state.noteFilePath);
+    try {
+      file.writeAsStringSync(jsonString);
+      return true;
+    } catch (e) {
+      print('文件写入失败: $e');
+      return false;
+    }
+  }
+
+  /**
+   * 复制粘贴图片(网络)
+   */
+  Future<String> _onImagePaste(Uint8List imageBytes) async {
+    // Saves the image to applications directory
+    final appDocDir = await getApplicationDocumentsDirectory();
+    final file = await File(
+            '${appDocDir.path}/${basename('${DateTime.now().millisecondsSinceEpoch}.png')}')
+        .writeAsBytes(imageBytes, flush: true);
+    print("_onImagePaste:保存路径" + file.path);
+    return file.path.toString();
+  }
+
+  /**
    * 插入视频锚点
    */
   void insertVideoAnchor(QuillController quillController) {
@@ -116,18 +148,17 @@ class QuillTextController {
    */
   void insertLinkBlockEmbed(QuillController controller, String string,
       void Function() linkBlockEmbedClick) {
-    controller.document.insert(controller.selection.extentOffset, '\n');
-    controller.updateSelection(
-      TextSelection.collapsed(
-        offset: controller.selection.extentOffset + 1,
-      ),
-      ChangeSource.LOCAL,
-    );
+    // controller.document.insert(controller.selection.extentOffset, '\n');
+    // controller.updateSelection(
+    //   TextSelection.collapsed(
+    //     offset: controller.selection.extentOffset + 1,
+    //   ),
+    //   ChangeSource.LOCAL,
+    // );
 
     controller.document.insert(
       controller.selection.extentOffset,
-      LinkBlockEmbed(
-          editValue: string, linkBlockEmbedClick: linkBlockEmbedClick),
+      LinkBlockEmbed(editValue: string),
     );
 
     controller.updateSelection(
@@ -227,6 +258,7 @@ class QuillTextController {
             insertVideoAnchor(quillController);
             final Directory appDocumentsDir =
                 await getApplicationDocumentsDirectory();
+
             print("截图保存路径为" + appDocumentsDir.path);
 
             videoNoteController.videoScreenShot(appDocumentsDir.path,
@@ -262,7 +294,12 @@ class QuillTextController {
       QuillCustomButton(
           icon: Icons.save,
           onTap: () {
-            saveNote();
+            bool result = saveNote();
+            if (result) {
+              Fluttertoast.showToast(msg: "保存成功");
+            } else {
+              Fluttertoast.showToast(msg: "保存失败");
+            }
           }),
     ];
 
@@ -320,27 +357,6 @@ class QuillTextController {
   }
 
   /**
-   * 保存笔记
-   */
-  bool saveNote() {
-    var json = quillController.document.toDelta().toJson();
-    return FileTool.writeJson(state.noteFilePath, json);
-  }
-
-  /**
-   * 复制粘贴图片(网络)
-   */
-  Future<String> _onImagePaste(Uint8List imageBytes) async {
-    // Saves the image to applications directory
-    final appDocDir = await getApplicationDocumentsDirectory();
-    final file = await File(
-            '${appDocDir.path}/${basename('${DateTime.now().millisecondsSinceEpoch}.png')}')
-        .writeAsBytes(imageBytes, flush: true);
-    print("_onImagePaste:保存路径" + file.path);
-    return file.path.toString();
-  }
-
-  /**
    * 构建富文本编辑器
    */
   QuillEditor buildQuillEditor() {
@@ -380,7 +396,10 @@ class QuillTextController {
           fontFeatures: [FontFeature.superscripts()],
         ),
       ),
-      embedBuilders: [...FlutterQuillEmbeds.builders(), LinkEmbedBuilder()],
+      embedBuilders: [
+        ...FlutterQuillEmbeds.builders(),
+        LinkEmbedBuilder(videoNoteController: videoNoteController)
+      ],
     );
     if (kIsWeb) {
       quillEditor = QuillEditor(
@@ -411,7 +430,7 @@ class QuillTextController {
           ),
           embedBuilders: [
             // ...defaultEmbedBuildersWeb,
-            LinkEmbedBuilder()
+            LinkEmbedBuilder(videoNoteController: videoNoteController)
           ]);
     }
 
