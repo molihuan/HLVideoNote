@@ -38,6 +38,9 @@ class FileTool {
     }
   }
 
+  /**
+   * 将json覆盖式写入文件
+   */
   static bool writeJson(String filePath, dynamic strContent) {
     final file = File(filePath);
     try {
@@ -50,6 +53,9 @@ class FileTool {
     }
   }
 
+  /**
+   * 把文件转换为json
+   */
   static Map? readJson(String filePath) {
     final file = File(filePath);
     try {
@@ -57,7 +63,7 @@ class FileTool {
       Map jsonObj = jsonDecode(jsonString);
       return jsonObj;
     } catch (e) {
-      print('444: $e');
+      print('失败: $e');
       return null;
     }
   }
@@ -100,7 +106,7 @@ class FileTool {
       }
     }
 
-    bool createResult = createFile(noteFilePath);
+    bool createResult = createFile(noteFilePath, context: '[{"insert":""}]');
     if (createResult) {
       return noteFilePath;
     }
@@ -113,10 +119,15 @@ class FileTool {
     return path.substring(0, endIndex);
   }
 
-  static bool createFile(String filePath) {
+  static bool createFile(String filePath, {String? context}) {
     File file = File(filePath);
     try {
-      file.createSync(recursive: true); // 创建文件
+      if (context == null) {
+        file.createSync(recursive: true); // 创建文件
+      } else {
+        file.writeAsStringSync(context);
+      }
+
       if (file.existsSync()) {
         // 检查文件是否存在
         return true;

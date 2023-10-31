@@ -1,11 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter_quill/flutter_quill.dart';
-
 import 'package:get/get.dart';
-
 import 'package:note/pages/videonote/quill_text_controller.dart';
 import 'package:note/pages/videonote/video_player_controller.dart';
 
@@ -25,11 +22,13 @@ class VideoNoteController extends GetxController {
 
   // 创建视频播放器
   late final player = videoPlayerController.player;
+
   // 创建视频控制器
   late final videoController = videoPlayerController.videoController;
 
   //创建富文本编辑器
   late final QuillEditor quillEditor = quillTextController.quillEditor;
+
   //创建富文本控制器
   late final QuillController quillController =
       quillTextController.quillController;
@@ -45,7 +44,9 @@ class VideoNoteController extends GetxController {
 
   //页面调整
   RxDouble _dividerPosition = 0.5.obs;
+
   set dividerPosition(value) => _dividerPosition.value = value;
+
   get dividerPosition => _dividerPosition.value;
 
   double minPosition = 0.25;
@@ -72,6 +73,7 @@ class VideoNoteController extends GetxController {
    */
   Future<void> playerSeek(
       {Duration? duration,
+      String? durationStr,
       int day = 0,
       int hour = 0,
       int minute = 0,
@@ -80,6 +82,7 @@ class VideoNoteController extends GetxController {
       int microsecond = 0}) async {
     videoPlayerController.playerSeek(
         duration: duration,
+        durationStr: durationStr,
         day: day,
         hour: hour,
         minute: minute,

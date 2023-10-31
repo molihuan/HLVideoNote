@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:note/common/utils/common_tool.dart';
@@ -10,6 +9,7 @@ import 'package:note/pages/videonote/state.dart';
 class VideoPlayerController {
   VideoPlayerController(
       {required this.videoNoteController, required this.state});
+
   VideoNoteController videoNoteController;
   VideoNoteState state;
 
@@ -23,6 +23,7 @@ class VideoPlayerController {
       },
     ),
   );
+
   // 创建视频控制器
   late final videoController = VideoController(player);
 
@@ -70,12 +71,17 @@ class VideoPlayerController {
    */
   Future<void> playerSeek(
       {Duration? duration,
+      String? durationStr,
       int day = 0,
       int hour = 0,
       int minute = 0,
       int second = 0,
       int millisecond = 0,
       int microsecond = 0}) async {
+    if (durationStr != null) {
+      duration = CommonTool.str2Duration(durationStr);
+    }
+
     await player.seek(
       duration ??
           Duration(
