@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-
 import 'package:note/pages/videonote/index.dart';
 
 class NoteArea extends GetView<VideoNoteController> {
@@ -26,7 +23,13 @@ class NoteArea extends GetView<VideoNoteController> {
   }
 
   Widget buildQuillView() {
-    return SafeArea(
+    return QuillProvider(
+      configurations: QuillConfigurations(
+        controller: quillController,
+        sharedConfigurations: const QuillSharedConfigurations(
+            // locale: Locale('zh'),
+            ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

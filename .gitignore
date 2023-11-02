@@ -46,3 +46,6 @@ app.*.map.json
 /.fvm/flutter_sdk
 
 /windows/out
+
+/windows/flutter/ephemeral/.plugin_symlinks/
+/linux/flutter/ephemeral/.plugin_symlinks/
