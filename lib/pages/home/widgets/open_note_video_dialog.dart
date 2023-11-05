@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/common/routes/app_pages.dart';
 import 'package:note/common/utils/file_tool.dart';
+import 'package:note/common/utils/platform_tool.dart';
 
 import '../index.dart';
 
@@ -66,17 +67,25 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
                 text: "选择",
                 size: GFSize.SMALL,
                 onPressed: () async {
-                  // 选择本地视频文件
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
-
-                  if (result != null) {
-                    PlatformFile file = result.files.first;
-                    print('文件路径： ${file.path}');
-                    noteFilePathEditController.text = file.path ?? "";
-                  } else {
-                    // 用户取消了选择文件操作
-                  }
+                  PlatformTool.voidCallback(android: () async {
+                    // 选择本地视频文件
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
+                    if (result != null) {
+                      PlatformFile file = result.files.first;
+                      print('path： ${file.path}');
+                      noteFilePathEditController.text = file.path ?? "";
+                    } else {}
+                  }, other: () async {
+                    // 选择本地视频文件
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
+                    if (result != null) {
+                      PlatformFile file = result.files.first;
+                      print('path： ${file.path}');
+                      noteFilePathEditController.text = file.path ?? "";
+                    } else {}
+                  });
                 },
               )
             ],
@@ -116,6 +125,8 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
             String noteFileSource = noteFileSourceType == FileSourceType.LOCAL
                 ? noteFilePathEditController.text
                 : noteFileUrlEditController.text;
+            //判断文件是否存在
+            FileTool.fileExists(noteFileSource);
 
             //从配置文件中获取视频的路径
             String noteProjectPath = FileTool.getParentPath(noteFileSource);
@@ -125,7 +136,7 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
                 Platform.pathSeparator +
                 FileTool.FILE_NAME_CONFIG +
                 Platform.pathSeparator +
-                "base.json";
+                FileTool.FILE_NAME_BASE_CONFIG_JSON;
             var jsonObj = FileTool.readJson(baseJsonPath)!;
 
             //

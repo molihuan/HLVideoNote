@@ -21,8 +21,7 @@ class MyPage extends GetView<MyController> {
           // );
           var logger = Logger();
 
-          final Directory? ff = await getExternalStorageDirectory();
-
+          Directory? ff = await getExternalStorageDirectory();
           logger.d("运行了" + ff!.path);
         });
   }

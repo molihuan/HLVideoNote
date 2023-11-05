@@ -34,9 +34,12 @@ dependencies:
   #持久化组件
   shared_preferences: ^2.2.1
   #路径组件
-  path_provider: ^2.1.0
+  path_provider: ^2.1.1
+  external_path: ^1.0.3
   #文件选择
-  file_picker: ^5.3.4
+  file_picker:
+    path: ./plugins/flutter_file_picker
+
   path: ^1.8.3
 
   # 国际化
@@ -50,6 +53,8 @@ dependencies:
   share_plus: ^7.1.0
   #设备信息
   device_info_plus: ^9.0.3
+
+  package_info_plus: ^4.1.0
   #日志
   logger: ^2.0.1
 
@@ -59,17 +64,22 @@ dependencies:
   #悬浮按钮
   flutter_speed_dial: ^7.0.0
   #弹窗
-  # awesome_dialog: ^3.1.0
+  #  awesome_dialog: ^3.1.0
   #pdf
   pdf: ^3.10.4
   #白板工具
   flutter_drawing_board: ^0.5.0
   # 图片工具
   extended_image: 8.0.2
-  # image_editor: any
-  # photo_manager: any
-
   json_annotation: ^4.8.1
+  #  录音
+  record: ^5.0.1
+  # 文件传输
+  socket_io_client: ^2.0.3+1
+  #插件
+  flutter_js: ^0.8.0
+  #拖拽控件
+  multi_split_view: ^2.4.0
 
 
 dev_dependencies:

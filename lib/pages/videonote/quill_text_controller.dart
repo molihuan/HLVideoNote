@@ -67,6 +67,7 @@ class QuillTextController {
       //     : 'assets/sample_data.json');
       final contents = noteFile.readAsStringSync();
       final doc = Document.fromJson(jsonDecode(contents));
+      print(doc);
       quillController = QuillController(
           document: doc, selection: const TextSelection.collapsed(offset: 0));
     } catch (error) {
