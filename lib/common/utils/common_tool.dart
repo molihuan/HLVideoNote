@@ -1,6 +1,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+typedef String StrCallbackStr(String value);
+typedef void CallbackStr(String value);
+typedef String StrCallback();
+
+typedef Future<String> FStrCallbackStr(String value);
+typedef Future<void> FCallbackStr(String value);
+typedef Future<String> FStrCallback();
+
 class CommonTool {
   /**
    * string转Duration

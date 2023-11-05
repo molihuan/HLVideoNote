@@ -174,16 +174,17 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
       ),
       actions: <Widget>[
         TextButton(
-          onPressed: () {
+          onPressed: () async {
             Navigator.of(context).pop();
             //创建笔记文件
             String noteSavePath = noteSavePathEditController.text;
+ 
             String noteNameNoSuffix = noteNameEditController.text;
             String videoSource = videoSourceType == VideoSourceType.LOCAL
                 ? videoPathEditController.text
                 : videoUrlEditController.text;
 
-            String? noteFilePath = FileTool.createNoteProjectFile(
+            String? noteFilePath = await FileTool.createNoteProjectFile(
                 noteSavePath, noteNameNoSuffix, videoSource);
 
             if (noteFilePath != null) {
@@ -194,7 +195,6 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                 'noteFilePath': noteFilePath,
               });
             } else {
-              print("hl  创建笔记工程失败");
               Fluttertoast.showToast(
                 msg: "创建笔记工程失败",
               );
