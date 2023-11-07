@@ -1,64 +1,61 @@
 # HL视频笔记
 
+### 简介
+
+一个全平台的视频笔记软件。一边看视频，一边做笔记。
+
+特点：一键视频截屏插入笔记；在笔记上插入视频节点，点击视频节点跳转到视频指定时间点；笔记中插入图片，音频，视频；支持手写笔记；支持录音；多端联动(例如：电脑看视频，平板写笔记，点击平板截屏按钮可快速在笔记中插入电脑视频截屏)，支持插件系统，安装插件，导出笔记为pdf；在pdf上做笔记；视频支持YouTube；
+
 ### 我们需要你！加入我们吧！
 
 ##### 一个人是孤独的，我们需要你的加入！无论你是否会写代码，都可加入我们！
 
-- **狗头策划组**：未来目标的规划者，发展方向的引路人。
-- **UI设计组**：对于UI、图标、颜色、交互体验等等有自己的看法的小哥哥小姐姐们。
-- **测试反馈组**：HL视频笔记的真爱粉，希望它变得更好的粉粉们。
-- **开发编程组**：攻克技术壁垒的攻城狮们。
-- **翻译组**：化解语言的迷雾，让不同文化间的交流变得如丝般顺滑。
+- **狗头策划组** 🧑：未来目标的规划者，发展方向的引路人。
+- **UI设计组** 🎨：对于UI、图标、颜色、交互体验等等有自己的看法的小哥哥小姐姐们。
+- **测试反馈组** 👨‍🔬：HL视频笔记的真爱粉，希望它变得更好的粉粉们。
+- **开发编程组** 🦁：攻克技术壁垒的攻城狮们。
+- **翻译组** 📙：化解语言的迷雾，让不同文化间的交流变得如丝般顺滑。
 
 ### 开发目标
 
 - [x] 视频快速截图
 - [x] 插入视频节点
 - [x] 白板功能
-- [ ] 手写区域扩大
-- [ ] 荧光笔
-- [x] 插入本地图片
-- [ ] 图片调整大小、裁剪，修改截图
 - [ ] 在图片上绘制
+- [x] 插入本地图片
 - [ ] 插入本地视频
-- [ ] 长按快进
-- [ ] 录音
-- [ ] 视频字幕
-- [ ] 截取视频片段
-- [ ] ORC识别
+- [ ] 网页视频(B站、YouTube)
+- [ ] 笔记导出（pdf、图片）
+- [ ] 图片调整大小、裁剪，修改截图
+- [ ] 视频浮动在页面上，自由缩放移动
 - [ ] pdf做笔记
+- [ ] 国际化(翻译)
+- [ ] 重新链接资源文件
+- [ ] 手机平板联动、一个看视频一个写笔记，功能拆分
+- [ ] 视频全屏后，一些功能变成悬浮按钮
+- [ ] 录音
 - [ ] 插件系统
-- [ ] bilibili、YouTube
-- [ ] 百度网盘、阿里网盘、cctalk
-- [ ] 笔记导出（pdf、图片、HTML...）
-- [ ] 支持Markdown
+- [ ] 横屏竖屏切换
+- [ ] 长按视频快进
 - [ ] 视频倍速
 - [ ] 视频缩放
-- [ ] 视频浮动在页面上，自由缩放移动
-- [ ] 横屏竖屏切换
-- [ ] chatGPT
-- [ ] 视频全屏后，一些功能变成悬浮按钮
+- [ ] 视频字幕
+- [ ] 截取视频片段
 - [ ] 分享视频
 - [ ] 分享笔记
-- [ ] 手机平板联动、一个看视频一个写笔记，功能拆分。
-- [ ] 实时语音转文字
-- [ ] 网页视频
-- [ ] 重新链接资源文件
+- [ ] ORC识别
+- [ ] 支持百度网盘、阿里网盘、cctalk
+- [ ] 支持Markdown
+- [ ] 手写区域扩大
+- [ ] 荧光笔
+- [ ] 实时语音转文字(可不做)
+- [ ] ChatGPT
+- [ ] webdev
 
 ### 开发环境
 
+```bash
 [!] Flutter (Channel stable, 3.13.7, on Microsoft Windows [版本 10.0.19043.1586], locale zh-CN)
-• Flutter version 3.13.7 on channel stable at C:\Users\moli\fvm\default
-! Warning: `flutter` on your path resolves to
-E:\DesktopSpace\Development\Environment\FlutterSDK\cache\3.13.7\bin\flutter, which is not inside
-your current
-Flutter SDK checkout at C:\Users\moli\fvm\default. Consider adding C:\Users\moli\fvm\default\bin to
-the front of
-your path.
-! Warning: `dart` on your path resolves to E:
-\DesktopSpace\Development\Environment\FlutterSDK\cache\3.13.7\bin\dart,
-which is not inside your current Flutter SDK checkout at C:\Users\moli\fvm\default. Consider adding
-C:\Users\moli\fvm\default\bin to the front of your path.
 • Upstream repository https://github.com/flutter/flutter.git
 • Framework revision 2f708eb839 (4 weeks ago), 2023-10-09 09:58:08 -0500
 • Engine revision a794cf2681
@@ -103,10 +100,11 @@ https://plugins.jetbrains.com/plugin/6351-dart
 • Windows (desktop)         • windows • windows-x64 • Microsoft Windows [版本 10.0.19043.1586]
 • Chrome (web)              • chrome • web-javascript • Google Chrome 119.0.6045.105
 • Edge (web)                • edge • web-javascript • Microsoft Edge 114.0.1823.82 (unsupported)
+```
 
 #### Windows
 
-编译环境需要C++ 20，请注意Visual Studio版本
+编译环境需要C++ 20，请注意Visual Studio版本，cmake需要3.23及以上，请到cmake官网下载安装包并替换Visual Studio中的cmake(3.22)
 
 编译时需要nuget.exe，请前往 [https://www.nuget.org/downloads](https://www.nuget.org/downloads)
 下载并配置好环境变量。
@@ -161,7 +159,7 @@ create . 重新添加。
 
 #### Android
 
-**PS：请一定要开启AS->settings->Languages&Frameworks->Flutter->Enable verbose logging**
+**PS：请一定要开启Android Studio->settings->Languages&Frameworks->Flutter->Enable verbose logging**
 
 **可以查看输出日志，方便调试**
 

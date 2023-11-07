@@ -1,6 +1,5 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/common/routes/app_pages.dart';
@@ -178,7 +177,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
             Navigator.of(context).pop();
             //创建笔记文件
             String noteSavePath = noteSavePathEditController.text;
- 
+
             String noteNameNoSuffix = noteNameEditController.text;
             String videoSource = videoSourceType == VideoSourceType.LOCAL
                 ? videoPathEditController.text
@@ -195,9 +194,9 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                 'noteFilePath': noteFilePath,
               });
             } else {
-              Fluttertoast.showToast(
-                msg: "创建笔记工程失败",
-              );
+              // Fluttertoast.showToast(
+              //   msg: "创建笔记工程失败",
+              // );
             }
           },
           child: Text('创建'),
