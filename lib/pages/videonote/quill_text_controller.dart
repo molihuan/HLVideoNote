@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/extensions.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fresh_quill_extensions/fresh_quill_extensions.dart';
 import 'package:fresh_quill_extensions/presentation/models/config/toolbar/buttons/camera.dart';
 import 'package:note/pages/videonote/controller.dart';
@@ -298,9 +297,9 @@ class QuillTextController {
           onTap: () {
             bool result = saveNote();
             if (result) {
-              Fluttertoast.showToast(msg: "保存成功");
+              // Fluttertoast.showToast(msg: "保存成功");
             } else {
-              Fluttertoast.showToast(msg: "保存失败");
+              // Fluttertoast.showToast(msg: "保存失败");
             }
           }),
     ];

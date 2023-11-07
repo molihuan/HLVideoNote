@@ -29,17 +29,15 @@ dependencies:
   fresh_quill_extensions: ^0.0.3
   #路由组件
   get: ^4.6.5
-  #webview组件
-  #  webview_flutter: ^4.2.3
   #持久化组件
   shared_preferences: ^2.2.1
   #路径组件
   path_provider: ^2.1.1
+  #安卓路径
   external_path: ^1.0.3
   #文件选择
   file_picker:
     path: ./plugins/flutter_file_picker
-
   path: ^1.8.3
 
   # 国际化
@@ -47,39 +45,75 @@ dependencies:
     sdk: flutter
   #权限组件
   permission_handler: ^11.0.0
-  #吐司
-  fluttertoast: ^8.2.2
+  #吐司弹窗框架
+  flutter_smart_dialog: ^4.9.5+1
   #分享
   share_plus: ^7.1.0
   #设备信息
   device_info_plus: ^9.0.3
-
   package_info_plus: ^4.1.0
   #日志
   logger: ^2.0.1
-
+  #打开url
   url_launcher: ^6.1.12
   #崩溃信息
   #  sentry_flutter: ^7.9.0
   #悬浮按钮
   flutter_speed_dial: ^7.0.0
-  #弹窗
-  #  awesome_dialog: ^3.1.0
   #pdf
   pdf: ^3.10.4
   #白板工具
   flutter_drawing_board: ^0.5.0
   # 图片工具
   extended_image: 8.0.2
+  #json工具
   json_annotation: ^4.8.1
-  #  录音
+  #录音
   record: ^5.0.1
   # 文件传输
   socket_io_client: ^2.0.3+1
-  #插件
+  #插件系统
   flutter_js: ^0.8.0
   #拖拽控件
   multi_split_view: ^2.4.0
+  #悬浮组件,将视频窗口悬浮
+  floating_overlay: ^1.2.1
+  #搜索框组件
+  super_cupertino_navigation_bar: ^1.1.2
+  #icon
+  flutter_launcher_icons: ^0.13.1
+  #屏幕工具
+  flutter_screenutil: ^5.9.0
+  #开屏动画
+  flutter_native_splash: ^2.3.5
+  #pdf编辑
+  #  pdftron_flutter: ^1.0.1-22
+  #代码编辑
+  flutter_code_editor: ^0.3.1
+  #工具类
+  nb_utils: ^6.0.6
+  #网格视图组件
+  flutter_staggered_grid_view: ^0.7.0
+  #上拉下拉刷新
+  pull_to_refresh: ^2.0.0
+  #存储
+  isar: ^3.1.0+1
+
+  persistent_bottom_nav_bar: ^5.0.2
+
+  get_storage: ^2.1.1
+
+  velocity_x: ^4.1.1
+
+  sizer: ^2.0.15
+
+  screenshot: ^2.1.0
+
+  keyboard_actions: ^4.2.0
+
+  settings_ui: ^2.0.2
+
+  syncfusion_flutter_signaturepad: ^23.1.43
 
 
 dev_dependencies:

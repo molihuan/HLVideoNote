@@ -3,11 +3,13 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  connectivity_plus
   file_selector_windows
   flutter_js
   gal
   media_kit_libs_windows_video
   media_kit_video
+  nb_utils
   pasteboard
   permission_handler_windows
   record_windows
