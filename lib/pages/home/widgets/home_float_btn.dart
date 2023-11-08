@@ -1,13 +1,9 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:note/common/routes/app_pages.dart';
 import 'package:note/pages/home/widgets/create_note_video_dialog.dart';
 import 'package:note/pages/home/widgets/open_note_video_dialog.dart';
-import 'package:note/pages/main/controller.dart';
+import 'package:note/routes/app_pages.dart';
 
 import '../index.dart';
 
