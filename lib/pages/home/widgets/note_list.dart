@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:note/common/entities/note_data.dart';
 import 'package:note/common/utils/common_tool.dart';
+import 'package:note/models/note_data.dart';
 import 'package:note/pages/home/controller.dart';
 
 class NoteList extends GetView<HomeController> {

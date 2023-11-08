@@ -1,11 +1,10 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/components/text_field/gf_text_field.dart';
 import 'package:getwidget/size/gf_size.dart';
-import 'package:note/common/routes/app_pages.dart';
+import 'package:note/routes/app_pages.dart';
 
 //弹窗
 class PopupDialogDemo extends StatefulWidget {

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:note/common/langs/translation_service.dart';
-
-import 'common/routes/app_pages.dart';
+import 'package:note/routes/app_pages.dart';
 
 Future<void> main() async {
   // 插件初始化

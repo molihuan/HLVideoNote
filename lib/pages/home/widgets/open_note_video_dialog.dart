@@ -4,9 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:note/common/routes/app_pages.dart';
 import 'package:note/common/utils/file_tool.dart';
 import 'package:note/common/utils/platform_tool.dart';
+import 'package:note/routes/app_pages.dart';
 
 import '../index.dart';
 
