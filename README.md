@@ -4,17 +4,19 @@
 
 一个全平台的视频笔记软件。一边看视频，一边做笔记。
 
-特点：一键视频截屏插入笔记；在笔记上插入视频节点，点击视频节点跳转到视频指定时间点；笔记中插入图片，音频，视频；支持手写笔记；支持录音；多端联动(例如：电脑看视频，平板写笔记，点击平板截屏按钮可快速在笔记中插入电脑视频截屏)，支持插件系统，安装插件，导出笔记为pdf；在pdf上做笔记；视频支持YouTube；
+特点：一键视频截屏插入笔记；在笔记上插入视频节点，点击视频节点跳转到视频指定时间点；笔记中插入图片，音频，视频；支持手写笔记；支持录音；多端联动(
+例如：电脑看视频，平板写笔记，点击平板截屏按钮可快速在笔记中插入电脑视频截屏)
+，支持插件系统，安装插件，导出笔记为pdf；在pdf上做笔记；视频支持YouTube；
 
 ### 我们需要你！加入我们吧！
 
 ##### 一个人是孤独的，我们需要你的加入！无论你是否会写代码，都可加入我们！
 
-- **狗头策划组** 🧑：未来目标的规划者，发展方向的引路人。
-- **UI设计组** 🎨：对于UI、图标、颜色、交互体验等等有自己的看法的小哥哥小姐姐们。
-- **测试反馈组** 👨‍🔬：HL视频笔记的真爱粉，希望它变得更好的粉粉们。
+- **狗头策划组** 🐶：未来目标的规划者，发展方向的引路人。
+- **UI设计组** 🦜：对于UI、图标、颜色、交互体验等等有自己的看法的小哥哥小姐姐们。
+- **测试反馈组** 🐹：HL视频笔记的真爱粉，希望它变得更好的粉粉们。
 - **开发编程组** 🦁：攻克技术壁垒的攻城狮们。
-- **翻译组** 📙：化解语言的迷雾，让不同文化间的交流变得如丝般顺滑。
+- **翻译组** 🐰：化解语言的迷雾，让不同文化间的交流变得如丝般顺滑。
 
 ### 开发目标
 
@@ -104,7 +106,8 @@ https://plugins.jetbrains.com/plugin/6351-dart
 
 #### Windows
 
-编译环境需要C++ 20，请注意Visual Studio版本，cmake需要3.23及以上，请到cmake官网下载安装包并替换Visual Studio中的cmake(3.22)
+编译环境需要C++ 20，请注意Visual Studio版本，cmake需要3.23及以上，请到cmake官网下载安装包并替换Visual
+Studio中的cmake(3.22)
 
 编译时需要nuget.exe，请前往 [https://www.nuget.org/downloads](https://www.nuget.org/downloads)
 下载并配置好环境变量。
@@ -122,10 +125,11 @@ flutter/ephemeral/.plugin_symlinks/media_kit_libs_windows_video/windows/CMakeLis
 Exception: Unable to generate build files
 ```
 
-(上面代码是mpv-dev-x86_64-20230924-git-652a1dd.7z拉取不下来)请前往https:
-//github.com/media-kit/libmpv-win32-video-build/releases/ 下载对应的文件并拷贝覆盖到项目目录的build/windows下
+（上面代码是mpv-dev-x86_64-20230924-git-652a1dd.7z拉取不下来）请前往[https://github.com/media-kit/libmpv-win32-video-build/releases/](https://github.com/media-kit/libmpv-win32-video-build/releases/)
+下载对应的文件并拷贝覆盖到项目目录的build/windows下
 
-media_kit依赖https://github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES 所以还会报错
+media_kit依赖[https://github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES](https://github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES)
+所以还会报错
 
 ```
 Launching lib\main.dart on Windows in debug mode...
@@ -139,8 +143,7 @@ flutter/ephemeral/.plugin_symlinks/media_kit_libs_windows_video/windows/CMakeLis
 Exception: Unable to generate build files
 ```
 
-(上面代码是ANGLE.7z拉取不下来)请前往https:
-//github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES/releases/download/v1.0.0/ANGLE.7z
+（上面代码是ANGLE.7z拉取不下来）请前往[https://github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES/releases/download/v1.0.0/ANGLE.7z](https://github.com/alexmercerind/flutter-windows-ANGLE-OpenGL-ES/releases/download/v1.0.0/ANGLE.7z)
 下载对应的文件并拷贝覆盖到项目目录的build/windows下
 
 还可能出现错误:
@@ -182,8 +185,8 @@ create . 重新添加。
 运行时依赖很可能拉取不下来，主要是media_kit的依赖
 
 请前往[https://github.com/media-kit/libmpv-android-video-build/releases](https://github.com/media-kit/libmpv-android-video-build/releases)
-下载对应的文件并拷贝覆盖到项目目录的build/media_kit_libs_android_video/{$版本号 如v1.1.5}下(
-一般是default-arm64-v8a.jar、default-armeabi-v7a.jar、default-x86.jar、default-x86_64.jar拉取不下来)
+下载对应的文件并拷贝覆盖到项目目录的build/media_kit_libs_android_video/{$版本号
+如v1.1.5}下（一般是default-arm64-v8a.jar、default-armeabi-v7a.jar、default-x86.jar、default-x86_64.jar拉取不下来）
 
 
 
