@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:note/common/utils/common_tool.dart';
-import 'package:note/pages/videonote/controller.dart';
+import 'package:note/pages/videonote/controller/controller.dart';
 import 'package:note/pages/videonote/state.dart';
 
 class VideoPlayerController {

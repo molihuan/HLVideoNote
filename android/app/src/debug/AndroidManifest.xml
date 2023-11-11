@@ -21,5 +21,13 @@
     <!-- 安卓11额外权限 -->
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
+    <application
+        android:preserveLegacyExternalStorage="true"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true">
+
+
+    </application>
+
 
 </manifest>

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:note/common/langs/translation_service.dart';
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.orange,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        useMaterial3: true,
       ),
 
       debugShowCheckedModeBanner: false,
@@ -31,6 +33,10 @@ class MyApp extends StatelessWidget {
       locale: TranslationService.locale,
       fallbackLocale: TranslationService.fallbackLocale,
       translations: TranslationService(),
+
+      ///flutter_smart_dialog初始化
+      navigatorObservers: [FlutterSmartDialog.observer],
+      builder: FlutterSmartDialog.init(),
     );
   }
 }

@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
-import 'package:note/pages/videonote/quill_text_controller.dart';
-import 'package:note/pages/videonote/video_player_controller.dart';
+import 'package:note/pages/videonote/controller/quill_text_controller.dart';
+import 'package:note/pages/videonote/controller/video_player_controller.dart';
 
-import 'index.dart';
+import '../index.dart';
 
 class VideoNoteController extends GetxController {
   VideoNoteController();

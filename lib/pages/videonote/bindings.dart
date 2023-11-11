@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import 'controller.dart';
+import 'controller/controller.dart';
 
 class VideoNoteBinding implements Bindings {
   @override

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+///WebSocket服务器
 class WebSocketService {
   late final HttpServer socketServer;
   static const int defaultPort = 5411;
