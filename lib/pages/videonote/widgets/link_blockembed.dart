@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:note/pages/videonote/controller.dart';
+import 'package:note/pages/videonote/controller/controller.dart';
 
 //使用时必须在QuillEditor的embedBuilders中注册
 class LinkBlockEmbed extends Embeddable {

@@ -5,14 +5,13 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/extensions.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:fresh_quill_extensions/fresh_quill_extensions.dart';
-import 'package:fresh_quill_extensions/presentation/models/config/toolbar/buttons/camera.dart';
-import 'package:note/pages/videonote/controller.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+import 'package:flutter_quill_extensions/presentation/embeds/embed_types/camera.dart';
+import 'package:note/pages/videonote/controller/controller.dart';
+import 'package:note/pages/videonote/controller/video_player_controller.dart';
 import 'package:note/pages/videonote/insert_image_dialog.dart';
 import 'package:note/pages/videonote/state.dart';
-import 'package:note/pages/videonote/video_player_controller.dart';
 import 'package:note/pages/videonote/widgets/link_blockembed.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -109,7 +108,7 @@ class QuillTextController {
   }
 
   /**
-   * 插入视频锚点
+   * 插入视频节点
    */
   void insertVideoAnchor(QuillController quillController) {
     Duration currentDuration = videoNoteController.getCurrentDuration();
@@ -166,7 +165,7 @@ class QuillTextController {
       TextSelection.collapsed(
         offset: controller.selection.extentOffset + 1,
       ),
-      ChangeSource.LOCAL,
+      ChangeSource.local,
     );
 
     controller.document.insert(controller.selection.extentOffset, '\n');
@@ -174,7 +173,7 @@ class QuillTextController {
       TextSelection.collapsed(
         offset: controller.selection.extentOffset + 1,
       ),
-      ChangeSource.LOCAL,
+      ChangeSource.local,
     );
   }
 
@@ -223,7 +222,7 @@ class QuillTextController {
         extentOffset: offset + length,
       );
 
-      controller.updateSelection(selection, ChangeSource.REMOTE);
+      controller.updateSelection(selection, ChangeSource.remote);
 
       // _selectionType = _SelectionType.line;
 
@@ -252,10 +251,10 @@ class QuillTextController {
    * 构建富文本工具栏
    */
   QuillToolbar buildQuillToolbar(BuildContext context) {
-    List<QuillCustomButton> customQuillCustomButtons = [
-      QuillCustomButton(
-          iconData: Icons.screenshot,
-          onTap: () async {
+    List<QuillToolbarCustomButtonOptions> customQuillCustomButtons = [
+      QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.screenshot),
+          onPressed: () async {
             insertVideoAnchor(quillController);
             final Directory appDocumentsDir =
                 await getApplicationDocumentsDirectory();
@@ -267,34 +266,38 @@ class QuillTextController {
               insertImageBlockEmbed(absolutePath);
             });
           }),
-      QuillCustomButton(
-          iconData: Icons.flag,
-          onTap: () {
+      QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.flag),
+          onPressed: () {
             insertVideoAnchor(quillController);
           }),
-      QuillCustomButton(
-          iconData: Icons.image,
-          onTap: () {
+      QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.image),
+          onPressed: () {
             showDialog(
               context: context,
               barrierDismissible: false,
               builder: (BuildContext context) => InsertImageDialog(),
             );
           }),
-      QuillCustomButton(iconData: Icons.movie_creation, onTap: () {}),
-      QuillCustomButton(iconData: Icons.photo_camera, onTap: () {}),
-      QuillCustomButton(iconData: Icons.find_in_page, onTap: () {}),
-      QuillCustomButton(iconData: Icons.mic, onTap: () {}),
-      QuillCustomButton(iconData: Icons.music_note, onTap: () {}),
-      QuillCustomButton(
-          iconData: Icons.live_tv,
-          onTap: () {
+      QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.movie_creation), onPressed: () {}),
+      QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.photo_camera), onPressed: () {}),
+      QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.find_in_page), onPressed: () {}),
+      QuillToolbarCustomButtonOptions(icon: Icon(Icons.mic), onPressed: () {}),
+      QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.music_note), onPressed: () {}),
+      QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.live_tv),
+          onPressed: () {
             insertVideoBlockEmbed(
-                quillController, "http://file.cccyun.cc/Demo/mv.mp4");
+                quillController, "https://file.cccyun.cc/Demo/mv.mp4");
           }),
-      QuillCustomButton(
-          iconData: Icons.save,
-          onTap: () {
+      QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.save),
+          onPressed: () {
             bool result = saveNote();
             if (result) {
               // Fluttertoast.showToast(msg: "保存成功");
@@ -304,35 +307,18 @@ class QuillTextController {
           }),
     ];
 
-    // var toolbar = QuillToolbar.basic(
-    //     controller: quillController!,
-    //     embedButtons: FlutterQuillEmbeds.buttons(
-    //       showImageButton: false,
-    //       showCameraButton: true,
-    //       showVideoButton: false,
-    //       showFormulaButton: true,
-    //       // provide a callback to enable picking images from device.
-    //       // if omit, "image" button only allows adding images from url.
-    //       // same goes for videos.
-    //       // onImagePickCallback: _onImagePickCallback,
-    //       // onVideoPickCallback: _onVideoPickCallback,
-    //       // uncomment to provide a custom "pick from" dialog.
-    //       // mediaPickSettingSelector: _selectMediaPickSetting,
-    //       // uncomment to provide a custom "pick from" dialog.
-    //       // cameraPickSettingSelector: _selectCameraPickSetting,
-    //     ),
-    //     showAlignmentButtons: true,
-    //     afterButtonPressed: _focusNode.requestFocus,
-    //     customButtons: customQuillCustomButtons);
     var toolbar = QuillToolbar(
       configurations: QuillToolbarConfigurations(
         customButtons: customQuillCustomButtons,
         showAlignmentButtons: true,
         embedButtons: FlutterQuillEmbeds.toolbarButtons(
           imageButtonOptions: QuillToolbarImageButtonOptions(
-            onImagePickCallback: (file) async {
-              return file.path;
-            },
+            imageButtonConfigurations: QuillToolbarImageConfigurations(
+              onImageInsertedCallback: (image) async {
+                // _onImagePickCallback(File(image));
+              },
+              onImageInsertCallback: onImageInsert,
+            ),
           ),
         ),
         buttonOptions: QuillToolbarButtonOptions(
@@ -349,9 +335,12 @@ class QuillTextController {
           showAlignmentButtons: true,
           embedButtons: FlutterQuillEmbeds.toolbarButtons(
             imageButtonOptions: QuillToolbarImageButtonOptions(
-              onImagePickCallback: (file) async {
-                return file.path;
-              },
+              imageButtonConfigurations: QuillToolbarImageConfigurations(
+                onImageInsertedCallback: (image) async {
+                  // _onImagePickCallback(File(image));
+                },
+                onImageInsertCallback: onImageInsert,
+              ),
             ),
           ),
           buttonOptions: QuillToolbarButtonOptions(
@@ -369,17 +358,18 @@ class QuillTextController {
           showAlignmentButtons: true,
           embedButtons: FlutterQuillEmbeds.toolbarButtons(
             imageButtonOptions: QuillToolbarImageButtonOptions(
-              onImagePickCallback: (file) async {
-                return file.path;
-              },
+              imageButtonConfigurations: QuillToolbarImageConfigurations(
+                onImageInsertedCallback: (image) async {
+                  // _onImagePickCallback(File(image));
+                },
+                onImageInsertCallback: onImageInsert,
+              ),
             ),
             cameraButtonOptions: QuillToolbarCameraButtonOptions(
-              onImagePickCallback: (File file) async {
-                return file.path;
-              },
-              onVideoPickCallback: (File file) async {
-                return file.path;
-              },
+              cameraConfigurations: QuillToolbarCameraConfigurations(
+                  onVideoInsertedCallback: (source) {
+                return Future(() => null);
+              }),
             ),
           ),
           buttonOptions: QuillToolbarButtonOptions(
@@ -393,6 +383,42 @@ class QuillTextController {
     return toolbar;
   }
 
+  /// When inserting an image
+  OnImageInsertCallback get onImageInsert {
+    return (image, controller) async {
+      // final croppedFile = await ImageCropper().cropImage(
+      //   sourcePath: image,
+      //   aspectRatioPresets: [
+      //     CropAspectRatioPreset.square,
+      //     CropAspectRatioPreset.ratio3x2,
+      //     CropAspectRatioPreset.original,
+      //     CropAspectRatioPreset.ratio4x3,
+      //     CropAspectRatioPreset.ratio16x9
+      //   ],
+      //   uiSettings: [
+      //     AndroidUiSettings(
+      //       toolbarTitle: 'Cropper',
+      //       toolbarColor: Colors.deepOrange,
+      //       toolbarWidgetColor: Colors.white,
+      //       initAspectRatio: CropAspectRatioPreset.original,
+      //       lockAspectRatio: false,
+      //     ),
+      //     IOSUiSettings(
+      //       title: 'Cropper',
+      //     ),
+      //     // WebUiSettings(
+      //     //   context: context,
+      //     // ),
+      //   ],
+      // );
+      // final newImage = croppedFile?.path;
+      // if (newImage == null) {
+      //   return;
+      // }
+      // controller.insertImageBlock(imageSource: newImage);
+    };
+  }
+
   /**
    * 构建富文本编辑器
    */
@@ -401,7 +427,6 @@ class QuillTextController {
       configurations: QuillEditorConfigurations(
         placeholder: '添加内容',
         padding: EdgeInsets.all(5),
-        enableSelectionToolbar: isMobile(),
         onImagePaste: _onImagePaste,
         onTapUp: (details, p1) {
           return _onTripleClickSelection();
@@ -440,13 +465,12 @@ class QuillTextController {
         configurations: QuillEditorConfigurations(
           placeholder: '添加内容',
           padding: EdgeInsets.all(5),
-          enableSelectionToolbar: isMobile(),
           onImagePaste: _onImagePaste,
           onTapUp: (details, p1) {
             return _onTripleClickSelection();
           },
           embedBuilders: [
-            ...FlutterQuillEmbeds.editorsWebBuilders(),
+            ...FlutterQuillEmbeds.editorWebBuilders(),
             LinkEmbedBuilder(videoNoteController: videoNoteController)
           ],
           customStyles: DefaultStyles(

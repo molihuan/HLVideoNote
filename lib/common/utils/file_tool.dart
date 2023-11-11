@@ -11,15 +11,16 @@ import 'package:path_provider/path_provider.dart';
 enum FileSourceType { LOCAL, NETWORK }
 
 class FileTool {
-  static final String FILE_NAME_IMG = "img";
-  static final String FILE_NAME_CONFIG = "config";
-  static final String FILE_NAME_VIDEO = "video";
-  static final String FILE_NAME_PDF = "pdf";
-  static final String FILE_NAME_RESOURCE = "resource";
-  static final String FILE_NAME_SUFFIX_HL = ".hl";
-  static final String VIDEO_SOURCE_KEY = "videoSource";
-  static final String FILE_NAME_BASE_CONFIG_JSON = "BaseConfig.json";
+  static const String FILE_NAME_IMG = "img";
+  static const String FILE_NAME_CONFIG = "config";
+  static const String FILE_NAME_VIDEO = "video";
+  static const String FILE_NAME_PDF = "pdf";
+  static const String FILE_NAME_RESOURCE = "resource";
+  static const String FILE_NAME_SUFFIX_HL = ".hl";
+  static const String VIDEO_SOURCE_KEY = "videoSource";
+  static const String FILE_NAME_BASE_CONFIG_JSON = "BaseConfig.json";
 
+  ///获取外部存储路径
   static Future<String> getExternalStoragePath() async {
     String directoryPath = '';
     try {

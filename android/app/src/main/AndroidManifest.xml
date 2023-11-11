@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
     <!--
       Media access permissions.
@@ -21,6 +22,7 @@
     <application
         android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
         android:label="note"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

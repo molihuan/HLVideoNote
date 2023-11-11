@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/middlewares/shelf/service/shelf_service.dart';
@@ -33,6 +34,11 @@ class MyPage extends GetView<MyController> {
               final webSocketClient = WebSocketClient();
               webSocketClient.connect(ip: "192.168.1.3", port: "5411");
               webSocketClient.send('Hello, WebSocket!');
+            }),
+        GFButton(
+            text: "toast",
+            onPressed: () {
+              SmartDialog.showToast('test toast');
             }),
       ],
     );

@@ -25,8 +25,8 @@ dependencies:
   #  flutter_quill_extensions: 0.4.1
   # flutter_quill: ^7.4.4
   # flutter_quill_extensions: 0.6.0-dev
-  flutter_quill: ^8.1.2
-  fresh_quill_extensions: ^0.0.3
+  flutter_quill: ^8.4.1
+  flutter_quill_extensions: ^0.6.6
   #路由组件
   get: ^4.6.5
   #持久化组件
@@ -71,11 +71,12 @@ dependencies:
   flutter_drawing_board: ^0.5.0
   #  手写签名
   syncfusion_flutter_signaturepad: ^23.1.43
-  # 图片工具
+  # 图片扩展
   extended_image: 8.0.2
+  # 图片裁剪
+  crop_image: ^1.0.11
   #录音
   record: ^5.0.1
-
   #插件系统
   flutter_js: ^0.8.0
   #拖拽控件
@@ -96,7 +97,7 @@ dependencies:
   flutter_code_editor: ^0.3.1
   #工具类
   nb_utils: ^6.0.6
-  #网格视图组件
+  #网格视图布局组件
   flutter_staggered_grid_view: ^0.7.0
   #上拉下拉刷新
   pull_to_refresh: ^2.0.0
@@ -116,13 +117,18 @@ dependencies:
   shelf: ^1.4.1
   #websocket
   web_socket_channel: ^2.4.0
+  #响应式数据绑定框架
+  flutter_riverpod: ^2.4.5
+
 
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  #  代码规范
+  flutter_lints: ^2.0.3
+  #json序列化
   json_serializable: ^6.7.1
   build_runner: ^2.4.6
 flutter:
