@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:note/middlewares/shelf/service/shelf_service.dart';
+import 'package:note/middlewares/websocket/client/socket_client.dart';
+import 'package:note/middlewares/websocket/service/socket_service.dart';
 
 import 'index.dart';
 
@@ -13,17 +12,30 @@ class MyPage extends GetView<MyController> {
 
   // 主视图
   Widget _buildView() {
-    return GFButton(
-        text: "99",
-        onPressed: () async {
-          // Fluttertoast.showToast(
-          //   msg: "666",
-          // );
-          var logger = Logger();
-
-          Directory? ff = await getExternalStorageDirectory();
-          logger.d("运行了" + ff!.path);
-        });
+    return Column(
+      children: [
+        GFButton(
+            text: "开启shelf服务",
+            onPressed: () async {
+              var service = ShelfService();
+              service.run();
+            }),
+        GFButton(
+            text: "开启socket服务",
+            onPressed: () async {
+              var serv = WebSocketService();
+              await serv.create();
+              serv.listen((data, webSocket) {});
+            }),
+        GFButton(
+            text: "发送socket信息",
+            onPressed: () {
+              final webSocketClient = WebSocketClient();
+              webSocketClient.connect(ip: "192.168.1.3", port: "5411");
+              webSocketClient.send('Hello, WebSocket!');
+            }),
+      ],
+    );
   }
 
   @override
