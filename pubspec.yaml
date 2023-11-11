@@ -31,18 +31,23 @@ dependencies:
   get: ^4.6.5
   #持久化组件
   shared_preferences: ^2.2.1
+  #存储
+  isar: ^3.1.0+1
+  get_storage: ^2.1.1
   #路径组件
   path_provider: ^2.1.1
   #安卓路径
   external_path: ^1.0.3
   #文件选择
+  path: ^1.8.3
   file_picker:
     path: ./plugins/flutter_file_picker
-  path: ^1.8.3
 
   # 国际化
   flutter_localizations:
     sdk: flutter
+  #json工具
+  json_annotation: ^4.8.1
   #权限组件
   permission_handler: ^11.0.0
   #吐司弹窗框架
@@ -64,14 +69,13 @@ dependencies:
   pdf: ^3.10.4
   #白板工具
   flutter_drawing_board: ^0.5.0
+  #  手写签名
+  syncfusion_flutter_signaturepad: ^23.1.43
   # 图片工具
   extended_image: 8.0.2
-  #json工具
-  json_annotation: ^4.8.1
   #录音
   record: ^5.0.1
-  # 文件传输
-  socket_io_client: ^2.0.3+1
+
   #插件系统
   flutter_js: ^0.8.0
   #拖拽控件
@@ -80,7 +84,7 @@ dependencies:
   floating_overlay: ^1.2.1
   #搜索框组件
   super_cupertino_navigation_bar: ^1.1.2
-  #icon
+  #应用图标
   flutter_launcher_icons: ^0.13.1
   #屏幕工具
   flutter_screenutil: ^5.9.0
@@ -96,24 +100,23 @@ dependencies:
   flutter_staggered_grid_view: ^0.7.0
   #上拉下拉刷新
   pull_to_refresh: ^2.0.0
-  #存储
-  isar: ^3.1.0+1
 
+  #底部导航栏
   persistent_bottom_nav_bar: ^5.0.2
 
-  get_storage: ^2.1.1
-
-  velocity_x: ^4.1.1
-
-  sizer: ^2.0.15
-
+  #响应式UI
+  responsive_framework: ^1.1.1
+  #高级屏幕截图
   screenshot: ^2.1.0
-
+  #键盘行为
   keyboard_actions: ^4.2.0
-
+  #  设置UI
   settings_ui: ^2.0.2
+  #服务器组件
+  shelf: ^1.4.1
 
-  syncfusion_flutter_signaturepad: ^23.1.43
+  web_socket_channel: ^2.4.0
+
 
 
 dev_dependencies:

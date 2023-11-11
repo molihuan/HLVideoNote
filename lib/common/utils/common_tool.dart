@@ -35,6 +35,9 @@ class CommonTool {
     return formattedTime;
   }
 
+  /**
+   * 获取当前时间
+   */
   static String getCurrentTime() {
     DateTime dateTime = DateTime.now();
     final formattedDate =
