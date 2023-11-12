@@ -4,12 +4,11 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/components/text_field/gf_text_field.dart';
 import 'package:getwidget/size/gf_size.dart';
-import 'package:note/pages/videonote/index.dart';
 
 enum SourceType { LOCAL, NETWORK }
 
-class InsertImageDialog extends GetView<VideoNoteController> {
-  final controller = Get.find<VideoNoteController>();
+class InsertImageDialog extends GetView {
+  // final controller = Get.find<VideoNoteController>();
 
   SourceType imgSourceType = SourceType.LOCAL;
 

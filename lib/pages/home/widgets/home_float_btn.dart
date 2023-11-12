@@ -3,7 +3,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:note/pages/home/widgets/create_note_video_dialog.dart';
 import 'package:note/pages/home/widgets/open_note_video_dialog.dart';
-import 'package:note/routes/app_pages.dart';
 
 import '../index.dart';
 
@@ -18,12 +17,11 @@ class HomeFloatBtn extends GetView<HomeController> {
       overlayOpacity: 0.0,
       children: [
         SpeedDialChild(
-          child: Icon(Icons.book),
-          label: '从书籍创建',
-          onTap: () => print('Camera'),
-        ),
+            child: Icon(Icons.picture_as_pdf_outlined),
+            label: '从pdf创建',
+            onTap: () {}),
         SpeedDialChild(
-          child: Icon(Icons.video_library),
+          child: Icon(Icons.live_tv),
           label: '从视频创建',
           onTap: () {
             showDialog(
@@ -34,14 +32,12 @@ class HomeFloatBtn extends GetView<HomeController> {
           },
         ),
         SpeedDialChild(
-          child: Icon(Icons.note),
+          child: Icon(Icons.create_outlined),
           label: '创建笔记',
-          onTap: () {
-            Get.toNamed(AppRoutes.VideoNote);
-          },
+          onTap: () {},
         ),
         SpeedDialChild(
-          child: Icon(Icons.open_in_new),
+          child: Icon(Icons.file_open_outlined),
           label: '打开笔记',
           onTap: () {
             showDialog(

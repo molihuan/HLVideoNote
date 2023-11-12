@@ -1,15 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:get/get.dart';
-import 'package:note/pages/videonote/index.dart';
+import 'package:note/pages/videonote/base_video_note_view.dart';
 
-class NoteArea extends GetView<VideoNoteController> {
+class NoteArea extends BaseVideoNoteView {
   NoteArea({Key? key}) : super(key: key);
 
-  final controller = Get.find<VideoNoteController>();
-  late final quillController = controller.quillController;
-  late final quillEditor = controller.quillEditor;
+  late final quillController = quillTextController.quillController;
+  late final quillEditor = quillTextController.quillEditor;
   late final quillToolbar;
 
   @override
@@ -19,7 +17,7 @@ class NoteArea extends GetView<VideoNoteController> {
   }
 
   void initData(BuildContext context) {
-    quillToolbar = controller.buildQuillToolbar(context);
+    quillToolbar = quillTextController.buildQuillToolbar(context);
   }
 
   Widget buildQuillView() {

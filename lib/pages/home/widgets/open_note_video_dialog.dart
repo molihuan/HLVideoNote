@@ -1,11 +1,11 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/common/utils/file_tool.dart';
 import 'package:note/common/utils/platform_tool.dart';
+import 'package:note/models/note/base_note.dart';
+import 'package:note/models/note/impl/local_note.dart';
 import 'package:note/routes/app_pages.dart';
 
 import '../index.dart';
@@ -75,7 +75,7 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
                       PlatformFile file = result.files.first;
                       print('path： ${file.path}');
                       noteFilePathEditController.text = file.path ?? "";
-                    } else {}
+                    }
                   }, other: () async {
                     // 选择本地视频文件
                     FilePickerResult? result =
@@ -84,7 +84,7 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
                       PlatformFile file = result.files.first;
                       print('path： ${file.path}');
                       noteFilePathEditController.text = file.path ?? "";
-                    } else {}
+                    }
                   });
                 },
               )
@@ -122,28 +122,55 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
-            String noteFileSource = noteFileSourceType == FileSourceType.LOCAL
-                ? noteFilePathEditController.text
-                : noteFileUrlEditController.text;
+            // String noteFileSource = noteFileSourceType == FileSourceType.LOCAL
+            //     ? noteFilePathEditController.text
+            //     : noteFileUrlEditController.text;
+            BaseNote baseNote;
+            switch (noteFileSourceType) {
+              case FileSourceType.LOCAL:
+                baseNote = LocalNote(
+                    noteType: NoteType.video,
+                    noteTitle: '',
+                    noteDescription: '',
+                    noteUpdateTime: DateTime.now(),
+                    noteFilePath: noteFilePathEditController.text);
+                break;
+
+              case FileSourceType.NETWORK:
+                baseNote = LocalNote(
+                    noteType: NoteType.video,
+                    noteTitle: '',
+                    noteDescription: '',
+                    noteUpdateTime: DateTime.now(),
+                    noteFilePath: noteFilePathEditController.text);
+                break;
+            }
+
             //判断文件是否存在
-            FileTool.fileExists(noteFileSource);
+            // if (FileTool.fileExists(noteFileSource)) {
+            //   SmartDialog.showToast("文件不存在");
+            //   return;
+            // }
 
             //从配置文件中获取视频的路径
-            String noteProjectPath = FileTool.getParentPath(noteFileSource);
-            var baseJsonPath = noteProjectPath +
-                Platform.pathSeparator +
-                FileTool.FILE_NAME_RESOURCE +
-                Platform.pathSeparator +
-                FileTool.FILE_NAME_CONFIG +
-                Platform.pathSeparator +
-                FileTool.FILE_NAME_BASE_CONFIG_JSON;
-            var jsonObj = FileTool.readJson(baseJsonPath)!;
+            // String noteProjectPath = FileTool.getParentPath(noteFileSource)!;
+            // var baseJsonPath = noteProjectPath +
+            //     Platform.pathSeparator +
+            //     FileTool.FILE_NAME_RESOURCE +
+            //     Platform.pathSeparator +
+            //     FileTool.FILE_NAME_CONFIG +
+            //     Platform.pathSeparator +
+            //     FileTool.FILE_NAME_BASE_CONFIG_JSON;
+            // var jsonObj = FileTool.readJson(baseJsonPath)!;
+
+            var jsonObj = FileTool.readJson(
+                baseNote.noteRouteMsg.noteBaseConfigFilePosition!)!;
 
             //
             Get.toNamed(AppRoutes.VideoNote, arguments: {
               'noteFileSourceType': noteFileSourceType,
               'videoSource': jsonObj["videoSource"],
-              'noteFilePath': noteFileSource,
+              'noteFilePath': baseNote.noteRouteMsg.noteFilePosition,
             });
           },
           child: Text('打开'),

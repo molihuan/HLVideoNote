@@ -1,18 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_drawing_board/flutter_drawing_board.dart';
-import 'package:get/get.dart';
-import 'package:getwidget/components/avatar/gf_avatar.dart';
-import 'package:getwidget/components/radio_list_tile/gf_radio_list_tile.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:getwidget/position/gf_position.dart';
-import 'package:getwidget/types/gf_radio_type.dart';
-import 'package:note/common/utils/common_tool.dart';
-import 'dart:ui' as ui;
-
-import '../index.dart';
+import 'package:note/common/utils/file_tool.dart';
 
 //白板测试
 class HelloWidget extends StatefulWidget {
@@ -39,7 +29,7 @@ class _MyAccordionState extends State<HelloWidget> {
           ByteData? data = await _drawingController.getImageData();
 
           var asInt8List = data?.buffer.asUint8List();
-          CommonTool.saveImage(asInt8List, "D:/", "1.png");
+          FileTool.saveImage(asInt8List!, "D:/", "1.png");
           print("成功");
         },
       ),

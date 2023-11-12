@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:note/pages/videonote/controller/controller.dart';
+import 'package:note/pages/videonote/controller/video_player_controller.dart';
 
 //使用时必须在QuillEditor的embedBuilders中注册
 class LinkBlockEmbed extends Embeddable {
@@ -21,9 +21,9 @@ class LinkBlockEmbed extends Embeddable {
 }
 
 class LinkEmbedBuilder extends EmbedBuilder {
-  LinkEmbedBuilder({required this.videoNoteController});
+  LinkEmbedBuilder({required this.videoPlayerController});
 
-  VideoNoteController videoNoteController;
+  VideoPlayerController videoPlayerController;
 
   @override
   String get key => 'LinkBlockEmbed';
@@ -49,7 +49,7 @@ class LinkEmbedBuilder extends EmbedBuilder {
           onTap: () {
             String targetDuration =
                 node.value.data[LinkBlockEmbed.editValueKey] as String;
-            videoNoteController.playerSeek(durationStr: targetDuration);
+            videoPlayerController.playerSeek(durationStr: targetDuration);
           },
           child: Text(
             node.value.data[LinkBlockEmbed.editValueKey] as String,

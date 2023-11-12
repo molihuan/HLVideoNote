@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:note/common/utils/common_tool.dart';
+import 'package:note/common/utils/file_tool.dart';
 import 'package:web_socket_channel/io.dart';
 
 class WebSocketClient {
@@ -16,7 +16,7 @@ class WebSocketClient {
   listen() {
     channel.stream.listen((message) {
       // print('Received: $message');
-      CommonTool.saveImage(message,
+      FileTool.saveImage(message,
           "C:/Users/moli/Flutter/Note/note/assets/images/", "ml01.png");
     });
   }

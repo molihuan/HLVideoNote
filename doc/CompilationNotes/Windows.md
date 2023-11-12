@@ -1,4 +1,4 @@
-## Windows编译注意事项
+## Windows版编译注意事项
 
 编译环境需要C++ 20，请注意Visual Studio版本，cmake需要3.23及以上，请到cmake官网下载安装包并替换Visual
 Studio中的cmake(3.22)

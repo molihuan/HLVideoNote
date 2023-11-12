@@ -24,9 +24,7 @@ class PlatformTool {
 
   static bool isWeb() => kIsWeb;
 
-  /**
-   * 平台空回调
-   */
+  ///平台空回调
   static void voidCallback({
     VoidCallback? android,
     VoidCallback? ios,
@@ -65,6 +63,9 @@ class PlatformTool {
         other: other);
   }
 
+  ///平台回调
+  ///[E] 返回类型
+  ///[T] 方法类型,请看:common_tool.dart,也可自定义
   static E? callback<E, T extends Function>({
     T? android,
     T? ios,

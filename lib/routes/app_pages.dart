@@ -24,8 +24,8 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.VideoNote,
-      page: () => const VideoNotePage(),
-      bindings: [VideoNoteBinding()],
+      page: () => VideoNotePage(),
+      binding: VideoNoteBinding(),
     ),
   ];
 }
