@@ -8,13 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_quill_extensions/presentation/embeds/embed_types/camera.dart';
-import 'package:note/pages/videonote/controller/controller.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
+import 'package:note/common/utils/common_tool.dart';
+import 'package:note/common/utils/file_tool.dart';
+import 'package:note/models/note/base_note.dart';
+import 'package:note/models/note/impl/local_note.dart';
+import 'package:note/pages/videonote/controller/multi_split_controller.dart';
 import 'package:note/pages/videonote/controller/video_player_controller.dart';
-import 'package:note/pages/videonote/insert_image_dialog.dart';
-import 'package:note/pages/videonote/state.dart';
+import 'package:note/pages/videonote/widgets/dialogs/insert_image_dialog.dart';
 import 'package:note/pages/videonote/widgets/link_blockembed.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 enum _SelectionType {
   none,
@@ -22,14 +25,28 @@ enum _SelectionType {
   // line,
 }
 
-/**
- * 富文本控制器
- */
-class QuillTextController {
-  QuillTextController({required this.videoNoteController, required this.state});
+///状态
+class QuillTextState {
+  // 笔记源
+  final _baseNote = Rx<BaseNote>(LocalNote(
+      noteType: NoteType.video,
+      noteFilePath: "",
+      noteTitle: 'videoLocalNote',
+      noteDescription: 'videoLocalNote',
+      noteUpdateTime: DateTime.now()));
 
-  VideoNoteController videoNoteController;
-  VideoNoteState state;
+  set baseNote(value) => _baseNote.value = value;
+
+  BaseNote get baseNote => _baseNote.value;
+}
+
+///富文本控制器
+class QuillTextController extends GetxController {
+  final state = QuillTextState();
+
+  final videoPlayerController = Get.find<VideoPlayerController>();
+
+  late final noteRouteMsg = state.baseNote.noteRouteMsg;
 
   //创建富文本编辑器
   late final QuillEditor quillEditor = buildQuillEditor();
@@ -49,10 +66,6 @@ class QuillTextController {
 
   Timer? _selectAllTimer;
   _SelectionType _selectionType = _SelectionType.none;
-
-  VideoPlayerController getVideoPlayerController() {
-    return videoNoteController.videoPlayerController;
-  }
 
   /**
    * 加载笔记数据
@@ -75,16 +88,14 @@ class QuillTextController {
     }
   }
 
-  /**
-   * 保存笔记
-   */
+  ///保存笔记
   bool saveNote() {
     var deltaJson = quillController.document.toDelta().toJson();
     print(deltaJson);
 
     String jsonString = jsonEncode(deltaJson);
 
-    final file = File(state.noteFilePath);
+    final file = File(noteRouteMsg.noteFilePosition);
     try {
       file.writeAsStringSync(jsonString);
       return true;
@@ -99,24 +110,24 @@ class QuillTextController {
    */
   Future<String> _onImagePaste(Uint8List imageBytes) async {
     // Saves the image to applications directory
-    final appDocDir = await getApplicationDocumentsDirectory();
-    final file = await File(
-            '${appDocDir.path}/${basename('${DateTime.now().millisecondsSinceEpoch}.png')}')
-        .writeAsBytes(imageBytes, flush: true);
-    print("_onImagePaste:保存路径" + file.path);
-    return file.path.toString();
+    String imgDir = noteRouteMsg.noteImgDirPosition!;
+    String fileName = CommonTool.getCurrentTime() + ".jpeg";
+    var allPath = await FileTool.saveImage(imageBytes, imgDir, fileName);
+
+    print("_onImagePaste:保存路径" + allPath!);
+    return allPath;
   }
 
   /**
    * 插入视频节点
    */
   void insertVideoAnchor(QuillController quillController) {
-    Duration currentDuration = videoNoteController.getCurrentDuration();
+    Duration currentDuration = videoPlayerController.getCurrentDuration();
     //去除毫秒
     String currentDurationStr = currentDuration.toString().split('.').first;
 
     insertLinkBlockEmbed(quillController, currentDurationStr, () {
-      videoNoteController.playerSeek(duration: currentDuration);
+      videoPlayerController.playerSeek(duration: currentDuration);
     });
   }
 
@@ -256,13 +267,9 @@ class QuillTextController {
           icon: Icon(Icons.screenshot),
           onPressed: () async {
             insertVideoAnchor(quillController);
-            final Directory appDocumentsDir =
-                await getApplicationDocumentsDirectory();
+            String imgDir = noteRouteMsg.noteImgDirPosition!;
 
-            print("截图保存路径为" + appDocumentsDir.path);
-
-            videoNoteController.videoScreenShot(appDocumentsDir.path,
-                (absolutePath) {
+            videoPlayerController.videoScreenShot(imgDir, (absolutePath) {
               insertImageBlockEmbed(absolutePath);
             });
           }),
@@ -296,13 +303,19 @@ class QuillTextController {
                 quillController, "https://file.cccyun.cc/Demo/mv.mp4");
           }),
       QuillToolbarCustomButtonOptions(
+          icon: Icon(Icons.unarchive_outlined),
+          onPressed: () {
+            final msc = Get.find<MultiSplitController>();
+            msc.setAxis(Axis.vertical);
+          }),
+      QuillToolbarCustomButtonOptions(
           icon: Icon(Icons.save),
           onPressed: () {
             bool result = saveNote();
             if (result) {
-              // Fluttertoast.showToast(msg: "保存成功");
+              SmartDialog.showToast('保存成功');
             } else {
-              // Fluttertoast.showToast(msg: "保存失败");
+              SmartDialog.showToast('保存失败');
             }
           }),
     ];
@@ -433,7 +446,7 @@ class QuillTextController {
         },
         embedBuilders: [
           ...FlutterQuillEmbeds.editorBuilders(),
-          LinkEmbedBuilder(videoNoteController: videoNoteController)
+          LinkEmbedBuilder(videoPlayerController: videoPlayerController)
         ],
         customStyles: DefaultStyles(
           h1: DefaultTextBlockStyle(
@@ -471,7 +484,7 @@ class QuillTextController {
           },
           embedBuilders: [
             ...FlutterQuillEmbeds.editorWebBuilders(),
-            LinkEmbedBuilder(videoNoteController: videoNoteController)
+            LinkEmbedBuilder(videoPlayerController: videoPlayerController)
           ],
           customStyles: DefaultStyles(
             h1: DefaultTextBlockStyle(
@@ -497,7 +510,7 @@ class QuillTextController {
 
   //获取视频地址或路径
   String? getNoteFilePath() {
-    Map? arguments = videoNoteController.getArguments();
+    Map? arguments = getArguments();
     if (arguments == null) {
       return null;
     }
@@ -505,11 +518,26 @@ class QuillTextController {
     return noteFilePath == null ? null : noteFilePath as String;
   }
 
+  ///获取传入页面的参数
+  Map? getArguments() {
+    if (Get.arguments != null) {
+      final arguments = Get.arguments as Map;
+      return arguments;
+    }
+    return null;
+  }
+
   /// 在 widget 内存中分配后立即调用。
   void onInit() {
-    state.noteFilePath = getNoteFilePath();
-    if (state.noteFilePath != null) {
-      loadNoteFileData(state.noteFilePath);
+    String? noteFilePath = getNoteFilePath();
+    if (noteFilePath != null) {
+      state.baseNote = LocalNote(
+          noteType: NoteType.video,
+          noteTitle: '',
+          noteDescription: '',
+          noteUpdateTime: DateTime.now(),
+          noteFilePath: noteFilePath);
+      loadNoteFileData(noteFilePath);
     }
   }
 

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:note/models/note_data.dart';
+import 'package:note/models/note/base_note.dart';
 
 class HomeState {
   //创建视频笔记类型
@@ -10,7 +10,7 @@ class HomeState {
   get videoType => _videoType.value;
 
   //笔记数据列表
-  final _noteDataList = <NoteData>[].obs;
+  final _noteDataList = <BaseNote>[].obs;
 
   set noteDataList(value) => _noteDataList.value = value;
 

@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:external_path/external_path.dart';
 import 'package:note/common/utils/common_tool.dart';
 import 'package:note/common/utils/platform_tool.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 enum FileSourceType { LOCAL, NETWORK }
@@ -19,6 +21,32 @@ class FileTool {
   static const String FILE_NAME_SUFFIX_HL = ".hl";
   static const String VIDEO_SOURCE_KEY = "videoSource";
   static const String FILE_NAME_BASE_CONFIG_JSON = "BaseConfig.json";
+
+  ///保存图片
+  ///[imageBytes] 图片数据
+  ///[dirPath] 保存路径
+  ///[fileName] 文件名称
+  static Future<String?> saveImage(
+      Uint8List imageBytes, String dirPath, String fileName) async {
+    // 获取图片保存目录
+    Directory directory = Directory(dirPath);
+    if (!directory.existsSync()) {
+      directory.createSync(recursive: true);
+    }
+    String absolutePath = join(dirPath, fileName);
+    File imageFile = File(absolutePath);
+
+    try {
+      /// 将图片数据写入文件
+      await imageFile.writeAsBytes(imageBytes);
+
+      /// 返回保存的图片路径
+      return absolutePath;
+    } catch (e) {
+      print('保存图片出错：$e');
+      return null;
+    }
+  }
 
   ///获取外部存储路径
   static Future<String> getExternalStoragePath() async {
@@ -209,7 +237,19 @@ class FileTool {
   /**
    * 获取上一级目录
    */
-  static String getParentPath(String path) {
+  static String? getParentPath(String path) {
+    if (path.isEmpty) {
+      return null;
+    }
+
+    ///如果是以路径分隔符结尾则去除最后的路径分隔符
+    if (path.endsWith(Platform.pathSeparator)) {
+      path = path.substring(0, path.length - 1);
+    }
+
+    if (!path.contains(Platform.pathSeparator)) {
+      return null;
+    }
     int endIndex = path.lastIndexOf(Platform.pathSeparator);
     return path.substring(0, endIndex);
   }

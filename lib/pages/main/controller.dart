@@ -8,14 +8,6 @@ class MainController extends GetxController {
 
   final state = MainState();
 
-  // tap
-  void handleTap(int index) {
-    Get.snackbar(
-      "标题",
-      "消息",
-    );
-  }
-
   /// 在 widget 内存中分配后立即调用。
   @override
   void onInit() {

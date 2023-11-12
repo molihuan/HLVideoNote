@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/common/utils/common_tool.dart';
-import 'package:note/models/note_data.dart';
+import 'package:note/models/note/base_note.dart';
+import 'package:note/models/note/impl/local_note.dart';
+import 'package:note/models/note/impl/web_socket_note.dart';
 import 'package:note/pages/home/controller.dart';
 
 class NoteList extends GetView<HomeController> {
@@ -10,33 +12,47 @@ class NoteList extends GetView<HomeController> {
 
   final controller = Get.find<HomeController>();
 
-  List<NoteData> noteDataList = [
-    NoteData(
-      title: '笔记标题1',
-      description: '笔记简介1',
-      time: DateTime.now(),
-    ),
-    NoteData(
-      title: '笔记标题2',
-      description: '笔记简介2',
-      time: DateTime.now(),
-    ),
-    NoteData(
-      title: '笔记标题3',
-      description: '笔记简介3',
-      time: DateTime.now(),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     controller.state.noteDataList;
+    var txtLocalNote = LocalNote(
+        noteType: NoteType.txt,
+        noteFilePath: "",
+        noteTitle: 'txtLocalNote',
+        noteDescription: 'txtLocalNote',
+        noteUpdateTime: DateTime.now());
+    var videoLocalNote = LocalNote(
+        noteType: NoteType.video,
+        noteFilePath: "",
+        noteTitle: 'videoLocalNote',
+        noteDescription: 'videoLocalNote',
+        noteUpdateTime: DateTime.now());
+    var txtWebSocketNote = WebSocketNote(
+        noteType: NoteType.txt,
+        noteFileUrl: '',
+        noteTitle: 'txtWebSocketNote',
+        noteDescription: 'txtWebSocketNote',
+        noteUpdateTime: DateTime.now());
+    var videoWebSocketNote = WebSocketNote(
+        noteType: NoteType.video,
+        noteFileUrl: '',
+        noteTitle: 'videoWebSocketNote',
+        noteDescription: 'videoWebSocketNote',
+        noteUpdateTime: DateTime.now());
+
+    List<BaseNote> noteDataList = [
+      txtLocalNote,
+      videoLocalNote,
+      txtWebSocketNote,
+      videoWebSocketNote
+    ];
 
     return ListView.builder(
       itemCount: noteDataList.length,
       itemBuilder: (context, index) {
         final noteDataItem = noteDataList[index];
-        final formattedTime = CommonTool.getFormattedTime(noteDataItem.time);
+        final formattedTime =
+            CommonTool.getFormattedTime(noteDataItem.noteUpdateTime);
 
         return GestureDetector(
           onLongPress: () {
@@ -71,9 +87,9 @@ class NoteList extends GetView<HomeController> {
             margin: EdgeInsets.all(7),
             title: GFListTile(
               margin: EdgeInsets.symmetric(),
-              title: Text(noteDataItem.title),
+              title: Text(noteDataItem.noteTitle),
               subTitle: Text(
-                noteDataItem.description,
+                noteDataItem.noteDescription,
                 style: TextStyle(fontSize: 13, color: Colors.grey),
               ),
             ),

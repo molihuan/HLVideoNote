@@ -1,17 +1,14 @@
 import 'dart:typed_data';
 
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:note/common/utils/common_tool.dart';
-import 'package:note/pages/videonote/controller/controller.dart';
-import 'package:note/pages/videonote/state.dart';
+import 'package:note/common/utils/file_tool.dart';
 
-class VideoPlayerController {
-  VideoPlayerController(
-      {required this.videoNoteController, required this.state});
-
-  VideoNoteController videoNoteController;
-  VideoNoteState state;
+class VideoPlayerController extends GetxController {
+  late Duration currentDuration;
 
   // 创建视频播放器
   late final player = Player(
@@ -29,11 +26,20 @@ class VideoPlayerController {
 
   //获取视频地址或路径
   String? getVideoSource() {
-    Map? arguments = videoNoteController.getArguments();
+    Map? arguments = getArguments();
     if (arguments == null) {
       return null;
     }
     return arguments['videoSource'] as String;
+  }
+
+  ///获取传入页面的参数
+  Map? getArguments() {
+    if (Get.arguments != null) {
+      final arguments = Get.arguments as Map;
+      return arguments;
+    }
+    return null;
   }
 
   //视频播放
@@ -61,7 +67,7 @@ class VideoPlayerController {
   void playerlisten() {
     player.stream.position.listen(
       (Duration position) {
-        state.currentDuration = position;
+        currentDuration = position;
       },
     );
   }
@@ -96,7 +102,7 @@ class VideoPlayerController {
 
   //获取当前进度
   Duration getCurrentDuration() {
-    return state.currentDuration;
+    return currentDuration;
   }
 
   //截屏
@@ -105,23 +111,15 @@ class VideoPlayerController {
     final Uint8List? screenshotData =
         await player.screenshot(format: "image/jpeg");
     final String fileName = CommonTool.getCurrentTime() + ".jpeg";
-    print("截屏文件名:${fileName}");
-    var result = CommonTool.saveImage(screenshotData, path, fileName);
+    // var allPath = join(path, fileName);
+    var allPath = await FileTool.saveImage(screenshotData!, path, fileName);
+    if (allPath == null) {
+      SmartDialog.showToast("截屏失败");
+      return;
+    }
 
-    result.then((absolutePath) => {
-          if (absolutePath != null)
-            {
-              // GFToast.showToast(
-              //   '保存在:${fileName}',
-              //   context,
-              //   textStyle: TextStyle(fontSize: 16, color: Colors.black54),
-              //   backgroundColor: Colors.white,
-              // )
-              callBack(absolutePath)
-            }
-          else
-            {}
-        });
+    print("截屏文件保存在:${allPath}");
+    callBack(allPath);
   }
 
   /// 在 widget 内存中分配后立即调用。

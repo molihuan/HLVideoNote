@@ -1,4 +1,4 @@
-## Android编译注意事项
+## Android版编译注意事项
 
 **PS：请一定要开启Android Studio->settings->Languages&Frameworks->Flutter->Enable verbose logging**
 

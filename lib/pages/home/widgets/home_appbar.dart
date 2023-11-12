@@ -32,6 +32,10 @@ class _HomeAppbarState extends State<HomeAppbar> {
               onTap: () {},
             ),
             PopupMenuItem(
+              child: Text("显示模式"),
+              onTap: () {},
+            ),
+            PopupMenuItem(
               child: Text('language'.tr),
               onTap: () {
                 // PopupMenuButton(

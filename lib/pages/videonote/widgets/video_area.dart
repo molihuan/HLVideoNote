@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:note/pages/videonote/index.dart';
+import 'package:note/pages/videonote/base_video_note_view.dart';
 
-class VideoArea extends GetView<VideoNoteController> {
+class VideoArea extends BaseVideoNoteView {
   VideoArea({Key? key}) : super(key: key);
-  final controller = Get.find<VideoNoteController>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           final containerWidth = constraints.maxWidth;
@@ -20,7 +17,7 @@ class VideoArea extends GetView<VideoNoteController> {
               child: SizedBox(
                 width: containerWidth,
                 height: containerWidth * 9.0 / 16.0,
-                child: Video(controller: controller.videoController),
+                child: Video(controller: videoPlayerController.videoController),
               ));
         },
       ),

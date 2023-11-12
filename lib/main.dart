@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:note/common/langs/translation_service.dart';
 import 'package:note/routes/app_pages.dart';
 
 Future<void> main() async {
-  // 插件初始化
+  /// 插件初始化
   WidgetsFlutterBinding.ensureInitialized();
-  // Necessary initialization for package:media_kit.
+
+  /// Necessary initialization for package:media_kit.
   MediaKit.ensureInitialized();
+
+  ///init nb_utils
+  await initialize();
   runApp(MyApp());
 }
 
@@ -37,6 +42,8 @@ class MyApp extends StatelessWidget {
       ///flutter_smart_dialog初始化
       navigatorObservers: [FlutterSmartDialog.observer],
       builder: FlutterSmartDialog.init(),
+
+      navigatorKey: navigatorKey,
     );
   }
 }
