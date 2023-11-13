@@ -105,13 +105,12 @@ class VideoPlayerController extends GetxController {
     return currentDuration;
   }
 
-  //截屏
-  void videoScreenShot(
-      String path, void Function(String filePath) callBack) async {
+  ///截屏
+  void videoScreenShot(String path, CallbackStr callBack) async {
     final Uint8List? screenshotData =
         await player.screenshot(format: "image/jpeg");
     final String fileName = CommonTool.getCurrentTime() + ".jpeg";
-    // var allPath = join(path, fileName);
+
     var allPath = await FileTool.saveImage(screenshotData!, path, fileName);
     if (allPath == null) {
       SmartDialog.showToast("截屏失败");

@@ -7,6 +7,7 @@ typedef String StrCallback();
 
 typedef Widget WgetCallback();
 
+/// 异步方法
 typedef Future<String> FStrCallbackStr(String value);
 typedef Future<void> FCallbackStr(String value);
 typedef Future<String> FStrCallback();

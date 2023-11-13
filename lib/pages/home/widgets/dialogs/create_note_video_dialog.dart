@@ -2,10 +2,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:note/common/utils/file_tool.dart';
+import 'package:note/models/note/base_note.dart';
+import 'package:note/models/r_source.dart';
+import 'package:note/models/read_source.dart';
 import 'package:note/routes/app_pages.dart';
 
-import '../index.dart';
+import '../../index.dart';
 
 enum VideoSourceType { LOCAL, NETWORK }
 
@@ -175,16 +177,24 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
         TextButton(
           onPressed: () async {
             Navigator.of(context).pop();
+
             //创建笔记文件
             String noteSavePath = noteSavePathEditController.text;
 
-            String noteNameNoSuffix = noteNameEditController.text;
+            String noteProjectName = noteNameEditController.text;
             String videoSource = videoSourceType == VideoSourceType.LOCAL
                 ? videoPathEditController.text
                 : videoUrlEditController.text;
 
-            String? noteFilePath = await FileTool.createNoteProjectFile(
-                noteSavePath, noteNameNoSuffix, videoSource);
+            // String? noteFilePath = await FileTool.createNoteProject(
+            //     noteSavePath, noteNameNoSuffix, videoSource);
+            String? noteFilePath = await controller.createNoteProject(
+                noteProjectName,
+                Rsource<String>(sourceType: SourceType.local, v: noteSavePath),
+                ReadMedia<String>(
+                    rsource: Rsource<String>(
+                        sourceType: SourceType.local, v: videoSource),
+                    noteType: NoteType.video));
 
             if (noteFilePath != null) {
               //视频类型、视频路径或地址
@@ -193,6 +203,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                 'videoSource': videoSource,
                 'noteFilePath': noteFilePath,
               });
+              //保存在数据库中
             } else {
               // Fluttertoast.showToast(
               //   msg: "创建笔记工程失败",
