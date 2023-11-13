@@ -1,3 +1,5 @@
+import 'package:note/models/r_source.dart';
+
 import 'note_route_msg.dart';
 
 /**
@@ -13,7 +15,7 @@ import 'note_route_msg.dart';
 class BaseNote {
   BaseNote({
     required this.noteType,
-    required this.noteSource,
+    required this.noteSourceType,
     required this.noteRouteMsg,
     required this.noteTitle,
     required this.noteDescription,
@@ -25,7 +27,7 @@ class BaseNote {
   NoteType noteType;
 
   ///笔记源
-  NoteSource noteSource;
+  SourceType noteSourceType;
 
   ///笔记路由信息
   NoteRouteMsg noteRouteMsg;
@@ -38,6 +40,27 @@ class BaseNote {
 
   ///封面
   String? noteCover;
+
+  R callSwitch<R, F extends R Function(BaseNote note)>({
+    required F txtCallback,
+    required F videoCallback,
+    required F pdfCallback,
+    required F audioCallback,
+    required F markdownCallback,
+  }) {
+    switch (noteType) {
+      case NoteType.txt:
+        return txtCallback(this);
+      case NoteType.video:
+        return videoCallback(this);
+      case NoteType.pdf:
+        return pdfCallback(this);
+      case NoteType.audio:
+        return audioCallback(this);
+      case NoteType.markdown:
+        return markdownCallback(this);
+    }
+  }
 }
 
 ///笔记类型
@@ -47,13 +70,4 @@ enum NoteType {
   pdf,
   audio,
   markdown,
-}
-
-///笔记源
-enum NoteSource {
-  local,
-
-  ///包括http和https
-  http,
-  webSocket,
 }

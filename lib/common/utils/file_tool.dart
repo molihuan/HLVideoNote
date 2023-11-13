@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:external_path/external_path.dart';
 import 'package:note/common/utils/common_tool.dart';
 import 'package:note/common/utils/platform_tool.dart';
+import 'package:note/models/note/base_note.dart';
+import 'package:note/models/note/note_route_msg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:path/path.dart';
@@ -181,7 +183,7 @@ class FileTool {
    *     --video(存放视频)
    *     --pdf(存放pdf)
    */
-  static Future<String?> createNoteProjectFile(
+  static Future<String?> createNoteProject(
       String noteSavePath, String noteNameNoSuffix, String videoSource) async {
     if (noteSavePath.isEmpty) {
       noteSavePath = await getDefaultNoteSavePath();
@@ -207,10 +209,10 @@ class FileTool {
         Platform.pathSeparator;
     //资源分类
     List<String> resourceClass = [
-      FILE_NAME_IMG,
-      FILE_NAME_CONFIG,
-      FILE_NAME_VIDEO,
-      FILE_NAME_PDF
+      NotePositionConstant.dirImg.v,
+      NotePositionConstant.dirConfig.v,
+      NotePositionConstant.dirVideo.v,
+      NotePositionConstant.dirPdf.v,
     ];
 
     for (String item in resourceClass) {
@@ -229,6 +231,44 @@ class FileTool {
     bool createResult = createFile(noteFilePath, context: '[{"insert":"\n"}]');
     if (createResult) {
       return noteFilePath;
+    }
+
+    return null;
+  }
+
+  static Future<String?> createNoteProjectFile(
+      BaseNote baseNote, String readMedia) async {
+    var noteRouteMsg = baseNote.noteRouteMsg;
+
+    //TODO 判断权限是否足够
+
+    //判断指定文件是否存在
+    if (fileExists(noteRouteMsg.noteFilePosition)) {
+      return noteRouteMsg.noteFilePosition;
+    }
+
+    //资源分类
+    List<String> resourceClass = [
+      noteRouteMsg.noteImgDirPosition!,
+      noteRouteMsg.noteConfigDirPosition!,
+      noteRouteMsg.noteVideoDirPosition!,
+      noteRouteMsg.notePdfDirPosition!,
+    ];
+
+    for (String item in resourceClass) {
+      Directory(item).createSync(recursive: true);
+      if (item == FILE_NAME_CONFIG) {
+        Map<String, dynamic> content = {
+          VIDEO_SOURCE_KEY: readMedia,
+        };
+        writeJson(noteRouteMsg.noteBaseConfigFilePosition!, content);
+      }
+    }
+
+    bool createResult =
+        createFile(noteRouteMsg.noteFilePosition, context: '[{"insert":"\n"}]');
+    if (createResult) {
+      return noteRouteMsg.noteFilePosition;
     }
 
     return null;

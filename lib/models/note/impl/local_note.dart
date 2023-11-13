@@ -1,5 +1,6 @@
 import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/note_path_msg.dart';
+import 'package:note/models/r_source.dart';
 
 class LocalNote extends BaseNote {
   LocalNote({
@@ -10,7 +11,7 @@ class LocalNote extends BaseNote {
     super.noteCreateTime,
     required this.noteFilePath,
   }) : super(
-          noteSource: NoteSource.local,
+          noteSourceType: SourceType.local,
           noteRouteMsg: NotePathMsg(noteFilePath: noteFilePath),
         );
   String noteFilePath;

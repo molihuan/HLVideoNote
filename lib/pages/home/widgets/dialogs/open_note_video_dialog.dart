@@ -8,7 +8,7 @@ import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/local_note.dart';
 import 'package:note/routes/app_pages.dart';
 
-import '../index.dart';
+import '../../index.dart';
 
 class OpenNoteVideoDialog extends GetView<HomeController> {
   OpenNoteVideoDialog({Key? key}) : super(key: key) {}

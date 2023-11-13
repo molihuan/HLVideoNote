@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
-import 'package:note/pages/home/widgets/create_note_video_dialog.dart';
-import 'package:note/pages/home/widgets/open_note_video_dialog.dart';
+import 'package:note/pages/home/widgets/dialogs/create_note_video_dialog.dart';
+import 'package:note/pages/home/widgets/dialogs/open_note_video_dialog.dart';
 
 import '../index.dart';
 
