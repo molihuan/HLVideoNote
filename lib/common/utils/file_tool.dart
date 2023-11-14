@@ -7,27 +7,20 @@ import 'package:note/common/utils/common_tool.dart';
 import 'package:note/common/utils/platform_tool.dart';
 import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/note_route_msg.dart';
+import 'package:note/models/r_source.dart';
+import 'package:note/models/read_media.dart';
+import 'package:note/pages/videonote/controller/quill_text_controller.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-
-enum FileSourceType { LOCAL, NETWORK }
 
 class FileTool {
-  static const String FILE_NAME_IMG = "img";
-  static const String FILE_NAME_CONFIG = "config";
-  static const String FILE_NAME_VIDEO = "video";
-  static const String FILE_NAME_PDF = "pdf";
-  static const String FILE_NAME_RESOURCE = "resource";
-  static const String FILE_NAME_SUFFIX_HL = ".hl";
-  static const String VIDEO_SOURCE_KEY = "videoSource";
-  static const String FILE_NAME_BASE_CONFIG_JSON = "BaseConfig.json";
+  static const String DIR_DEFAULT_NOTE_PROJECT = "NoteProject";
 
   ///保存图片
   ///[imageBytes] 图片数据
   ///[dirPath] 保存路径
-  ///[fileName] 文件名称
+  ///[fileName] 文件名称，如1.jpg
   static Future<String?> saveImage(
       Uint8List imageBytes, String dirPath, String fileName) async {
     // 获取图片保存目录
@@ -51,21 +44,40 @@ class FileTool {
   }
 
   ///获取外部存储路径
-  static Future<String> getExternalStoragePath() async {
-    String directoryPath = '';
+  ///仅仅适应Android
+  // static Future<String?> getExternalStoragePath() async {
+  //   String directoryPath;
+  //   try {
+  //     final directory = await getExternalStorageDirectory();
+  //     directoryPath = directory!.path;
+  //   } catch (e) {
+  //     print('Failed to get external storage directory: $e');
+  //     return null;
+  //   }
+  //   return directoryPath;
+  // }
+
+  // static String getProjectRootPath() {
+  //   String projectPath = '';
+  //   try {
+  //     projectPath = path.current;
+  //   } catch (e) {
+  //     print('Failed to get project root path: $e');
+  //   }
+  //   return projectPath;
+  // }
+
+  ///获取当前可执行文件路径
+  static String? getCurrentAppPath() {
     try {
-      final directory = await getExternalStorageDirectory();
-      directoryPath = directory!.path;
+      return path.dirname(Platform.resolvedExecutable);
     } catch (e) {
-      print('Failed to get external storage directory: $e');
+      print('Failed to get current app path: $e');
+      return null;
     }
-    print(directoryPath);
-    return directoryPath;
   }
 
-  /**
-   * 判断文件夹是否存在
-   */
+  /// 判断文件夹是否存在
   static bool dirExists(String path) {
     Directory directory = Directory(path);
     if (directory.existsSync()) {
@@ -74,9 +86,7 @@ class FileTool {
     return false;
   }
 
-  /**
-   * 判断文件是否存在
-   */
+  /// 判断文件是否存在
   static bool fileExists(String path) {
     File file = File(path);
     if (file.existsSync()) {
@@ -85,38 +95,34 @@ class FileTool {
     return false;
   }
 
-  /**
-   * 将字符串写入文件
-   */
+  /// 将字符串写入文件
   static bool writeString(String filePath, contents) {
     final file = File(filePath);
     try {
       file.writeAsStringSync(contents);
       return true;
     } catch (e) {
-      print('文件写入失败: $e');
+      print('writeString err: $e');
       return false;
     }
   }
 
-  /**
-   * 将json覆盖式写入文件
-   */
-  static bool writeJson(String filePath, dynamic strContent) {
+  /// 将json覆盖式写入文件
+  /// 内容优先[jsonContent],[jsonContent]和[mapContent]不能同时为null
+  static bool writeJson(String filePath,
+      {Map? mapContent, String? jsonContent}) {
     final file = File(filePath);
     try {
-      final jsonString = jsonEncode(strContent);
-      file.writeAsStringSync(jsonString);
+      jsonContent ??= jsonEncode(mapContent!);
+      file.writeAsStringSync(jsonContent);
       return true;
     } catch (e) {
-      print('文件写入失败: $e');
+      print('writeJson err: $e');
       return false;
     }
   }
 
-  /**
-   * 把文件转换为json
-   */
+  /// 把文件转换为json
   static Map? readJson(String filePath) {
     final file = File(filePath);
     try {
@@ -124,29 +130,9 @@ class FileTool {
       Map jsonObj = jsonDecode(jsonString);
       return jsonObj;
     } catch (e) {
-      print('失败: $e');
+      print('readJson err: $e');
       return null;
     }
-  }
-
-  static String getCurrentAppPath() {
-    String appPath = '';
-    try {
-      appPath = path.dirname(Platform.resolvedExecutable);
-    } catch (e) {
-      print('Failed to get current app path: $e');
-    }
-    return appPath;
-  }
-
-  static String getProjectRootPath() {
-    String projectPath = '';
-    try {
-      projectPath = path.current;
-    } catch (e) {
-      print('Failed to get project root path: $e');
-    }
-    return projectPath;
   }
 
   static Future<String> getAppName() async {
@@ -154,18 +140,26 @@ class FileTool {
     return packageInfo.appName;
   }
 
+  ///获取默认的笔记保存路径
   static Future<String> getDefaultNoteSavePath() {
     return PlatformTool.callback<Future<String>, FStrCallback>(
         android: () async {
       String docPath = await ExternalPath.getExternalStoragePublicDirectory(
           ExternalPath.DIRECTORY_DOCUMENTS);
 
-      String targetPath = docPath + Platform.pathSeparator + await getAppName();
-      print(targetPath);
+      String targetPath =
+          join(docPath, await getAppName(), DIR_DEFAULT_NOTE_PROJECT);
+      print("默认笔记保存路径:$targetPath");
       return targetPath;
-    }, windows: () {
-      var projectRootPath = getProjectRootPath();
-      return Future.value(projectRootPath);
+    }, ios: () async {
+      return "";
+    }, other: () async {
+      var appPath = getCurrentAppPath();
+      if (appPath == null) {
+        return "";
+      }
+      var dPath = join(appPath, DIR_DEFAULT_NOTE_PROJECT);
+      return dPath;
     })!;
   }
 
@@ -183,59 +177,8 @@ class FileTool {
    *     --video(存放视频)
    *     --pdf(存放pdf)
    */
-  static Future<String?> createNoteProject(
-      String noteSavePath, String noteNameNoSuffix, String videoSource) async {
-    if (noteSavePath.isEmpty) {
-      noteSavePath = await getDefaultNoteSavePath();
-    }
 
-    //TODO 判断权限是否足够
-    //获取项目目录
-    String noteProjectPath =
-        noteSavePath + Platform.pathSeparator + noteNameNoSuffix;
-    //获取笔记文件路径
-    String noteFilePath = noteProjectPath +
-        Platform.pathSeparator +
-        noteNameNoSuffix +
-        FILE_NAME_SUFFIX_HL;
-    //判断指定文件是否存在
-    if (fileExists(noteFilePath)) {
-      return noteFilePath;
-    }
-    //获取笔记资源路径
-    String noteResourcePath = noteProjectPath +
-        Platform.pathSeparator +
-        FILE_NAME_RESOURCE +
-        Platform.pathSeparator;
-    //资源分类
-    List<String> resourceClass = [
-      NotePositionConstant.dirImg.v,
-      NotePositionConstant.dirConfig.v,
-      NotePositionConstant.dirVideo.v,
-      NotePositionConstant.dirPdf.v,
-    ];
-
-    for (String item in resourceClass) {
-      String itemPath = noteResourcePath + item;
-      Directory(itemPath).createSync(recursive: true);
-      if (item == FILE_NAME_CONFIG) {
-        Map<String, dynamic> content = {
-          VIDEO_SOURCE_KEY: videoSource,
-        };
-        String baseConfigPath =
-            itemPath + Platform.pathSeparator + FILE_NAME_BASE_CONFIG_JSON;
-        writeJson(baseConfigPath, content);
-      }
-    }
-
-    bool createResult = createFile(noteFilePath, context: '[{"insert":"\n"}]');
-    if (createResult) {
-      return noteFilePath;
-    }
-
-    return null;
-  }
-
+  /// 创建笔记项目
   static Future<String?> createNoteProjectFile(
       BaseNote baseNote, String readMedia) async {
     var noteRouteMsg = baseNote.noteRouteMsg;
@@ -255,18 +198,21 @@ class FileTool {
       noteRouteMsg.notePdfDirPosition!,
     ];
 
-    for (String item in resourceClass) {
-      Directory(item).createSync(recursive: true);
-      if (item == FILE_NAME_CONFIG) {
-        Map<String, dynamic> content = {
-          VIDEO_SOURCE_KEY: readMedia,
-        };
-        writeJson(noteRouteMsg.noteBaseConfigFilePosition!, content);
-      }
+    for (String dir in resourceClass) {
+      Directory(dir).createSync(recursive: true);
+      if (dir == NotePositionConstant.dirConfig.v) {}
     }
 
-    bool createResult =
-        createFile(noteRouteMsg.noteFilePosition, context: '[{"insert":"\n"}]');
+    ///设置阅读媒介的类型，本地、网络
+    ///设置阅读媒介
+    Map<String, String> content = {
+      ReadMedia.flag + Rsource.flag: SourceType.LOCAL.name,
+      ReadMedia.flag: readMedia,
+    };
+    writeJson(noteRouteMsg.noteBaseConfigFilePosition!, mapContent: content);
+
+    bool createResult = createFile(noteRouteMsg.noteFilePosition,
+        context: QuillTextController.EMPTY_DOCUMENT);
     if (createResult) {
       return noteRouteMsg.noteFilePosition;
     }
@@ -274,9 +220,7 @@ class FileTool {
     return null;
   }
 
-  /**
-   * 获取上一级目录
-   */
+  ///获取上一级路径
   static String? getParentPath(String path) {
     if (path.isEmpty) {
       return null;
@@ -294,9 +238,7 @@ class FileTool {
     return path.substring(0, endIndex);
   }
 
-  /**
-   * 创建文件
-   */
+  /// 创建文件
   static bool createFile(String filePath, {String? context}) {
     File file = File(filePath);
     try {

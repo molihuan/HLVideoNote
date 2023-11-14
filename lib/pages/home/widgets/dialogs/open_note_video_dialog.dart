@@ -6,6 +6,8 @@ import 'package:note/common/utils/file_tool.dart';
 import 'package:note/common/utils/platform_tool.dart';
 import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/local_note.dart';
+import 'package:note/models/r_source.dart';
+import 'package:note/models/read_media.dart';
 import 'package:note/routes/app_pages.dart';
 
 import '../../index.dart';
@@ -15,7 +17,7 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
 
   final controller = Get.find<HomeController>();
 
-  FileSourceType noteFileSourceType = FileSourceType.LOCAL;
+  SourceType noteFileSourceType = SourceType.LOCAL;
 
   final localExpansionTileController = ExpansionTileController();
   final networkExpansionTileController = ExpansionTileController();
@@ -43,12 +45,12 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
             title: Text('本地'),
             trailing: SizedBox.shrink(),
             controller: localExpansionTileController,
-            initiallyExpanded: noteFileSourceType == FileSourceType.LOCAL,
+            initiallyExpanded: noteFileSourceType == SourceType.LOCAL,
             onExpansionChanged: (value) {
               if (value) {
                 networkExpansionTileController.collapse();
-                controller.state.videoType = FileSourceType.LOCAL;
-                noteFileSourceType = FileSourceType.LOCAL;
+                controller.state.videoType = SourceType.LOCAL;
+                noteFileSourceType = SourceType.LOCAL;
               }
             },
             children: [
@@ -94,12 +96,12 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
             title: Text('网络'),
             trailing: SizedBox.shrink(),
             controller: networkExpansionTileController,
-            initiallyExpanded: noteFileSourceType == FileSourceType.NETWORK,
+            initiallyExpanded: noteFileSourceType == SourceType.HTTP,
             onExpansionChanged: (value) {
               if (value) {
                 localExpansionTileController.collapse();
-                controller.state.videoType = FileSourceType.NETWORK;
-                noteFileSourceType = FileSourceType.NETWORK;
+                controller.state.videoType = SourceType.HTTP;
+                noteFileSourceType = SourceType.HTTP;
               }
             },
             children: [
@@ -125,52 +127,74 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
             // String noteFileSource = noteFileSourceType == FileSourceType.LOCAL
             //     ? noteFilePathEditController.text
             //     : noteFileUrlEditController.text;
+
+            String noteFilePath = noteFilePathEditController.text;
+
             BaseNote baseNote;
             switch (noteFileSourceType) {
-              case FileSourceType.LOCAL:
+              case SourceType.LOCAL:
                 baseNote = LocalNote(
-                    noteType: NoteType.video,
                     noteTitle: '',
                     noteDescription: '',
                     noteUpdateTime: DateTime.now(),
-                    noteFilePath: noteFilePathEditController.text);
+                    noteFilePath: noteFilePath,
+                    readMedia: ReadMedia(
+                        rsource: Rsource<String>(
+                            sourceType: SourceType.LOCAL, v: ""),
+                        readMediaType: ReadMediaType.video));
                 break;
 
-              case FileSourceType.NETWORK:
+              case SourceType.HTTP:
                 baseNote = LocalNote(
-                    noteType: NoteType.video,
                     noteTitle: '',
                     noteDescription: '',
                     noteUpdateTime: DateTime.now(),
-                    noteFilePath: noteFilePathEditController.text);
+                    noteFilePath: noteFilePath,
+                    readMedia: ReadMedia(
+                        rsource: Rsource<String>(
+                            sourceType: SourceType.LOCAL, v: ""),
+                        readMediaType: ReadMediaType.video));
                 break;
+              case SourceType.WEB_SOCKET:
+                baseNote = LocalNote(
+                    noteTitle: '',
+                    noteDescription: '',
+                    noteUpdateTime: DateTime.now(),
+                    noteFilePath: noteFilePath,
+                    readMedia: ReadMedia(
+                        rsource: Rsource<String>(
+                            sourceType: SourceType.LOCAL, v: ""),
+                        readMediaType: ReadMediaType.video));
             }
 
-            //判断文件是否存在
-            // if (FileTool.fileExists(noteFileSource)) {
-            //   SmartDialog.showToast("文件不存在");
-            //   return;
-            // }
-
-            //从配置文件中获取视频的路径
-            // String noteProjectPath = FileTool.getParentPath(noteFileSource)!;
-            // var baseJsonPath = noteProjectPath +
-            //     Platform.pathSeparator +
-            //     FileTool.FILE_NAME_RESOURCE +
-            //     Platform.pathSeparator +
-            //     FileTool.FILE_NAME_CONFIG +
-            //     Platform.pathSeparator +
-            //     FileTool.FILE_NAME_BASE_CONFIG_JSON;
-            // var jsonObj = FileTool.readJson(baseJsonPath)!;
-
+            ///读取json
             var jsonObj = FileTool.readJson(
                 baseNote.noteRouteMsg.noteBaseConfigFilePosition!)!;
 
+            ///获取阅读媒介的值
+            String mediaSource = jsonObj[ReadMedia.flag + Rsource.flag];
+            String mediaValues = jsonObj[ReadMedia.flag];
+
+            if (mediaSource == SourceType.LOCAL.name) {
+              baseNote.readMedia = ReadMedia(
+                  rsource: Rsource<String>(
+                      sourceType: SourceType.LOCAL, v: mediaValues),
+                  readMediaType: ReadMediaType.video);
+            } else if (mediaSource == SourceType.HTTP.name) {
+              baseNote.readMedia = ReadMedia(
+                  rsource: Rsource<String>(
+                      sourceType: SourceType.HTTP, v: mediaValues),
+                  readMediaType: ReadMediaType.video);
+            } else if (mediaSource == SourceType.WEB_SOCKET.name) {
+              baseNote.readMedia = ReadMedia(
+                  rsource: Rsource<String>(
+                      sourceType: SourceType.WEB_SOCKET, v: mediaValues),
+                  readMediaType: ReadMediaType.video);
+            }
+       
             //
             Get.toNamed(AppRoutes.VideoNote, arguments: {
-              'noteFileSourceType': noteFileSourceType,
-              'videoSource': jsonObj["videoSource"],
-              'noteFilePath': baseNote.noteRouteMsg.noteFilePosition,
+              BaseNote.flag: baseNote,
             });
           },
           child: Text('打开'),

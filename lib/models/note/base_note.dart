@@ -1,4 +1,5 @@
 import 'package:note/models/r_source.dart';
+import 'package:note/models/read_media.dart';
 
 import 'note_route_msg.dart';
 
@@ -14,17 +15,20 @@ import 'note_route_msg.dart';
 
 class BaseNote {
   BaseNote({
-    required this.noteType,
     required this.noteSourceType,
     required this.noteRouteMsg,
     required this.noteTitle,
     required this.noteDescription,
     required this.noteUpdateTime,
     this.noteCreateTime,
+    required this.readMedia,
   });
 
+  static const String flag = "BaseNote";
+
   ///笔记类型
-  NoteType noteType;
+  ///阅读媒介
+  ReadMedia readMedia;
 
   ///笔记源
   SourceType noteSourceType;
@@ -48,16 +52,16 @@ class BaseNote {
     required F audioCallback,
     required F markdownCallback,
   }) {
-    switch (noteType) {
-      case NoteType.txt:
+    switch (readMedia.readMediaType) {
+      case ReadMediaType.txt:
         return txtCallback(this);
-      case NoteType.video:
+      case ReadMediaType.video:
         return videoCallback(this);
-      case NoteType.pdf:
+      case ReadMediaType.pdf:
         return pdfCallback(this);
-      case NoteType.audio:
+      case ReadMediaType.audio:
         return audioCallback(this);
-      case NoteType.markdown:
+      case ReadMediaType.markdown:
         return markdownCallback(this);
     }
   }

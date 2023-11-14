@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/models/note/base_note.dart';
 import 'package:note/models/r_source.dart';
-import 'package:note/models/read_source.dart';
+import 'package:note/models/read_media.dart';
 import 'package:note/routes/app_pages.dart';
 
 import '../../index.dart';
@@ -186,29 +186,22 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                 ? videoPathEditController.text
                 : videoUrlEditController.text;
 
-            // String? noteFilePath = await FileTool.createNoteProject(
-            //     noteSavePath, noteNameNoSuffix, videoSource);
-            String? noteFilePath = await controller.createNoteProject(
+            BaseNote? baseNote = await controller.createNoteProject(
                 noteProjectName,
-                Rsource<String>(sourceType: SourceType.local, v: noteSavePath),
+                Rsource<String>(sourceType: SourceType.LOCAL, v: noteSavePath),
                 ReadMedia<String>(
                     rsource: Rsource<String>(
-                        sourceType: SourceType.local, v: videoSource),
-                    noteType: NoteType.video));
+                        sourceType: SourceType.LOCAL, v: videoSource),
+                    readMediaType: ReadMediaType.video));
 
-            if (noteFilePath != null) {
-              //视频类型、视频路径或地址
-              Get.toNamed(AppRoutes.VideoNote, arguments: {
-                'videoType': videoSourceType,
-                'videoSource': videoSource,
-                'noteFilePath': noteFilePath,
-              });
+            if (baseNote == null) {
+              return;
               //保存在数据库中
-            } else {
-              // Fluttertoast.showToast(
-              //   msg: "创建笔记工程失败",
-              // );
             }
+
+            Get.toNamed(AppRoutes.VideoNote, arguments: {
+              BaseNote.flag: baseNote,
+            });
           },
           child: Text('创建'),
         ),

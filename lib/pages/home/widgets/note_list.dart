@@ -5,6 +5,8 @@ import 'package:note/common/utils/common_tool.dart';
 import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/local_note.dart';
 import 'package:note/models/note/impl/web_socket_note.dart';
+import 'package:note/models/r_source.dart';
+import 'package:note/models/read_media.dart';
 import 'package:note/pages/home/controller.dart';
 
 class NoteList extends GetView<HomeController> {
@@ -16,25 +18,33 @@ class NoteList extends GetView<HomeController> {
   Widget build(BuildContext context) {
     controller.state.noteDataList;
     var txtLocalNote = LocalNote(
-        noteType: NoteType.txt,
+        readMedia: ReadMedia(
+            rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
+            readMediaType: ReadMediaType.txt),
         noteFilePath: "",
         noteTitle: 'txtLocalNote',
         noteDescription: 'txtLocalNote',
         noteUpdateTime: DateTime.now());
     var videoLocalNote = LocalNote(
-        noteType: NoteType.video,
+        readMedia: ReadMedia(
+            rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
+            readMediaType: ReadMediaType.video),
         noteFilePath: "",
         noteTitle: 'videoLocalNote',
         noteDescription: 'videoLocalNote',
         noteUpdateTime: DateTime.now());
     var txtWebSocketNote = WebSocketNote(
-        noteType: NoteType.txt,
+        readMedia: ReadMedia(
+            rsource: Rsource<String>(sourceType: SourceType.WEB_SOCKET, v: ""),
+            readMediaType: ReadMediaType.txt),
         noteFileUrl: '',
         noteTitle: 'txtWebSocketNote',
         noteDescription: 'txtWebSocketNote',
         noteUpdateTime: DateTime.now());
     var videoWebSocketNote = WebSocketNote(
-        noteType: NoteType.video,
+        readMedia: ReadMedia(
+            rsource: Rsource<String>(sourceType: SourceType.WEB_SOCKET, v: ""),
+            readMediaType: ReadMediaType.video),
         noteFileUrl: '',
         noteTitle: 'videoWebSocketNote',
         noteDescription: 'videoWebSocketNote',
