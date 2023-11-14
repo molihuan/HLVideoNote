@@ -5,7 +5,7 @@ import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/local_note.dart';
 import 'package:note/models/note/note_route_msg.dart';
 import 'package:note/models/r_source.dart';
-import 'package:note/models/read_source.dart';
+import 'package:note/models/read_media.dart';
 import 'package:path/path.dart';
 
 import 'index.dart';
@@ -15,12 +15,12 @@ class HomeController extends GetxController {
   ///[noteProjectPosition]笔记项目的位置
   ///[noteProjectName]笔记项目的名称
   ///[readSource]阅读媒介
-  String createNoteProject(
+  BaseNote? createNoteProject(
     String noteProjectName,
     Rsource<String> noteProjectPosition,
     ReadMedia<String> readMedia,
   ) {
-    var result;
+    late BaseNote baseNote;
 
     noteProjectPosition.callSwitch<bool, bool Function(Rsource<String>)>(
       localCallback: (rsource) {
@@ -31,8 +31,8 @@ class HomeController extends GetxController {
             join(noteProjectPosition.v, noteProjectName, noteFileName);
 
         ///实例化路径信息
-        BaseNote baseNote = LocalNote(
-            noteType: readMedia.noteType,
+        baseNote = LocalNote(
+            readMedia: readMedia,
             noteTitle: noteProjectName,
             noteDescription: '',
             noteUpdateTime: DateTime.now(),
@@ -44,10 +44,11 @@ class HomeController extends GetxController {
               ///获取媒体源
               String readMediaPath = readMedia.rsource.v;
 
-              result =
+              var result =
                   await FileTool.createNoteProjectFile(baseNote, readMediaPath);
               if (result == null) {
                 SmartDialog.showToast("创建笔记项目失败");
+                return;
               }
             },
             httpCallback: (rsource) {},
@@ -63,7 +64,7 @@ class HomeController extends GetxController {
         return false;
       },
     );
-    return "";
+    return baseNote;
   }
 
   final state = HomeState();

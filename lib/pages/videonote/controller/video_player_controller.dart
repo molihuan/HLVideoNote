@@ -6,6 +6,7 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:note/common/utils/common_tool.dart';
 import 'package:note/common/utils/file_tool.dart';
+import 'package:note/models/note/base_note.dart';
 
 class VideoPlayerController extends GetxController {
   late Duration currentDuration;
@@ -30,7 +31,9 @@ class VideoPlayerController extends GetxController {
     if (arguments == null) {
       return null;
     }
-    return arguments['videoSource'] as String;
+    BaseNote baseNote = arguments[BaseNote.flag] as BaseNote;
+
+    return baseNote.readMedia.rsource.v;
   }
 
   ///获取传入页面的参数

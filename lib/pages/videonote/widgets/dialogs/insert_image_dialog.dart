@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/components/text_field/gf_text_field.dart';
 import 'package:getwidget/size/gf_size.dart';
-
-enum SourceType { LOCAL, NETWORK }
+import 'package:note/models/r_source.dart';
 
 class InsertImageDialog extends GetView {
   // final controller = Get.find<VideoNoteController>();
@@ -75,12 +74,12 @@ class InsertImageDialog extends GetView {
             title: Text('网络'),
             trailing: SizedBox.shrink(),
             controller: networkExpansionTileController,
-            initiallyExpanded: imgSourceType == SourceType.NETWORK,
+            initiallyExpanded: imgSourceType == SourceType.HTTP,
             onExpansionChanged: (value) {
               if (value) {
                 localExpansionTileController.collapse();
-                controller.state.imgSourceType = SourceType.NETWORK;
-                imgSourceType = SourceType.NETWORK;
+                controller.state.imgSourceType = SourceType.HTTP;
+                imgSourceType = SourceType.HTTP;
               }
             },
             children: [

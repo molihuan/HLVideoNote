@@ -10,10 +10,13 @@ import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:flutter_quill_extensions/presentation/embeds/embed_types/camera.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:note/common/utils/common_tool.dart';
 import 'package:note/common/utils/file_tool.dart';
 import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/local_note.dart';
+import 'package:note/models/r_source.dart';
+import 'package:note/models/read_media.dart';
 import 'package:note/pages/videonote/controller/multi_split_controller.dart';
 import 'package:note/pages/videonote/controller/video_player_controller.dart';
 import 'package:note/pages/videonote/widgets/dialogs/insert_image_dialog.dart';
@@ -29,7 +32,9 @@ enum _SelectionType {
 class QuillTextState {
   // 笔记源
   final _baseNote = Rx<BaseNote>(LocalNote(
-      noteType: NoteType.video,
+      readMedia: ReadMedia(
+          rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
+          readMediaType: ReadMediaType.video),
       noteFilePath: "",
       noteTitle: 'videoLocalNote',
       noteDescription: 'videoLocalNote',
@@ -42,6 +47,9 @@ class QuillTextState {
 
 ///富文本控制器
 class QuillTextController extends GetxController {
+  ///空内容
+  static const String EMPTY_DOCUMENT = '[{"insert":" "}]';
+
   final state = QuillTextState();
 
   final videoPlayerController = Get.find<VideoPlayerController>();
@@ -509,13 +517,14 @@ class QuillTextController extends GetxController {
   }
 
   //获取视频地址或路径
-  String? getNoteFilePath() {
+  BaseNote? getBaseNote() {
     Map? arguments = getArguments();
     if (arguments == null) {
       return null;
     }
-    var noteFilePath = arguments['noteFilePath'];
-    return noteFilePath == null ? null : noteFilePath as String;
+    BaseNote baseNote = arguments[BaseNote.flag] as BaseNote;
+
+    return baseNote;
   }
 
   ///获取传入页面的参数
@@ -528,17 +537,21 @@ class QuillTextController extends GetxController {
   }
 
   /// 在 widget 内存中分配后立即调用。
-  void onInit() {
-    String? noteFilePath = getNoteFilePath();
-    if (noteFilePath != null) {
-      state.baseNote = LocalNote(
-          noteType: NoteType.video,
-          noteTitle: '',
-          noteDescription: '',
-          noteUpdateTime: DateTime.now(),
-          noteFilePath: noteFilePath);
-      loadNoteFileData(noteFilePath);
+  Future<void> onInit() async {
+    BaseNote? baseNote = getBaseNote();
+    if (baseNote == null) {
+      return;
     }
+
+    ///持久化保存笔记记录
+    await setValue(baseNote.noteRouteMsg.noteFilePosition, [
+      baseNote.noteTitle,
+      baseNote.noteUpdateTime.toString(),
+      baseNote.noteRouteMsg.noteFilePosition
+    ]);
+
+    state.baseNote = baseNote;
+    loadNoteFileData(baseNote.noteRouteMsg.noteFilePosition);
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所

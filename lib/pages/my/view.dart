@@ -8,6 +8,8 @@ import 'package:note/middlewares/websocket/client/socket_client.dart';
 import 'package:note/middlewares/websocket/service/socket_service.dart';
 import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/local_note.dart';
+import 'package:note/models/r_source.dart';
+import 'package:note/models/read_media.dart';
 
 import 'index.dart';
 
@@ -47,7 +49,10 @@ class MyPage extends GetView<MyController> {
             text: "保存",
             onPressed: () async {
               BaseNote baseNote = LocalNote(
-                  noteType: NoteType.video,
+                  readMedia: ReadMedia(
+                      rsource:
+                          Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
+                      readMediaType: ReadMediaType.video),
                   noteTitle: "标题",
                   noteDescription: '描述',
                   noteUpdateTime: DateTime.now(),

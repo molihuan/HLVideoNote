@@ -26,7 +26,7 @@ abstract class NoteRouteMsg {
 }
 
 ///笔记路径常量
-enum NotePositionConstant implements Comparable<NotePositionConstant> {
+enum NotePositionConstant {
   dirImg(v: "img"),
   dirConfig(v: "config"),
   dirVideo(v: "video"),
@@ -39,9 +39,4 @@ enum NotePositionConstant implements Comparable<NotePositionConstant> {
 
   ///value
   final String v;
-
-  @override
-  int compareTo(NotePositionConstant other) {
-    return this.v.hashCode == other.v.hashCode ? 0 : 1;
-  }
 }

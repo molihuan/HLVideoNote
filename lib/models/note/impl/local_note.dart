@@ -4,14 +4,14 @@ import 'package:note/models/r_source.dart';
 
 class LocalNote extends BaseNote {
   LocalNote({
-    required super.noteType,
+    required super.readMedia,
     required super.noteTitle,
     required super.noteDescription,
     required super.noteUpdateTime,
     super.noteCreateTime,
     required this.noteFilePath,
   }) : super(
-          noteSourceType: SourceType.local,
+          noteSourceType: SourceType.LOCAL,
           noteRouteMsg: NotePathMsg(noteFilePath: noteFilePath),
         );
   String noteFilePath;
