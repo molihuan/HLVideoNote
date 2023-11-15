@@ -9,13 +9,23 @@ import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/note_route_msg.dart';
 import 'package:note/models/r_source.dart';
 import 'package:note/models/read_media.dart';
-import 'package:note/pages/videonote/controller/quill_text_controller.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:path/path.dart';
 
 class FileTool {
   static const String DIR_DEFAULT_NOTE_PROJECT = "NoteProject";
+
+  static bool deleteFiles(String folderPath) {
+    Directory folder = Directory(folderPath);
+    if (folder.existsSync()) {
+      folder.deleteSync(recursive: true);
+      return true;
+    } else {
+      print('文件夹不存在');
+      return false;
+    }
+  }
 
   ///保存图片
   ///[imageBytes] 图片数据
@@ -211,8 +221,8 @@ class FileTool {
     };
     writeJson(noteRouteMsg.noteBaseConfigFilePosition!, mapContent: content);
 
-    bool createResult = createFile(noteRouteMsg.noteFilePosition,
-        context: QuillTextController.EMPTY_DOCUMENT);
+    bool createResult =
+        createFile(noteRouteMsg.noteFilePosition, context: '[{"insert":" "}]');
     if (createResult) {
       return noteRouteMsg.noteFilePosition;
     }

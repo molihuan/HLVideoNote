@@ -5,7 +5,9 @@ enum SourceType {
 
   ///包括http和https
   HTTP,
-  WEB_SOCKET,
+  WEB_SOCKET;
+
+  static const String flag = "SourceType";
 }
 
 typedef bool BoolFuncRsource(Rsource rsource);
@@ -25,6 +27,7 @@ class Rsource<T> {
   SourceType sourceType;
 
   ///值
+  static const String vkey = "v";
   T v;
 
   ///[R]返回值

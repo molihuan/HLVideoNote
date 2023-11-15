@@ -1,61 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:note/common/utils/common_tool.dart';
+import 'package:note/common/utils/file_tool.dart';
 import 'package:note/models/note/base_note.dart';
-import 'package:note/models/note/impl/local_note.dart';
-import 'package:note/models/note/impl/web_socket_note.dart';
-import 'package:note/models/r_source.dart';
-import 'package:note/models/read_media.dart';
 import 'package:note/pages/home/controller.dart';
+import 'package:note/routes/app_pages.dart';
 
 class NoteList extends GetView<HomeController> {
   NoteList({Key? key}) : super(key: key);
+
+  static const String noteListPrefix = "NoteList-";
 
   final controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
-    controller.state.noteDataList;
-    var txtLocalNote = LocalNote(
-        readMedia: ReadMedia(
-            rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
-            readMediaType: ReadMediaType.txt),
-        noteFilePath: "",
-        noteTitle: 'txtLocalNote',
-        noteDescription: 'txtLocalNote',
-        noteUpdateTime: DateTime.now());
-    var videoLocalNote = LocalNote(
-        readMedia: ReadMedia(
-            rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
-            readMediaType: ReadMediaType.video),
-        noteFilePath: "",
-        noteTitle: 'videoLocalNote',
-        noteDescription: 'videoLocalNote',
-        noteUpdateTime: DateTime.now());
-    var txtWebSocketNote = WebSocketNote(
-        readMedia: ReadMedia(
-            rsource: Rsource<String>(sourceType: SourceType.WEB_SOCKET, v: ""),
-            readMediaType: ReadMediaType.txt),
-        noteFileUrl: '',
-        noteTitle: 'txtWebSocketNote',
-        noteDescription: 'txtWebSocketNote',
-        noteUpdateTime: DateTime.now());
-    var videoWebSocketNote = WebSocketNote(
-        readMedia: ReadMedia(
-            rsource: Rsource<String>(sourceType: SourceType.WEB_SOCKET, v: ""),
-            readMediaType: ReadMediaType.video),
-        noteFileUrl: '',
-        noteTitle: 'videoWebSocketNote',
-        noteDescription: 'videoWebSocketNote',
-        noteUpdateTime: DateTime.now());
+    // controller.state.noteDataList;
+    // var txtLocalNote = LocalNote(
+    //     readMedia: ReadMedia(
+    //         rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
+    //         readMediaType: ReadMediaType.txt),
+    //     noteFilePath: "",
+    //     noteTitle: 'txtLocalNote',
+    //     noteDescription: 'txtLocalNote',
+    //     noteUpdateTime: DateTime.now());
+    // List<BaseNote> noteDataList = [
+    //   txtLocalNote,
+    // ];
 
-    List<BaseNote> noteDataList = [
-      txtLocalNote,
-      videoLocalNote,
-      txtWebSocketNote,
-      videoWebSocketNote
-    ];
+    List<BaseNote> noteDataList = [];
+
+    List<String> noteKeyList = getMatchingSharedPrefKeys(noteListPrefix);
+
+    noteKeyList.forEach((noteKey) {
+      var noteJson = getJSONAsync(noteKey);
+      var baseNote = BaseNote.fromJson(noteJson);
+      print(baseNote);
+      noteDataList.add(baseNote);
+    });
 
     return ListView.builder(
       itemCount: noteDataList.length,
@@ -65,6 +49,11 @@ class NoteList extends GetView<HomeController> {
             CommonTool.getFormattedTime(noteDataItem.noteUpdateTime);
 
         return GestureDetector(
+          onTap: () {
+            Get.toNamed(AppRoutes.VideoNote, arguments: {
+              BaseNote.flag: noteDataList[index],
+            });
+          },
           onLongPress: () {
             showDialog(
               context: context,
@@ -74,10 +63,14 @@ class NoteList extends GetView<HomeController> {
                   content: Text('确定要删除该笔记吗？'),
                   actions: [
                     TextButton(
-                      onPressed: () {
-                        // setState(() {
-                        //   cardDataList.removeAt(index);
-                        // });
+                      onPressed: () async {
+                        FileTool.deleteFiles(noteDataList[index]
+                            .noteRouteMsg
+                            .noteProjectPosition!);
+
+                        var resu = await removeKey(noteListPrefix +
+                            noteDataList[index].noteRouteMsg.noteFilePosition);
+
                         Navigator.pop(context);
                       },
                       child: Text('确定'),

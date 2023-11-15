@@ -19,5 +19,7 @@ enum ReadMediaType {
   video,
   pdf,
   audio,
-  markdown,
+  markdown;
+
+  static const String flag = "ReadMediaType";
 }
