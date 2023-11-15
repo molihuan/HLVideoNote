@@ -17,6 +17,7 @@ import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/local_note.dart';
 import 'package:note/models/r_source.dart';
 import 'package:note/models/read_media.dart';
+import 'package:note/pages/home/widgets/note_list.dart';
 import 'package:note/pages/videonote/controller/multi_split_controller.dart';
 import 'package:note/pages/videonote/controller/video_player_controller.dart';
 import 'package:note/pages/videonote/widgets/dialogs/insert_image_dialog.dart';
@@ -79,20 +80,19 @@ class QuillTextController extends GetxController {
    * 加载笔记数据
    */
   void loadNoteFileData(String noteFilePath) {
+    print(noteFilePath);
     final noteFile = File(noteFilePath);
     try {
-      // final result = await rootBundle.loadString(isDesktop()
-      //     ? 'assets/sample_data_nomedia.json'
-      //     : 'assets/sample_data.json');
       final contents = noteFile.readAsStringSync();
       final doc = Document.fromJson(jsonDecode(contents));
+      print(contents);
       print(doc);
       quillController = QuillController(
           document: doc, selection: const TextSelection.collapsed(offset: 0));
     } catch (error) {
-      final doc = Document()..insert(0, '读取文件错误,文件不是Delta格式');
-      quillController = QuillController(
-          document: doc, selection: const TextSelection.collapsed(offset: 0));
+      // final doc = Document()..insert(0, '读取文件错误,文件不是Delta格式');
+      // quillController = QuillController(
+      //     document: doc, selection: const TextSelection.collapsed(offset: 0));
     }
   }
 
@@ -542,13 +542,15 @@ class QuillTextController extends GetxController {
     if (baseNote == null) {
       return;
     }
+    var baseNoteJson = baseNote.toJson();
 
     ///持久化保存笔记记录
-    await setValue(baseNote.noteRouteMsg.noteFilePosition, [
-      baseNote.noteTitle,
-      baseNote.noteUpdateTime.toString(),
-      baseNote.noteRouteMsg.noteFilePosition
-    ]);
+    await setValue(
+        NoteList.noteListPrefix + baseNote.noteRouteMsg.noteFilePosition,
+        baseNoteJson);
+
+    print(getStringAsync(
+        NoteList.noteListPrefix + baseNote.noteRouteMsg.noteFilePosition));
 
     state.baseNote = baseNote;
     loadNoteFileData(baseNote.noteRouteMsg.noteFilePosition);
