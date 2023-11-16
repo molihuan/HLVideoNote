@@ -17,7 +17,7 @@ import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/local_note.dart';
 import 'package:note/models/r_source.dart';
 import 'package:note/models/read_media.dart';
-import 'package:note/pages/home/widgets/note_list.dart';
+import 'package:note/pages/home/controller.dart';
 import 'package:note/pages/videonote/controller/multi_split_controller.dart';
 import 'package:note/pages/videonote/controller/video_player_controller.dart';
 import 'package:note/pages/videonote/widgets/dialogs/insert_image_dialog.dart';
@@ -31,7 +31,7 @@ enum _SelectionType {
 
 ///状态
 class QuillTextState {
-  // 笔记源
+  /// 笔记源
   final _baseNote = Rx<BaseNote>(LocalNote(
       readMedia: ReadMedia(
           rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
@@ -49,7 +49,7 @@ class QuillTextState {
 ///富文本控制器
 class QuillTextController extends GetxController {
   ///空内容
-  static const String EMPTY_DOCUMENT = '[{"insert":" "}]';
+  // static const String EMPTY_DOCUMENT = '[{"insert":" "}]';
 
   final state = QuillTextState();
 
@@ -60,40 +60,71 @@ class QuillTextController extends GetxController {
   //创建富文本编辑器
   late final QuillEditor quillEditor = buildQuillEditor();
 
-  // late final QuillEditor quillEditor = QuillEditor.basic(
-  //   controller: quillController,
-  //   embedBuilders: [...FlutterQuillEmbeds.builders(), LinkEmbedBuilder()],
-  //   readOnly: false, // 为 true 时只读
-  //   autoFocus: true,
-  //   padding: EdgeInsets.all(10),
-  // );
-
   //创建富文本控制器
-  late QuillController quillController = QuillController.basic();
+  late QuillController quillController = loadNoteFileData();
 
   final FocusNode _focusNode = FocusNode();
 
   Timer? _selectAllTimer;
   _SelectionType _selectionType = _SelectionType.none;
 
-  /**
-   * 加载笔记数据
-   */
-  void loadNoteFileData(String noteFilePath) {
-    print(noteFilePath);
-    final noteFile = File(noteFilePath);
+  //获取笔记
+  BaseNote? getBaseNote() {
+    Map? arguments = getArguments();
+    if (arguments == null) {
+      return null;
+    }
+    BaseNote baseNote = arguments[BaseNote.flag] as BaseNote;
+
+    return baseNote;
+  }
+
+  ///获取传入页面的参数
+  Map? getArguments() {
+    if (Get.arguments != null) {
+      final arguments = Get.arguments as Map;
+      return arguments;
+    }
+    return null;
+  }
+
+  /// 加载笔记数据
+  QuillController loadNoteFileData({BaseNote? baseNote}) {
+    baseNote = baseNote ?? getBaseNote();
+
+    if (baseNote == null) {
+      quillController = QuillController.basic();
+      return quillController;
+    }
+    state.baseNote = baseNote;
+
+    final homeController = Get.find<HomeController>();
+
+    ///持久化笔记到SP中
+    homeController.addToNodeList(baseNote);
+
+    print("获取持久化的note");
+
+    print(getStringAsync(HomeController.NOTE_LIST_PREFIX +
+        baseNote.noteRouteMsg.noteFilePosition));
+
+    final noteFile = File(baseNote.noteRouteMsg.noteFilePosition);
     try {
-      final contents = noteFile.readAsStringSync();
-      final doc = Document.fromJson(jsonDecode(contents));
-      print(contents);
-      print(doc);
+      var contents = noteFile.readAsStringSync();
+      var json = jsonDecode(contents);
+      final doc = Document.fromJson(json);
+      print("读取到的hl源文件为:$contents");
+      print("json转换后:$json");
       quillController = QuillController(
           document: doc, selection: const TextSelection.collapsed(offset: 0));
     } catch (error) {
+      print('读取文件错误,文件不是Delta格式:$error');
+      quillController = QuillController.basic();
       // final doc = Document()..insert(0, '读取文件错误,文件不是Delta格式');
       // quillController = QuillController(
       //     document: doc, selection: const TextSelection.collapsed(offset: 0));
     }
+    return quillController;
   }
 
   ///保存笔记
@@ -113,9 +144,7 @@ class QuillTextController extends GetxController {
     }
   }
 
-  /**
-   * 复制粘贴图片(网络)
-   */
+  /// 复制粘贴图片(网络)
   Future<String> _onImagePaste(Uint8List imageBytes) async {
     // Saves the image to applications directory
     String imgDir = noteRouteMsg.noteImgDirPosition!;
@@ -126,9 +155,7 @@ class QuillTextController extends GetxController {
     return allPath;
   }
 
-  /**
-   * 插入视频节点
-   */
+  /// 插入视频节点
   void insertVideoAnchor(QuillController quillController) {
     Duration currentDuration = videoPlayerController.getCurrentDuration();
     //去除毫秒
@@ -139,9 +166,7 @@ class QuillTextController extends GetxController {
     });
   }
 
-  /**
-   * 插入图片(本地和网络)
-   */
+  /// 插入图片(本地和网络)
   void insertImageBlockEmbed(String? source) {
     if (source != null && source.isNotEmpty) {
       final index = quillController.selection.baseOffset;
@@ -151,9 +176,7 @@ class QuillTextController extends GetxController {
     }
   }
 
-  /**
-   * 插入视频(本地和网络)
-   */
+  /// 插入视频(本地和网络)
   void insertVideoBlockEmbed(QuillController controller, String? source) {
     if (source != null && source.isNotEmpty) {
       final index = controller.selection.baseOffset;
@@ -162,9 +185,7 @@ class QuillTextController extends GetxController {
     }
   }
 
-  /**
-   * 插入自定义链接
-   */
+  /// 插入自定义链接
   void insertLinkBlockEmbed(QuillController controller, String string,
       void Function() linkBlockEmbedClick) {
     // controller.document.insert(controller.selection.extentOffset, '\n');
@@ -196,9 +217,7 @@ class QuillTextController extends GetxController {
     );
   }
 
-  /**
-   * 三击
-   */
+  /// 三击
   bool _onTripleClickSelection() {
     final controller = quillController!;
 
@@ -261,14 +280,10 @@ class QuillTextController extends GetxController {
     });
   }
 
-  /**
-   * 是否为桌面
-   */
+  /// 是否为桌面
   bool _isDesktop() => !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
 
-  /**
-   * 构建富文本工具栏
-   */
+  /// 构建富文本工具栏
   QuillToolbar buildQuillToolbar(BuildContext context) {
     List<QuillToolbarCustomButtonOptions> customQuillCustomButtons = [
       QuillToolbarCustomButtonOptions(
@@ -406,38 +421,7 @@ class QuillTextController extends GetxController {
 
   /// When inserting an image
   OnImageInsertCallback get onImageInsert {
-    return (image, controller) async {
-      // final croppedFile = await ImageCropper().cropImage(
-      //   sourcePath: image,
-      //   aspectRatioPresets: [
-      //     CropAspectRatioPreset.square,
-      //     CropAspectRatioPreset.ratio3x2,
-      //     CropAspectRatioPreset.original,
-      //     CropAspectRatioPreset.ratio4x3,
-      //     CropAspectRatioPreset.ratio16x9
-      //   ],
-      //   uiSettings: [
-      //     AndroidUiSettings(
-      //       toolbarTitle: 'Cropper',
-      //       toolbarColor: Colors.deepOrange,
-      //       toolbarWidgetColor: Colors.white,
-      //       initAspectRatio: CropAspectRatioPreset.original,
-      //       lockAspectRatio: false,
-      //     ),
-      //     IOSUiSettings(
-      //       title: 'Cropper',
-      //     ),
-      //     // WebUiSettings(
-      //     //   context: context,
-      //     // ),
-      //   ],
-      // );
-      // final newImage = croppedFile?.path;
-      // if (newImage == null) {
-      //   return;
-      // }
-      // controller.insertImageBlock(imageSource: newImage);
-    };
+    return (image, controller) async {};
   }
 
   /**
@@ -516,53 +500,22 @@ class QuillTextController extends GetxController {
     return quillEditor;
   }
 
-  //获取视频地址或路径
-  BaseNote? getBaseNote() {
-    Map? arguments = getArguments();
-    if (arguments == null) {
-      return null;
-    }
-    BaseNote baseNote = arguments[BaseNote.flag] as BaseNote;
-
-    return baseNote;
-  }
-
-  ///获取传入页面的参数
-  Map? getArguments() {
-    if (Get.arguments != null) {
-      final arguments = Get.arguments as Map;
-      return arguments;
-    }
-    return null;
-  }
-
-  /// 在 widget 内存中分配后立即调用。
+  /// 在 widget 内存中分配后立即调用,这和Widget build(BuildContext context)异步,不适合初始化一些耗时操作。
+  @override
   Future<void> onInit() async {
-    BaseNote? baseNote = getBaseNote();
-    if (baseNote == null) {
-      return;
-    }
-    var baseNoteJson = baseNote.toJson();
-
-    ///持久化保存笔记记录
-    await setValue(
-        NoteList.noteListPrefix + baseNote.noteRouteMsg.noteFilePosition,
-        baseNoteJson);
-
-    print(getStringAsync(
-        NoteList.noteListPrefix + baseNote.noteRouteMsg.noteFilePosition));
-
-    state.baseNote = baseNote;
-    loadNoteFileData(baseNote.noteRouteMsg.noteFilePosition);
+    super.onInit();
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所
-
+  @override
   void onReady() {}
 
   /// 在 [onDelete] 方法之前调用。
+  @override
   void onClose() {}
 
   /// dispose 释放内存
-  void dispose() {}
+  void dispose() {
+    super.dispose();
+  }
 }

@@ -14,7 +14,7 @@ class HomeState {
 
   set noteDataList(value) => _noteDataList.value = value;
 
-  get noteDataList => _noteDataList.value;
+  List<BaseNote> get noteDataList => _noteDataList;
 
   //笔记路径
   final _noteFilePath = "".obs;

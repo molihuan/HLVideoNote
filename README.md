@@ -20,6 +20,8 @@
 
 特点：一键视频截屏插入笔记；在笔记上插入视频节点，点击视频节点跳转到视频指定时间点；笔记中插入图片，音频，视频；支持手写笔记；支持录音；多端联动(例如：电脑看视频，平板写笔记，点击平板截屏按钮可一键在笔记中插入电脑视频截图)；支持插件系统，安装插件，扩展自定义功能；导出笔记为pdf；在pdf上做笔记；视频支持Bilibili，YouTube；
 
+#### 我们会一直维护这个软件，除非江水为竭🌊，冬雷震震⚡，没有Star⭐。直至时间的尽头🕑。
+
 ### 一个人是孤独的，我们需要你！诚挚地邀请你上我们的贼船🏴‍☠️！
 
 ##### 加入我们吧！无论你是否会写代码，都可加入我们！
@@ -38,9 +40,9 @@
 
 交流：
 
-- 【优先】Github()
+- 【优先】Github([https://github.com/molihuan/HLVideoNote](https://github.com/molihuan/HLVideoNote))
 - 【聊天+摆烂】QQ频道号(1v2e027115)
-- 【高速列车】Telegram频道()
+- 【高速列车】Telegram群组([https://t.me/hl_open_source](https://t.me/hl_open_source))
 
 加入我们**不能得到**什么：
 
@@ -54,17 +56,17 @@
 
 1. 不支持收费：过去没有收费，现在也不会收费，未来更不会收费。
 
-#### 我们会一直维护这个软件，除非江水为竭🌊，冬雷震震⚡，没有Star⭐。直至时间的尽头🕑。
+#### 
 
-### 软件界面
+### 软件界面截屏
 
-| Android   | iOS    |
-| --------- | ------ |
-|           | 待补充 |
-| Windows   | macOS  |
-|           | 待补充 |
-| GNU/Linux | Web    |
-| 待补充    | 待补充 |
+| Android                                                      | iOS    |
+| ------------------------------------------------------------ | ------ |
+| ![android_vedio_note.png](https://z4a.net/images/2023/11/17/android_vedio_note.png) | 待补充 |
+| Windows                                                      | macOS  |
+| ![win_vedio_note.png](https://z4a.net/images/2023/11/17/win_vedio_note.png) | 待补充 |
+| GNU/Linux                                                    | Web    |
+| 待补充                                                       | 待补充 |
 
 
 
@@ -143,6 +145,8 @@
 
 
 如果你觉得软件帮助到你的话，可以给开发者买一杯咖啡，帮助开发者晚上写代码。
+
+
 
 ## [MIT协议](./LICENSE)
 

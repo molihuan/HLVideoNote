@@ -196,7 +196,6 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
 
             if (baseNote == null) {
               return;
-              //保存在数据库中
             }
 
             Get.toNamed(AppRoutes.VideoNote, arguments: {

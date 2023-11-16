@@ -6,8 +6,9 @@ import 'package:note/pages/videonote/controller/video_player_controller.dart';
 class VideoNoteBinding implements Bindings {
   @override
   void dependencies() {
+    ///页面加载之前就会调用。
     ///创建控制器实例，在其他页面直接find就行
-    // Get.lazyPut<VideoNoteController>(() => VideoNoteController());
+    print("VideoNoteBinding 的 dependencies 被调用");
     Get.lazyPut<VideoPlayerController>(() => VideoPlayerController());
     Get.lazyPut<MultiSplitController>(() => MultiSplitController());
     Get.lazyPut<QuillTextController>(() => QuillTextController());
