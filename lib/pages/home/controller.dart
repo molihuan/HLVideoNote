@@ -1,5 +1,6 @@
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:note/common/utils/file_tool.dart';
 import 'package:note/models/note/base_note.dart';
 import 'package:note/models/note/impl/local_note.dart';
@@ -11,6 +12,72 @@ import 'package:path/path.dart';
 import 'index.dart';
 
 class HomeController extends GetxController {
+  final state = HomeState();
+
+  late final noteDataList = state.noteDataList;
+
+  static const String NOTE_LIST_PREFIX = "NoteList-";
+
+  ///添加一个笔记到列表中
+  Future<bool> addToNodeList(BaseNote baseNote) async {
+    String targetKey = HomeController.NOTE_LIST_PREFIX +
+        baseNote.noteRouteMsg.noteFilePosition;
+
+    ///判断SP中是否存在key
+    bool exiteKey = sharedPreferences.containsKey(targetKey);
+    if (exiteKey) {
+      return false;
+    }
+
+    ///持久化笔记到SP中
+    bool saveResult = await setValue(targetKey, baseNote.toJson());
+
+    if (!saveResult) {
+      return false;
+    }
+
+    ///更新UI
+    noteDataList.add(baseNote);
+    return true;
+  }
+
+  ///删除一个笔记从列表中
+  Future<bool> delToNodeList(BaseNote baseNote) async {
+    String targetKey = HomeController.NOTE_LIST_PREFIX +
+        baseNote.noteRouteMsg.noteFilePosition;
+
+    ///判断SP中是否存在key
+    bool exiteKey = sharedPreferences.containsKey(targetKey);
+    if (!exiteKey) {
+      return false;
+    }
+
+    ///删除本地文件
+    FileTool.deleteFiles(baseNote.noteRouteMsg.noteProjectPosition!);
+
+    ///删除SP中的记录
+    var resu = await removeKey(targetKey);
+
+    ///更新UI
+    noteDataList.remove(baseNote);
+
+    return true;
+  }
+
+  ///获取本地的笔记列表
+  List<BaseNote> getLocalNodeDataList() {
+    List<String> noteKeyList =
+        getMatchingSharedPrefKeys(HomeController.NOTE_LIST_PREFIX);
+    noteDataList.clear();
+    noteKeyList.forEach((noteKey) {
+      var noteJson = getJSONAsync(noteKey);
+      var baseNote = BaseNote.fromJson(noteJson);
+      print(baseNote);
+      noteDataList.add(baseNote);
+    });
+    return noteDataList;
+  }
+
   ///创建笔记项目
   ///[noteProjectPosition]笔记项目的位置
   ///[noteProjectName]笔记项目的名称
@@ -66,8 +133,6 @@ class HomeController extends GetxController {
     );
     return baseNote;
   }
-
-  final state = HomeState();
 
   /// 在 widget 内存中分配后立即调用。
   @override

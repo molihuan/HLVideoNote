@@ -4,11 +4,14 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:note/pages/videonote/base_video_note_view.dart';
 
 class NoteArea extends BaseVideoNoteView {
-  NoteArea({Key? key}) : super(key: key);
+  NoteArea({Key? key}) : super(key: key) {}
 
-  late final quillController = quillTextController.quillController;
-  late final quillEditor = quillTextController.quillEditor;
-  late final quillToolbar;
+  late QuillToolbar quillToolbar;
+
+  Future<void> initData(BuildContext context) async {
+    ///构建quillToolbar
+    quillToolbar = quillTextController.buildQuillToolbar(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +19,10 @@ class NoteArea extends BaseVideoNoteView {
     return buildQuillView();
   }
 
-  void initData(BuildContext context) {
-    quillToolbar = quillTextController.buildQuillToolbar(context);
-  }
-
   Widget buildQuillView() {
     return QuillProvider(
       configurations: QuillConfigurations(
-        controller: quillController,
+        controller: quillTextController.quillController,
         sharedConfigurations: const QuillSharedConfigurations(
             // locale: Locale('zh'),
             ),
@@ -44,7 +43,7 @@ class NoteArea extends BaseVideoNoteView {
             child: Container(
               color: Colors.white,
               // padding: const EdgeInsets.only(left: 5, right: 5),
-              child: quillEditor,
+              child: quillTextController.quillEditor,
             ),
           ),
         ],
