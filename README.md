@@ -24,7 +24,7 @@
 
 特点：一键视频截屏插入笔记；在笔记上插入视频节点，点击视频节点跳转到视频指定时间点；笔记中插入图片，音频，视频；支持手写笔记；支持录音；多端联动(例如：电脑看视频，平板写笔记，点击平板截屏按钮可一键在笔记中插入电脑视频截图)；支持插件系统，安装插件，扩展自定义功能；导出笔记为pdf；在pdf上做笔记；视频支持Bilibili，YouTube；
 
-#### 
+
 
 ### 一个人是孤独的，我们需要你！诚挚地邀请你上我们的贼船🏴‍☠️！
 
@@ -124,15 +124,15 @@
 
 ### 开发环境
 
-[查看](./doc/DevelopmentEnvironment.md)
+[查看](doc/md/zh_CN/DevelopmentEnvironment.md)
 
 #### Windows版编译注意事项
 
-[查看](./doc/CompilationNotes/Windows.md)
+[查看](doc/md/zh_CN/CompilationNotes/Windows.md)
 
 #### Android版编译注意事项
 
-[查看](./doc/CompilationNotes/Android.md)
+[查看](doc/md/zh_CN/CompilationNotes/Android.md)
 
 #### Linux版编译注意事项
 

@@ -7,10 +7,6 @@ import 'package:note/pages/my/index.dart';
 class MainShow extends GetView<MainController> {
   MainShow({Key? key}) : super(key: key);
 
-  ///必须在此注册子视图的控制器否则会有null异常
-  final HomeController homeController = Get.put(HomeController());
-  final MyController myController = Get.put(MyController());
-
   final List<Widget> viewList = [HomePage(), MyPage()];
 
   final List<BottomNavigationBarItem> navigationBarItemList = [

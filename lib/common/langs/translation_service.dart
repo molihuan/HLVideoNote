@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import 'en_US.dart';
 import 'zh_CN.dart';
-import 'zh_HK.dart';
+import 'zh-TW.dart';
 
 /*
 
@@ -22,6 +22,6 @@ class TranslationService extends Translations {
   Map<String, Map<String, String>> get keys => {
         'en_US': en_US,
         'zh_CN': zh_CN,
-        'zh_HK': zh_HK,
+        'zh_TW': zh_TW,
       };
 }

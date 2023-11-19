@@ -3,11 +3,13 @@ description: A full-platform video note-taking software. Watch the video and tak
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.1
+version: 0.0.3
 
 environment:
   sdk: '>=3.1.5 <4.0.0'
   flutter: ">=3.10.0"
+
+isar_version: &isar_version 3.1.0 # define the version to be used
 
 dependencies:
   flutter:
@@ -24,19 +26,22 @@ dependencies:
   media_kit_libs_video: 1.0.4                   # Native video dependencies.
   #markdown组件
   flutter_markdown: ^0.6.17+2
-  #富文本组件
+  #富文本编辑器组件
   #  flutter_quill: 7.3.3
   #  flutter_quill_extensions: 0.4.1
   # flutter_quill: ^7.4.4
   # flutter_quill_extensions: 0.6.0-dev
-  flutter_quill: ^8.4.1
-  flutter_quill_extensions: ^0.6.6
+  #  flutter_quill: 8.4.1
+  #  flutter_quill_extensions: 0.6.6
+  flutter_quill: 8.5.5
+  flutter_quill_extensions: 0.6.10
   #路由组件
   get: ^4.6.6
   #持久化组件
   # shared_preferences: ^2.2.1
   #存储
-  # isar: ^3.1.0+1
+  #  isar: *isar_version
+  #  isar_flutter_libs: *isar_version # contains Isar Core
   # get_storage: ^2.1.1
   #路径组件
   path_provider: ^2.1.1
@@ -86,12 +91,12 @@ dependencies:
   floating_overlay: ^1.2.1
   #搜索框组件
   super_cupertino_navigation_bar: ^1.1.2
-  #应用图标
-  flutter_launcher_icons: ^0.13.1
-  #屏幕工具
+
+  #屏幕工具响应式布局
   flutter_screenutil: ^5.9.0
   #开屏动画
   flutter_native_splash: ^2.3.5
+
   #pdf编辑
   #  pdftron_flutter: ^1.0.1-22
   #代码编辑
@@ -103,11 +108,11 @@ dependencies:
   #上拉下拉刷新
   pull_to_refresh: ^2.0.0
   #底部导航栏
-  persistent_bottom_nav_bar: ^5.0.2
+  #  persistent_bottom_nav_bar: ^5.0.2
   #响应式UI
   responsive_framework: ^1.1.1
-  #高级屏幕截图
-  screenshot: ^2.1.0
+  #  #高级屏幕截图
+  #  screenshot: ^2.1.0
   #键盘行为
   keyboard_actions: ^4.2.0
   #  设置UI
@@ -116,10 +121,8 @@ dependencies:
   shelf: ^1.4.1
   #websocket 跨端通信
   web_socket_channel: ^2.4.0
-  #响应式数据绑定框架
-  flutter_riverpod: ^2.4.5
-
-
+  #  版本更新
+  upgrader: ^8.2.0
 
 
 
@@ -131,6 +134,42 @@ dev_dependencies:
   #json序列化
   #  json_serializable: ^6.7.1
   build_runner: ^2.4.6
+  #应用图标
+  flutter_launcher_icons: ^0.13.1
+  #isar代码生成工具
+#  isar_generator: *isar_version
+
+
+
+#应用图标
+flutter_launcher_icons:
+  image_path: "assets/icons/ml.png"
+  android: true
+  ios: true
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icons/ml.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/icons/ml.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icons/ml.png"
+#开屏图
+flutter_native_splash:
+  color: "#42a5f5"
+  #background_image: "assets/background.png"
+  android_12:
+  #color: "#42a5f5"
+  #image: assets/android12splash.png
+
+
+
+
 
 flutter:
   uses-material-design: true

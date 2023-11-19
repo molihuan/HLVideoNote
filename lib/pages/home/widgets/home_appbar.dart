@@ -37,33 +37,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
             ),
             PopupMenuItem(
               child: Text('language'.tr),
-              onTap: () {
-                // PopupMenuButton(
-                //   itemBuilder: (context) => [
-                //     PopupMenuItem(
-                //       child: Text('zh_CN'.tr),
-                //       onTap: () {
-                //         var locale = Locale('zh', 'CN');
-                //         Get.updateLocale(locale);
-                //       },
-                //     ),
-                //     PopupMenuItem(
-                //       child: Text('zh_HK'.tr),
-                //       onTap: () {
-                //         var locale = Locale('zh', 'HK');
-                //         Get.updateLocale(locale);
-                //       },
-                //     ),
-                //     PopupMenuItem(
-                //       child: Text('en_US'.tr),
-                //       onTap: () {
-                //         var locale = Locale('en', 'US');
-                //         Get.updateLocale(locale);
-                //       },
-                //     ),
-                //   ],
-                // )
-              },
+              onTap: () {},
             ),
           ],
         ),

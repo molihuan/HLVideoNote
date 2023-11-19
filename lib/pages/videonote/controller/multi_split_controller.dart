@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_split_view/multi_split_view.dart';
+import 'package:note/common/utils/platform_tool.dart';
 
 ///状态
 class MultiSplitState {
@@ -34,6 +35,8 @@ class MultiSplitController extends GetxController {
 
   @override
   void dispose() {
+    super.dispose();
+
     // TODO: implement dispose
   }
 
@@ -44,6 +47,13 @@ class MultiSplitController extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
+    PlatformTool.voidCallback(android: (){
+      setAxis(Axis.vertical);
+    },ios: (){setAxis(Axis.vertical);},other: (){
+      setAxis(Axis.horizontal);
+    });
+
     // TODO: implement onInit
   }
 

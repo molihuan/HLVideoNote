@@ -3,8 +3,8 @@ import 'package:note/models/note/note_route_msg.dart';
 import 'package:path/path.dart';
 
 ///笔记url路径信息
-class NoteUrlMsg extends NoteRouteMsg {
-  NoteUrlMsg({
+class NoteWsMsg extends NoteRouteMsg {
+  NoteWsMsg({
     required this.noteFileUrl,
     super.noteProjectPosition,
     super.noteConfigDirPosition,

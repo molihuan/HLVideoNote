@@ -16,6 +16,7 @@ class NoteArea extends BaseVideoNoteView {
   @override
   Widget build(BuildContext context) {
     initData(context);
+
     return buildQuillView();
   }
 

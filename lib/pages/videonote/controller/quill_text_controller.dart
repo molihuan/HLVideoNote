@@ -283,6 +283,8 @@ class QuillTextController extends GetxController {
   /// 是否为桌面
   bool _isDesktop() => !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
 
+  setScreenshotView(Widget widget) {}
+
   /// 构建富文本工具栏
   QuillToolbar buildQuillToolbar(BuildContext context) {
     List<QuillToolbarCustomButtonOptions> customQuillCustomButtons = [
@@ -320,11 +322,7 @@ class QuillTextController extends GetxController {
       QuillToolbarCustomButtonOptions(
           icon: Icon(Icons.music_note), onPressed: () {}),
       QuillToolbarCustomButtonOptions(
-          icon: Icon(Icons.live_tv),
-          onPressed: () {
-            insertVideoBlockEmbed(
-                quillController, "https://file.cccyun.cc/Demo/mv.mp4");
-          }),
+          icon: Icon(Icons.live_tv), onPressed: () {}),
       QuillToolbarCustomButtonOptions(
           icon: Icon(Icons.unarchive_outlined),
           onPressed: () {
