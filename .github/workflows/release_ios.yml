@@ -1,0 +1,33 @@
+name: Release IOS ipa
+on:
+  # 手动触发
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build
+    runs-on: macos-latest
+    steps:
+      # 使用本项目
+      - uses: actions/checkout@v3
+      #设置flutter
+      - uses: subosito/flutter-action@v2.12.0
+        with:
+          # The Flutter version to make available on the path
+          flutter-version: 3.13.9
+          # The Flutter build release channel
+          channel: # optional, default is stable
+
+      # Get flutter dependencies.
+      - run: flutter pub get
+      # TODO Build ios
+
+
+      # Upload generated apk to the artifacts.
+      - uses: actions/upload-artifact@v3.1.3
+        with:
+          # Artifact name
+          name: release-ios
+          # 导出文件夹
+          path: ios/build/Runner.ipa
+          # The desired behavior if no files are found using the provided path.
+

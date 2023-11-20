@@ -1,0 +1,38 @@
+name: Release Android Apk
+on:
+  # 手动触发
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      # 使用本项目
+      - uses: actions/checkout@v3
+      # 设置jdk
+      - uses: actions/setup-java@v3.13.0
+        with:
+          distribution: 'zulu'
+          # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
+          java-version: 17
+      #设置flutter
+      - uses: subosito/flutter-action@v2.12.0
+        with:
+          # The Flutter version to make available on the path
+          flutter-version: 3.13.9
+          # The Flutter build release channel
+          channel: # optional, default is stable
+
+      # Get flutter dependencies.
+      - run: flutter pub get
+      # Build apk.打包各架构版本
+      - run: flutter build apk --split-per-abi
+      # Upload generated apk to the artifacts.
+      - uses: actions/upload-artifact@v3.1.3
+        with:
+          # Artifact name
+          name: release-android
+          # 导出文件夹
+          path: build/app/outputs/flutter-apk/
+          # The desired behavior if no files are found using the provided path.
+
