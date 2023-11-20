@@ -1,0 +1,44 @@
+name: Release Windows
+on:
+  # 手动触发
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      # 使用本项目
+      - uses: actions/checkout@v3
+        #windows C++组件
+      - uses: microsoft/setup-msbuild@v1.3.1
+        with:
+          # Folder location of where vswhere.exe is located if a self-hosted agent
+          vswhere-path: # optional
+          # Version of Visual Studio to search; defaults to latest if not specified
+          vs-version: # optional
+          # Enable searching for pre-release versions of Visual Studio/MSBuild
+          vs-prerelease: # optional
+          # The preferred processor architecture of MSBuild. Can be either "x86", "x64", or "arm64". "x64" is only available from Visual Studio version 17.0 and later.
+          msbuild-architecture: # optional, default is x86
+
+      #设置flutter
+      - uses: subosito/flutter-action@v2.12.0
+        with:
+          # The Flutter version to make available on the path
+          flutter-version: 3.13.9
+          # The Flutter build release channel
+          channel: # optional, default is stable
+
+      # Get flutter dependencies.
+      - run: flutter pub get
+      # Build apk.打包各架构版本
+      - run: flutter build windows
+      # Upload generated apk to the artifacts.
+      - uses: actions/upload-artifact@v3.1.3
+        with:
+          # Artifact name
+          name: release-windows
+          # 导出文件夹
+          path: build/windows/runner/Release/
+          # The desired behavior if no files are found using the provided path.
+
