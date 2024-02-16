@@ -191,7 +191,7 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
                       sourceType: SourceType.WEB_SOCKET, v: mediaValues),
                   readMediaType: ReadMediaType.video);
             }
-       
+
             //
             Get.toNamed(AppRoutes.VideoNote, arguments: {
               BaseNote.flag: baseNote,

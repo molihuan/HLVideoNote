@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = note
+PRODUCT_NAME = hlvideonote
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.molihuan.note
+PRODUCT_BUNDLE_IDENTIFIER = com.molihuan.hlvideonote
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.molihuan.note. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 com.molihuan. All rights reserved.

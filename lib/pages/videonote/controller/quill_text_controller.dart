@@ -31,7 +31,7 @@ enum _SelectionType {
 
 ///状态
 class QuillTextState {
-  /// 笔记源
+  /// 笔记
   final _baseNote = Rx<BaseNote>(LocalNote(
       readMedia: ReadMedia(
           rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
@@ -283,8 +283,6 @@ class QuillTextController extends GetxController {
   /// 是否为桌面
   bool _isDesktop() => !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
 
-  setScreenshotView(Widget widget) {}
-
   /// 构建富文本工具栏
   QuillToolbar buildQuillToolbar(BuildContext context) {
     List<QuillToolbarCustomButtonOptions> customQuillCustomButtons = [
@@ -345,16 +343,7 @@ class QuillTextController extends GetxController {
       configurations: QuillToolbarConfigurations(
         customButtons: customQuillCustomButtons,
         showAlignmentButtons: true,
-        embedButtons: FlutterQuillEmbeds.toolbarButtons(
-          imageButtonOptions: QuillToolbarImageButtonOptions(
-            imageButtonConfigurations: QuillToolbarImageConfigurations(
-              onImageInsertedCallback: (image) async {
-                // _onImagePickCallback(File(image));
-              },
-              onImageInsertCallback: onImageInsert,
-            ),
-          ),
-        ),
+        embedButtons: null,
         buttonOptions: QuillToolbarButtonOptions(
           base: QuillToolbarBaseButtonOptions(
             afterButtonPressed: _focusNode.requestFocus,
@@ -367,16 +356,7 @@ class QuillTextController extends GetxController {
         configurations: QuillToolbarConfigurations(
           customButtons: customQuillCustomButtons,
           showAlignmentButtons: true,
-          embedButtons: FlutterQuillEmbeds.toolbarButtons(
-            imageButtonOptions: QuillToolbarImageButtonOptions(
-              imageButtonConfigurations: QuillToolbarImageConfigurations(
-                onImageInsertedCallback: (image) async {
-                  // _onImagePickCallback(File(image));
-                },
-                onImageInsertCallback: onImageInsert,
-              ),
-            ),
-          ),
+          embedButtons: null,
           buttonOptions: QuillToolbarButtonOptions(
             base: QuillToolbarBaseButtonOptions(
               afterButtonPressed: _focusNode.requestFocus,
@@ -390,22 +370,7 @@ class QuillTextController extends GetxController {
         configurations: QuillToolbarConfigurations(
           customButtons: customQuillCustomButtons,
           showAlignmentButtons: true,
-          embedButtons: FlutterQuillEmbeds.toolbarButtons(
-            imageButtonOptions: QuillToolbarImageButtonOptions(
-              imageButtonConfigurations: QuillToolbarImageConfigurations(
-                onImageInsertedCallback: (image) async {
-                  // _onImagePickCallback(File(image));
-                },
-                onImageInsertCallback: onImageInsert,
-              ),
-            ),
-            cameraButtonOptions: QuillToolbarCameraButtonOptions(
-              cameraConfigurations: QuillToolbarCameraConfigurations(
-                  onVideoInsertedCallback: (source) {
-                return Future(() => null);
-              }),
-            ),
-          ),
+          embedButtons: null,
           buttonOptions: QuillToolbarButtonOptions(
             base: QuillToolbarBaseButtonOptions(
               afterButtonPressed: _focusNode.requestFocus,

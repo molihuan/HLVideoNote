@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:note/pages/videonote/base_video_note_view.dart';
+import 'package:note/pages/videonote/widgets/base_video_note_view.dart';
 
 class VideoArea extends BaseVideoNoteView {
   VideoArea({Key? key}) : super(key: key);

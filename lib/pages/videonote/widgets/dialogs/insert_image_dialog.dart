@@ -5,8 +5,9 @@ import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/components/text_field/gf_text_field.dart';
 import 'package:getwidget/size/gf_size.dart';
 import 'package:note/models/r_source.dart';
+import 'package:note/pages/videonote/controller/quill_text_controller.dart';
 
-class InsertImageDialog extends GetView {
+class InsertImageDialog extends GetView<QuillTextController> {
   // final controller = Get.find<VideoNoteController>();
 
   SourceType imgSourceType = SourceType.LOCAL;
@@ -35,7 +36,6 @@ class InsertImageDialog extends GetView {
             onExpansionChanged: (value) {
               if (value) {
                 networkExpansionTileController.collapse();
-                controller.state.imgSourceType = SourceType.LOCAL;
                 imgSourceType = SourceType.LOCAL;
               }
             },
@@ -78,7 +78,7 @@ class InsertImageDialog extends GetView {
             onExpansionChanged: (value) {
               if (value) {
                 localExpansionTileController.collapse();
-                controller.state.imgSourceType = SourceType.HTTP;
+
                 imgSourceType = SourceType.HTTP;
               }
             },
