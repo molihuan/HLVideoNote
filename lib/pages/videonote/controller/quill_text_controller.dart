@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
-import 'package:flutter_quill_extensions/presentation/embeds/embed_types/camera.dart';
+
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -285,8 +285,8 @@ class QuillTextController extends GetxController {
 
   /// 构建富文本工具栏
   QuillToolbar buildQuillToolbar(BuildContext context) {
-    List<QuillToolbarCustomButtonOptions> customQuillCustomButtons = [
-      QuillToolbarCustomButtonOptions(
+    List<Widget> customQuillCustomButtons = [
+      IconButton(
           icon: Icon(Icons.screenshot),
           onPressed: () async {
             insertVideoAnchor(quillController);
@@ -296,12 +296,12 @@ class QuillTextController extends GetxController {
               insertImageBlockEmbed(absolutePath);
             });
           }),
-      QuillToolbarCustomButtonOptions(
+      IconButton(
           icon: Icon(Icons.flag),
           onPressed: () {
             insertVideoAnchor(quillController);
           }),
-      QuillToolbarCustomButtonOptions(
+      IconButton(
           icon: Icon(Icons.image),
           onPressed: () {
             showDialog(
@@ -310,24 +310,24 @@ class QuillTextController extends GetxController {
               builder: (BuildContext context) => InsertImageDialog(),
             );
           }),
-      QuillToolbarCustomButtonOptions(
+      IconButton(
           icon: Icon(Icons.movie_creation), onPressed: () {}),
-      QuillToolbarCustomButtonOptions(
+      IconButton(
           icon: Icon(Icons.photo_camera), onPressed: () {}),
-      QuillToolbarCustomButtonOptions(
+      IconButton(
           icon: Icon(Icons.find_in_page), onPressed: () {}),
-      QuillToolbarCustomButtonOptions(icon: Icon(Icons.mic), onPressed: () {}),
-      QuillToolbarCustomButtonOptions(
+      IconButton(icon: Icon(Icons.mic), onPressed: () {}),
+      IconButton(
           icon: Icon(Icons.music_note), onPressed: () {}),
-      QuillToolbarCustomButtonOptions(
+      IconButton(
           icon: Icon(Icons.live_tv), onPressed: () {}),
-      QuillToolbarCustomButtonOptions(
+      IconButton(
           icon: Icon(Icons.unarchive_outlined),
           onPressed: () {
             final msc = Get.find<MultiSplitController>();
             msc.setAxis(Axis.vertical);
           }),
-      QuillToolbarCustomButtonOptions(
+      IconButton(
           icon: Icon(Icons.save),
           onPressed: () {
             bool result = saveNote();
@@ -341,41 +341,29 @@ class QuillTextController extends GetxController {
 
     var toolbar = QuillToolbar(
       configurations: QuillToolbarConfigurations(
-        customButtons: customQuillCustomButtons,
-        showAlignmentButtons: true,
-        embedButtons: null,
-        buttonOptions: QuillToolbarButtonOptions(
-          base: QuillToolbarBaseButtonOptions(
-            afterButtonPressed: _focusNode.requestFocus,
-          ),
-        ),
+          sharedConfigurations:QuillSharedConfigurations()
+      ),
+      child: Wrap(
+        children: customQuillCustomButtons,
       ),
     );
     if (kIsWeb) {
-      toolbar = QuillToolbar(
+      toolbar =  QuillToolbar(
         configurations: QuillToolbarConfigurations(
-          customButtons: customQuillCustomButtons,
-          showAlignmentButtons: true,
-          embedButtons: null,
-          buttonOptions: QuillToolbarButtonOptions(
-            base: QuillToolbarBaseButtonOptions(
-              afterButtonPressed: _focusNode.requestFocus,
-            ),
-          ),
+            sharedConfigurations:QuillSharedConfigurations()
+        ),
+        child: Wrap(
+          children: customQuillCustomButtons,
         ),
       );
     }
     if (_isDesktop()) {
       toolbar = QuillToolbar(
         configurations: QuillToolbarConfigurations(
-          customButtons: customQuillCustomButtons,
-          showAlignmentButtons: true,
-          embedButtons: null,
-          buttonOptions: QuillToolbarButtonOptions(
-            base: QuillToolbarBaseButtonOptions(
-              afterButtonPressed: _focusNode.requestFocus,
-            ),
-          ),
+            sharedConfigurations:QuillSharedConfigurations()
+        ),
+        child: Wrap(
+          children: customQuillCustomButtons,
         ),
       );
     }
@@ -423,7 +411,7 @@ class QuillTextController extends GetxController {
             fontFamily: 'SF-UI-Display',
             fontFeatures: [FontFeature.superscripts()],
           ),
-        ),
+        ), controller: quillController,
       ),
       scrollController: ScrollController(),
       focusNode: _focusNode,
@@ -453,7 +441,7 @@ class QuillTextController extends GetxController {
                 const VerticalSpacing(0, 0),
                 null),
             sizeSmall: const TextStyle(fontSize: 9),
-          ),
+          ), controller: quillController,
         ),
         scrollController: ScrollController(),
         focusNode: _focusNode,

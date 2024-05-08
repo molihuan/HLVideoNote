@@ -21,14 +21,7 @@ class NoteArea extends BaseVideoNoteView {
   }
 
   Widget buildQuillView() {
-    return QuillProvider(
-      configurations: QuillConfigurations(
-        controller: quillTextController.quillController,
-        sharedConfigurations: const QuillSharedConfigurations(
-            // locale: Locale('zh'),
-            ),
-      ),
-      child: Column(
+    return  Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           kIsWeb
@@ -48,7 +41,6 @@ class NoteArea extends BaseVideoNoteView {
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 }

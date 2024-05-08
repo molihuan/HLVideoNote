@@ -7,14 +7,15 @@ list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_windows
   flutter_js
   gal
+  irondash_engine_context
   media_kit_libs_windows_video
   media_kit_video
   nb_utils
-  pasteboard
   permission_handler_windows
   record_windows
   screen_brightness_windows
   share_plus
+  super_native_extensions
   url_launcher_windows
 )
 
