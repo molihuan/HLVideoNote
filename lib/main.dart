@@ -13,9 +13,12 @@ Future<void> main() async {
   /// Necessary initialization for package:media_kit.
   MediaKit.ensureInitialized();
 
+
   ///init nb_utils
   await initialize();
+  print('初始化完毕');
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
