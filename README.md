@@ -66,9 +66,9 @@
 
 | Android                                                      | iOS    |
 | ------------------------------------------------------------ | ------ |
-| ![android_vedio_note.png](https://z4a.net/images/2023/11/17/android_vedio_note.png) | 待补充 |
+| ![android_vedio_note.png](https://z4a.net/images/2023/11/17/android_vedio_note.png) | ![ios-vedio-note.png](https://z4a.net/images/2024/05/11/ios-vedio-note.png) |
 | Windows                                                      | macOS  |
-| ![win_vedio_note.png](https://z4a.net/images/2023/11/17/win_vedio_note.png) | 待补充 |
+| ![win_vedio_note.png](https://z4a.net/images/2023/11/17/win_vedio_note.png) | ![mac-vedio-note.png](https://z4a.net/images/2024/05/11/mac-vedio-note.png) |
 | GNU/Linux                                                    | Web    |
 | 待补充                                                       | 待补充 |
 
@@ -140,7 +140,7 @@ Gitee：
 
 ##### Mac版编译注意事项
 
-自测
+[查看](doc/md/zh_CN/CompilationNotes/Mac.md)
 
 ##### ios版编译注意事项
 
