@@ -13,7 +13,6 @@ Future<void> main() async {
   /// Necessary initialization for package:media_kit.
   MediaKit.ensureInitialized();
 
-
   ///init nb_utils
   await initialize();
   print('初始化完毕');
@@ -45,7 +44,7 @@ class MyApp extends StatelessWidget {
       ///flutter_smart_dialog初始化
       navigatorObservers: [FlutterSmartDialog.observer],
       builder: FlutterSmartDialog.init(),
-
+      // 设置nb_util的全局key
       navigatorKey: navigatorKey,
     );
   }

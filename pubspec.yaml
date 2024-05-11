@@ -18,6 +18,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   #ui库
   getwidget: 4.0.0
+
+  velocity_x: ^4.1.2
   #视频组件
   media_kit: 1.1.10                             # Primary package.
   media_kit_video: 1.2.4                        # For video rendering.

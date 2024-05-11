@@ -64,5 +64,11 @@ flutter create --platforms android .
 (安卓的包名必须为com.molihuan.note否则会白屏无法进入页面)
 打包windows
 flutter build windows
+打包mac
+flutter build macos
+打包安卓分架构
+flutter build apk --split-per-abi
+打包ios
+flutter build ios --release
 ```
 

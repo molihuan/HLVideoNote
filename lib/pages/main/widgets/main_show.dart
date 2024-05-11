@@ -6,12 +6,12 @@ import 'package:note/pages/my/index.dart';
 
 class MainShow extends GetView<MainController> {
   MainShow({Key? key}) : super(key: key);
-
-  final List<Widget> viewList = [HomePage(), MyPage()];
-
+  //  视图列表
+  final List<Widget> viewList = [const HomePage(), const MyPage()];
+  //  导航按钮列表
   final List<BottomNavigationBarItem> navigationBarItemList = [
-    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'.tr),
-    BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'my'.tr),
+    BottomNavigationBarItem(icon: const Icon(Icons.home), label: 'home'.tr),
+    BottomNavigationBarItem(icon: const Icon(Icons.account_circle), label: 'my'.tr),
   ];
 
   @override
