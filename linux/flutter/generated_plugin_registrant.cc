@@ -7,12 +7,10 @@
 #include "generated_plugin_registrant.h"
 
 #include <file_selector_linux/file_selector_plugin.h>
-#include <flutter_js/flutter_js_plugin.h>
 #include <irondash_engine_context/irondash_engine_context_plugin.h>
 #include <media_kit_libs_linux/media_kit_libs_linux_plugin.h>
 #include <media_kit_video/media_kit_video_plugin.h>
 #include <nb_utils/nb_utils_plugin.h>
-#include <record_linux/record_linux_plugin.h>
 #include <super_native_extensions/super_native_extensions_plugin.h>
 #include <url_launcher_linux/url_launcher_plugin.h>
 
@@ -20,9 +18,6 @@ void fl_register_plugins(FlPluginRegistry* registry) {
   g_autoptr(FlPluginRegistrar) file_selector_linux_registrar =
       fl_plugin_registry_get_registrar_for_plugin(registry, "FileSelectorPlugin");
   file_selector_plugin_register_with_registrar(file_selector_linux_registrar);
-  g_autoptr(FlPluginRegistrar) flutter_js_registrar =
-      fl_plugin_registry_get_registrar_for_plugin(registry, "FlutterJsPlugin");
-  flutter_js_plugin_register_with_registrar(flutter_js_registrar);
   g_autoptr(FlPluginRegistrar) irondash_engine_context_registrar =
       fl_plugin_registry_get_registrar_for_plugin(registry, "IrondashEngineContextPlugin");
   irondash_engine_context_plugin_register_with_registrar(irondash_engine_context_registrar);
@@ -35,9 +30,6 @@ void fl_register_plugins(FlPluginRegistry* registry) {
   g_autoptr(FlPluginRegistrar) nb_utils_registrar =
       fl_plugin_registry_get_registrar_for_plugin(registry, "nb_utils_plugin");
   nb_utils_plugin_register_with_registrar(nb_utils_registrar);
-  g_autoptr(FlPluginRegistrar) record_linux_registrar =
-      fl_plugin_registry_get_registrar_for_plugin(registry, "RecordLinuxPlugin");
-  record_linux_plugin_register_with_registrar(record_linux_registrar);
   g_autoptr(FlPluginRegistrar) super_native_extensions_registrar =
       fl_plugin_registry_get_registrar_for_plugin(registry, "SuperNativeExtensionsPlugin");
   super_native_extensions_plugin_register_with_registrar(super_native_extensions_registrar);

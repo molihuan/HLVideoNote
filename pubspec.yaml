@@ -1,15 +1,13 @@
 name: note
 description: A full-platform video note-taking software. Watch the video and take notes at the same time. Of course it's more than that.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
-version: 0.0.3
+version: 0.0.4
 
 environment:
   sdk: '>=3.1.5 <4.0.0'
   flutter: ">=3.10.0"
-
-isar_version: &isar_version 3.1.0 # define the version to be used
 
 dependencies:
   flutter:
@@ -33,10 +31,6 @@ dependencies:
   get: ^4.6.6
   #持久化组件
   # shared_preferences: ^2.2.1
-  #存储
-  #  isar: *isar_version
-  #  isar_flutter_libs: *isar_version # contains Isar Core
-  # get_storage: ^2.1.1
   #路径组件
   path_provider: ^2.1.1
   #安卓路径
@@ -51,14 +45,14 @@ dependencies:
   #吐司弹窗框架
   flutter_smart_dialog: ^4.9.5+1
   #分享
-  share_plus: ^9.0.0
+#  share_plus: ^9.0.0
   #设备信息
   #  device_info_plus: ^9.0.3
   package_info_plus: ^4.2.0
   #日志
   logger: ^2.0.1
   #打开url
-  url_launcher: ^6.1.12
+#  url_launcher: ^6.1.12
   #崩溃信息
   #  sentry_flutter: ^7.9.0
   #悬浮按钮
@@ -68,15 +62,15 @@ dependencies:
   #白板工具
   flutter_drawing_board: ^0.5.0
   #  手写签名
-  syncfusion_flutter_signaturepad: ^23.1.43
+#  syncfusion_flutter_signaturepad: ^23.1.43
   # 图片扩展
-  extended_image: 8.0.2
+#  extended_image: 8.0.2
   # 图片裁剪
-  crop_image: ^1.0.11
+#  crop_image: ^1.0.11
   #录音
-  record: ^5.0.1
+#  record: ^5.0.1
   #插件系统
-  flutter_js: ^0.8.0
+#  flutter_js: ^0.8.0
   #拖拽控件
   multi_split_view: ^2.4.0
   #悬浮组件,将视频窗口悬浮
@@ -92,13 +86,13 @@ dependencies:
   #pdf编辑
   #  pdftron_flutter: ^1.0.1-22
   #代码编辑
-  flutter_code_editor: ^0.3.1
+#  flutter_code_editor: ^0.3.1
   #工具类 包含shared_preferences
   nb_utils: ^7.0.2
   #网格视图布局组件
   flutter_staggered_grid_view: ^0.7.0
   #上拉下拉刷新
-  pull_to_refresh: ^2.0.0
+#  pull_to_refresh: ^2.0.0
   #底部导航栏
   #  persistent_bottom_nav_bar: ^5.0.2
   #响应式UI
@@ -106,15 +100,16 @@ dependencies:
   #  #高级屏幕截图
   #  screenshot: ^2.1.0
   #键盘行为
-  keyboard_actions: ^4.2.0
+#  keyboard_actions: ^4.2.0
   #  设置UI
-  settings_ui: ^2.0.2
+#  settings_ui: ^2.0.2
   #服务器组件
   shelf: ^1.4.1
   #websocket 跨端通信
   web_socket_channel: ^2.4.0
+#  socket_io_client: ^2.0.3+1
   #  版本更新
-  upgrader: ^8.2.0
+#  upgrader: ^8.2.0
   #  序列化
 #  freezed_annotation: ^2.4.1
 #  json_annotation: ^4.8.1
@@ -129,7 +124,7 @@ dev_dependencies:
   #生成器
   build_runner: ^2.4.6
   #应用图标
-#  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.13.1
   # 序列化
 #  freezed: ^2.4.5
 #  json_serializable: ^6.7.1
@@ -163,9 +158,6 @@ flutter_launcher_icons:
 #  android_12:
 #  #color: "#42a5f5"
 #  #image: assets/android12splash.png
-
-
-
 
 
 flutter:

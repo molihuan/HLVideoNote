@@ -25,3 +25,13 @@
 请前往[https://github.com/media-kit/libmpv-android-video-build/releases](https://github.com/media-kit/libmpv-android-video-build/releases)
 下载对应的文件并拷贝覆盖到项目目录的build/media_kit_libs_android_video/{$版本号
 如v1.1.5}下（一般是default-arm64-v8a.jar、default-armeabi-v7a.jar、default-x86.jar、default-x86_64.jar拉取不下来）
+
+## 注意
+
+安卓的包名必须为
+
+```
+com.molihuan.note
+```
+
+否则会白屏无法进入页面

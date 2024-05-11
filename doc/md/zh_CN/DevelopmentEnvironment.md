@@ -61,6 +61,7 @@
 flutter doctor -v
 生成安卓端代码
 flutter create --platforms android .
+(安卓的包名必须为com.molihuan.note否则会白屏无法进入页面)
 打包windows
 flutter build windows
 ```
