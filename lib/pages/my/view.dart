@@ -3,10 +3,11 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:note/middlewares/websocket/client/socket_client.dart';
-import 'package:note/middlewares/websocket/service/socket_service.dart';
 
 
+
+import '../../middlewares/websocket/client/socket_client.dart';
+import '../../middlewares/websocket/service/socket_service.dart';
 import 'index.dart';
 
 class MyPage extends GetView<MyController> {

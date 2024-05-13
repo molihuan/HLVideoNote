@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:note/common/utils/file_tool.dart';
+
 import 'package:web_socket_channel/io.dart';
+
+import '../../../common/utils/file_tool.dart';
 
 class WebSocketClient {
   late final IOWebSocketChannel channel;

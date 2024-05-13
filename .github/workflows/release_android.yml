@@ -28,7 +28,7 @@ jobs:
       # Build apk.打包各架构版本
       - run: flutter build apk --split-per-abi
       # Upload generated apk to the artifacts.
-      - uses: actions/upload-artifact@v3.1.3
+      - uses: actions/upload-artifact@v4
         with:
           # Artifact name
           name: release-android.zip

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:note/common/utils/common_tool.dart';
+
+import '../../common/utils/common_tool.dart';
+
 
 /**
  * --noteProjectName1

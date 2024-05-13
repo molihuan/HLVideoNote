@@ -5,10 +5,11 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
     <application
         android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
-        android:label="hlvideonote"
+        android:label="videonote"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

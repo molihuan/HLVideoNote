@@ -2,7 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_drawing_board/flutter_drawing_board.dart';
-import 'package:note/common/utils/file_tool.dart';
+
+import '../../../common/utils/file_tool.dart';
 
 //白板测试
 class HelloWidget extends StatefulWidget {

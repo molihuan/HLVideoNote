@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:note/common/store/global_store.dart';
-import 'package:note/common/utils/file_tool.dart';
-import 'package:note/dao/data_manager.dart';
 
-import 'package:note/models/note_model/base_note.dart';
-import 'package:note/routes/app_pages.dart';
 
 import 'package:path/path.dart';
 
+import '../../common/store/global_store.dart';
+import '../../common/utils/file_tool.dart';
+import '../../dao/data_manager.dart';
+import '../../models/note_model/base_note.dart';
+import '../../routes/app_pages.dart';
 import 'index.dart';
 
 class HomeController extends GetxController {

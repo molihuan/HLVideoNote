@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
-import 'package:note/common/utils/common_tool.dart';
-import 'package:note/common/utils/file_tool.dart';
-import 'package:note/pages/home/widgets/dialogs/create_note_video_dialog.dart';
-import 'package:note/pages/home/widgets/dialogs/open_note_video_dialog.dart';
+
 
 import '../../../models/note_model/base_note.dart';
 import '../index.dart';
+import 'dialogs/create_note_video_dialog.dart';
+import 'dialogs/open_note_video_dialog.dart';
 
 class HomeFloatBtn extends GetView<HomeController> {
   const HomeFloatBtn({Key? key}) : super(key: key);

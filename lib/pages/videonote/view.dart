@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:note/common/utils/common_tool.dart';
-import 'package:note/common/utils/platform_tool.dart';
-import 'package:note/pages/videonote/widgets/video_note_show_pc.dart';
-import 'package:note/pages/videonote/widgets/video_note_show_phone.dart';
 
+
+import '../../common/utils/common_tool.dart';
+import '../../common/utils/platform_tool.dart';
 import 'controller/quill_text_controller.dart';
+import 'widgets/video_note_show_pc.dart';
+import 'widgets/video_note_show_phone.dart';
 
 class VideoNotePage extends GetView {
   const VideoNotePage({Key? key}) : super(key: key);

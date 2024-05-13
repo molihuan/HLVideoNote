@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:note/pages/home/widgets/home_show.dart';
+
+
 
 import 'index.dart';
+import 'widgets/home_show.dart';
 import 'widgets/widgets.dart';
 
 class HomePage extends GetView<HomeController> {

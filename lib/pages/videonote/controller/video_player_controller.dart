@@ -4,9 +4,11 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:note/common/utils/common_tool.dart';
-import 'package:note/common/utils/file_tool.dart';
-import 'package:note/models/note_model/base_note.dart';
+
+import '../../../common/utils/common_tool.dart';
+import '../../../common/utils/file_tool.dart';
+import '../../../models/note_model/base_note.dart';
+
 
 
 class VideoPlayerController extends GetxController {

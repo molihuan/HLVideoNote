@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:note/pages/home/index.dart';
-import 'package:note/pages/main/controller.dart';
-import 'package:note/pages/my/index.dart';
+
+import '../../home/view.dart';
+import '../../my/view.dart';
+import '../controller.dart';
+
 
 class MainShow extends GetView<MainController> {
   MainShow({Key? key}) : super(key: key);

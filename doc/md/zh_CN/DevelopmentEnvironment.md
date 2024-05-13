@@ -61,6 +61,10 @@
 ```shell
 查看详细配置信息
 flutter doctor -v
+创建包名为com.molihuan.videonote的项目
+flutter create --org com.molihuan videonote
+创建所有平台
+flutter create .
 生成安卓端代码
 flutter create --platforms android .
 (安卓的包名必须为com.molihuan.note否则会白屏无法进入页面)

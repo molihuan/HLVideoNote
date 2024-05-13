@@ -9,14 +9,18 @@
 ```xml
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    
+    
     <application android:preserveLegacyExternalStorage="true"
-        android:requestLegacyExternalStorage="true" android:label="note"
+        android:requestLegacyExternalStorage="true" android:label="videonote"
         android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
 ```
 
@@ -28,10 +32,16 @@
 
 ## 注意
 
-安卓的包名必须为
 
-```
+
+```sh
+安卓的包名为：
 com.molihuan.note
+
+minSdkVersion 23
+
+id "org.jetbrains.kotlin.android" version "1.9.24"
 ```
 
-否则会白屏无法进入页面
+
+

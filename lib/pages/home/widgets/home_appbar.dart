@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:note/pages/main/controller.dart';
+
+import '../../main/controller.dart';
+
 /// 主页的AppBar
 class HomeAppbar extends AppBar {
   @override

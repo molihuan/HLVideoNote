@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
-import 'package:note/models/note_model/base_note.dart';
+
+import '../../models/note_model/base_note.dart';
+
 
 
 class HomeState {

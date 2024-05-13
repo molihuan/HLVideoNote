@@ -2,9 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:note/models/note_model/base_note.dart';
 
-import 'package:note/routes/app_pages.dart';
 
 import '../../index.dart';
 

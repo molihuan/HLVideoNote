@@ -1,13 +1,13 @@
-name: note
+name: videonote
 description: A full-platform video note-taking software. Watch the video and take notes at the same time. Of course it's more than that.
 
 publish_to: 'none'
 
-version: 0.0.4
+version: 0.0.5
 
 environment:
-  sdk: '>=3.1.5 <4.0.0'
-  flutter: ">=3.10.0"
+  sdk: '>=3.3.1 <4.0.0'
+  flutter: ">=3.19.3"
 
 dependencies:
   flutter:
@@ -25,11 +25,11 @@ dependencies:
   media_kit_video: 1.2.4                        # For video rendering.
   media_kit_libs_video: 1.0.4                   # Native video dependencies.
   #markdown组件
-  flutter_markdown: ^0.6.17+2
+#  flutter_markdown: ^0.6.17+2
   #富文本编辑器组件
   flutter_quill: ^9.3.10
   flutter_quill_extensions: ^9.3.10
-  google_fonts: ^6.2.1
+  google_fonts: ^4.0.3
   #路由组件
   #https://github.com/jonataslaw/getx/blob/master/README.zh-cn.md
   get: ^4.6.6
@@ -87,6 +87,8 @@ dependencies:
 
   #屏幕工具响应式布局
   flutter_screenutil: ^5.9.0
+  #自定义桌面端窗口
+  bitsdojo_window: ^0.1.6
   #开屏动画
 #  flutter_native_splash: ^2.3.5
 

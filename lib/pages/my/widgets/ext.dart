@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/components/text_field/gf_text_field.dart';
 import 'package:getwidget/size/gf_size.dart';
-import 'package:note/routes/app_pages.dart';
+
+import '../../../routes/app_pages.dart';
+
 
 //弹窗
 class PopupDialogDemo extends StatefulWidget {

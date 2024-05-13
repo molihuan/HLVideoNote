@@ -11,14 +11,14 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:image_cropper/image_cropper.dart';
-import 'package:note/dao/data_manager.dart';
-import 'package:note/pages/videonote/controller/quill_text_controller.dart';
-import 'package:note/pages/videonote/controller/video_player_controller.dart';
-import 'package:note/pages/videonote/widgets/link_blockembed.dart';
+
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
 
+import '../../../dao/data_manager.dart';
+import '../controller/quill_text_controller.dart';
+import '../controller/video_player_controller.dart';
 import 'dialogs/insert_image_dialog.dart';
 
 

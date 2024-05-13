@@ -1,8 +1,10 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:note/common/store/global_store.dart';
-import 'package:note/common/utils/file_tool.dart';
-import 'package:note/models/note_model/base_note.dart';
+
+import '../common/store/global_store.dart';
+import '../common/utils/file_tool.dart';
+import '../models/note_model/base_note.dart';
+
 
 class DataManager{
   static const DATASTORE_KEY_EDITOR_SHOW_MORE_TOOLBAR_BTN = "molihuan_note_DATASTORE_KEY_EDITOR_SHOW_MORE_TOOLBAR_BTN";

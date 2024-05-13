@@ -3,14 +3,15 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:external_path/external_path.dart';
-import 'package:note/common/utils/common_tool.dart';
-import 'package:note/common/utils/platform_tool.dart';
 
-import 'package:note/models/note_model/base_note.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:path/path.dart';
+
+import '../../models/note_model/base_note.dart';
+import 'common_tool.dart';
+import 'platform_tool.dart';
 
 class FileTool {
   static const String DIR_DEFAULT_NOTE_PROJECT = "NoteProject";

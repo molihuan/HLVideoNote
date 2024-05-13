@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:note/common/utils/common_tool.dart';
-import 'package:note/models/note_model/base_note.dart';
 
-import 'package:note/pages/home/controller.dart';
-import 'package:note/routes/app_pages.dart';
+import '../../../common/utils/common_tool.dart';
+import '../../../models/note_model/base_note.dart';
+import '../../../routes/app_pages.dart';
+import '../controller.dart';
+
 ///笔记列表
 class NoteList extends GetView<HomeController> {
   NoteList({Key? key}) : super(key: key);

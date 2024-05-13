@@ -1,4 +1,4 @@
-package com.molihuan.note
+package com.molihuan.videonote
 
 import io.flutter.embedding.android.FlutterActivity
 

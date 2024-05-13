@@ -11,19 +11,15 @@ import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:note/common/utils/common_tool.dart';
-import 'package:note/common/utils/file_tool.dart';
-import 'package:note/dao/data_manager.dart';
 
-import 'package:note/models/note_model/base_note.dart';
+import '../../../common/utils/common_tool.dart';
+import '../../../common/utils/file_tool.dart';
+import '../../../dao/data_manager.dart';
+import '../../../models/note_model/base_note.dart';
+import '../widgets/link_blockembed.dart';
+import '../widgets/my_quill_toolbar.dart';
+import 'video_player_controller.dart';
 
-import 'package:note/pages/home/controller.dart';
-import 'package:note/pages/videonote/controller/multi_split_controller.dart';
-import 'package:note/pages/videonote/controller/video_player_controller.dart';
-import 'package:note/pages/videonote/widgets/dialogs/insert_image_dialog.dart';
-import 'package:note/pages/videonote/widgets/link_blockembed.dart';
-import 'package:note/pages/videonote/widgets/my_quill_toolbar.dart';
 ///选择类型
 enum _SelectionType {
   none,

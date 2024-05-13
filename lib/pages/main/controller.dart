@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
-import 'package:note/common/utils/permission_tool.dart';
-import 'package:note/pages/home/controller.dart';
-import 'package:note/pages/my/controller.dart';
 
+
+import '../../common/utils/permission_tool.dart';
+import '../home/controller.dart';
+import '../my/controller.dart';
 import 'index.dart';
 
 class MainController extends GetxController {

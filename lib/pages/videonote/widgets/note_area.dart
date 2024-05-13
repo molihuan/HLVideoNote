@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:note/pages/videonote/widgets/base_video_note_view.dart';
+
+import 'base_video_note_view.dart';
+
 
 class NoteArea extends BaseVideoNoteView {
   NoteArea({Key? key}) : super(key: key) {}

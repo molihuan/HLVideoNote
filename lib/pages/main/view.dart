@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:note/pages/main/widgets/main_show.dart';
+
 
 import 'index.dart';
+import 'widgets/main_show.dart';
 
 ///主要显示区
 class MainPage extends GetView<MainController> {

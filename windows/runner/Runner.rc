@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.molihuan" "\0"
-            VALUE "FileDescription", "note" "\0"
+            VALUE "FileDescription", "videonote" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "note" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.molihuan. All rights reserved." "\0"
-            VALUE "OriginalFilename", "note.exe" "\0"
-            VALUE "ProductName", "note" "\0"
+            VALUE "InternalName", "videonote" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 com.molihuan. All rights reserved." "\0"
+            VALUE "OriginalFilename", "videonote.exe" "\0"
+            VALUE "ProductName", "videonote" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

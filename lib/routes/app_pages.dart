@@ -1,10 +1,14 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:get/get.dart';
-import 'package:note/pages/home/index.dart';
-import 'package:note/pages/main/bindings.dart';
-import 'package:note/pages/main/view.dart';
-import 'package:note/pages/videonote/index.dart';
+
+import '../pages/home/bindings.dart';
+import '../pages/home/view.dart';
+import '../pages/main/bindings.dart';
+import '../pages/main/view.dart';
+import '../pages/videonote/bindings.dart';
+import '../pages/videonote/view.dart';
+
 
 part 'app_routes.dart';
 
