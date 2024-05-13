@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: windows-latest
             platform: 'android'
             target-platform: 'android-arm64'
           - os: ubuntu-latest
