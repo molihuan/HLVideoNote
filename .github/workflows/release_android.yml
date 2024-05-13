@@ -19,7 +19,7 @@ jobs:
       - uses: subosito/flutter-action@v2.12.0
         with:
           # The Flutter version to make available on the path
-          flutter-version: 3.13.9
+          flutter-version: 3.19.3
           # The Flutter build release channel
           channel: # optional, default is stable
 

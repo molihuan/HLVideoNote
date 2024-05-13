@@ -1,7 +1,6 @@
 name: Flutter Build
 
 on:
-  push:
   workflow_dispatch:
 
 env:
