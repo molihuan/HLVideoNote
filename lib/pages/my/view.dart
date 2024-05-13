@@ -3,13 +3,9 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:note/middlewares/shelf/service/shelf_service.dart';
 import 'package:note/middlewares/websocket/client/socket_client.dart';
 import 'package:note/middlewares/websocket/service/socket_service.dart';
-import 'package:note/models/note/base_note.dart';
-import 'package:note/models/note/impl/local_note.dart';
-import 'package:note/models/r_source.dart';
-import 'package:note/models/read_media.dart';
+
 
 import 'index.dart';
 
@@ -23,8 +19,6 @@ class MyPage extends GetView<MyController> {
         GFButton(
             text: "开启shelf服务",
             onPressed: () async {
-              var service = ShelfService();
-              service.run();
             }),
         GFButton(
             text: "开启socket服务",
@@ -48,22 +42,22 @@ class MyPage extends GetView<MyController> {
         GFButton(
             text: "保存",
             onPressed: () async {
-              BaseNote baseNote = LocalNote(
-                  readMedia: ReadMedia(
-                      rsource:
-                          Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
-                      readMediaType: ReadMediaType.video),
-                  noteTitle: "标题",
-                  noteDescription: '描述',
-                  noteUpdateTime: DateTime.now(),
-                  noteFilePath: "路径");
-
-              await setValue("key", [
-                // baseNote.noteType,
-                baseNote.noteTitle,
-                baseNote.noteUpdateTime.toString(),
-                baseNote.noteRouteMsg.noteFilePosition
-              ]);
+              // BaseNote baseNote = LocalNote(
+              //     readMedia: ReadMedia(
+              //         rsource:
+              //             Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
+              //         readMediaType: ReadMediaType.video),
+              //     noteTitle: "标题",
+              //     noteDescription: '描述',
+              //     noteUpdateTime: DateTime.now(),
+              //     noteFilePath: "路径");
+              //
+              // await setValue("key", [
+              //   // baseNote.noteType,
+              //   baseNote.noteTitle,
+              //   baseNote.noteUpdateTime.toString(),
+              //   baseNote.noteRouteMsg.noteFilePosition
+              // ]);
             }),
         GFButton(
             text: "读取",

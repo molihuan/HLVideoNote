@@ -4,15 +4,43 @@ import 'package:flutter/material.dart';
 typedef String StrCallbackStr(String value);
 typedef void CallbackStr(String value);
 typedef String StrCallback();
-
-typedef Widget WgetCallback();
+typedef bool BoolCallback();
 
 /// 异步方法
 typedef Future<String> FStrCallbackStr(String value);
 typedef Future<void> FCallbackStr(String value);
 typedef Future<String> FStrCallback();
 
+typedef Widget WgetCallback();
+
 class CommonTool {
+
+  Widget conditionalWidget(BoolCallback boolCallback, Widget widget) {
+    bool condition = boolCallback();
+    return condition ? widget : Visibility(visible: false, child: widget);
+  }
+
+  /// 获取父位置
+  static String getParentPos(String path) {
+    // 如果路径以斜杠结尾，先去掉斜杠
+    if (path.endsWith('/')) {
+      path = path.substring(0, path.length - 1);
+    }
+
+    // 使用字符串匹配找到最后一个斜杠的位置
+    int lastSlashIndex = path.lastIndexOf('/');
+
+    // 如果找不到斜杠，或者斜杠在第一个位置，表示当前路径已经是根路径，直接返回原路径
+    if (lastSlashIndex <= 0) {
+      return path;
+    }
+
+    // 截取路径字符串，获取上一级路径
+    return path.substring(0, lastSlashIndex);
+  }
+
+
+
   ///String转Duration
   static Duration str2Duration(String durationString) {
     List<String> parts = durationString.split(':');
@@ -37,6 +65,7 @@ class CommonTool {
   }
 
   ///获取当前时间
+  ///2024_05_12_22_36_37_1715524597897
   static String getCurrentTime() {
     DateTime dateTime = DateTime.now();
     final formattedDate =
@@ -48,21 +77,21 @@ class CommonTool {
   }
 
   ///获取上一级url
-  static String? getParentUrl(String url) {
-    if (url.isEmpty) {
-      return null;
-    }
-
-    ///如果是以路径分隔符结尾则去除最后的路径分隔符
-    if (url.endsWith("/")) {
-      url = url.substring(0, url.length - 1);
-    }
-
-    if (!url.contains("/")) {
-      return null;
-    }
-
-    int endIndex = url.lastIndexOf("/");
-    return url.substring(0, endIndex);
-  }
+  // static String? getParentUrl(String url) {
+  //   if (url.isEmpty) {
+  //     return null;
+  //   }
+  //
+  //   ///如果是以路径分隔符结尾则去除最后的路径分隔符
+  //   if (url.endsWith("/")) {
+  //     url = url.substring(0, url.length - 1);
+  //   }
+  //
+  //   if (!url.contains("/")) {
+  //     return null;
+  //   }
+  //
+  //   int endIndex = url.lastIndexOf("/");
+  //   return url.substring(0, endIndex);
+  // }
 }

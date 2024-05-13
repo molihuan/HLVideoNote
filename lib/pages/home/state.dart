@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:note/models/note/base_note.dart';
+import 'package:note/models/note_model/base_note.dart';
+
 
 class HomeState {
   //创建视频笔记类型

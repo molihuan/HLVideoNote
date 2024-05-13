@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -15,7 +16,9 @@ Future<void> main() async {
 
   ///init nb_utils
   await initialize();
-  print('初始化完毕');
+
+  LogUtil.init(isDebug: true);
+
   runApp(MyApp());
 
 }
@@ -32,11 +35,11 @@ class MyApp extends StatelessWidget {
       ),
 
       debugShowCheckedModeBanner: false,
-      // 初始路由
+      /// 初始路由
       initialRoute: AppPages.INITIAL,
-      // 所有的页面
+      /// 所有的页面
       getPages: AppPages.routes,
-      //国际化
+      ///国际化
       locale: TranslationService.locale,
       fallbackLocale: TranslationService.fallbackLocale,
       translations: TranslationService(),

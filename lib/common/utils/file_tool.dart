@@ -5,10 +5,9 @@ import 'dart:typed_data';
 import 'package:external_path/external_path.dart';
 import 'package:note/common/utils/common_tool.dart';
 import 'package:note/common/utils/platform_tool.dart';
-import 'package:note/models/note/base_note.dart';
-import 'package:note/models/note/note_route_msg.dart';
-import 'package:note/models/r_source.dart';
-import 'package:note/models/read_media.dart';
+
+import 'package:note/models/note_model/base_note.dart';
+
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:path/path.dart';
@@ -16,6 +15,68 @@ import 'package:path/path.dart';
 class FileTool {
   static const String DIR_DEFAULT_NOTE_PROJECT = "NoteProject";
 
+  static loadNoteFile(){
+
+  }
+
+  static bool deleteAll(String path) {
+    Directory folder = Directory(path);
+    if (folder.existsSync()) {
+      folder.deleteSync(recursive: true);
+      return true;
+    } else {
+      print('文件夹不存在');
+      return false;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> readJsonFile(String filePath) async {
+    try {
+      // 读取文件内容
+      File file = File(filePath);
+      String content = await file.readAsString();
+
+      // 将文件内容解析为 JSON
+      Map<String, dynamic>? jsonData = json.decode(content);
+      return jsonData;
+    } catch (error) {
+      print('读取文件时出现错误：$error');
+      return null;
+    }
+  }
+
+  static Future<bool> writeFile(String filePath, String content) async {
+    try {
+      // 创建文件
+      File file = File(filePath);
+      // 写入内容
+      await file.writeAsString(content);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  static Future<bool> writeMapToFile(String filePath, Map<String, dynamic> map) async {
+    try {
+      // 将 Map 转换为 JSON 格式的字符串
+      String jsonString = jsonEncode(map);
+
+      // 创建文件
+      File file = File(filePath);
+
+      // 写入内容
+      await file.writeAsString(jsonString);
+
+      print('文件创建成功并写入内容。');
+      return true;
+    } catch (error) {
+      print('写入文件时出现错误：$error');
+      return false;
+    }
+  }
+
+///////////////////////////////////////////////////////////////////////////
   static bool deleteFiles(String folderPath) {
     Directory folder = Directory(folderPath);
     if (folder.existsSync()) {
@@ -44,11 +105,10 @@ class FileTool {
     try {
       /// 将图片数据写入文件
       await imageFile.writeAsBytes(imageBytes);
-
       /// 返回保存的图片路径
       return absolutePath;
     } catch (e) {
-      print('保存图片出错：$e');
+      print('保存图片出错:$e');
       return null;
     }
   }
@@ -133,11 +193,11 @@ class FileTool {
   }
 
   /// 把文件转换为json
-  static Map? readJson(String filePath) {
+  static Map<String,dynamic>? readJson(String filePath) {
     final file = File(filePath);
     try {
       var jsonString = file.readAsStringSync();
-      Map jsonObj = jsonDecode(jsonString);
+      Map<String,dynamic> jsonObj = jsonDecode(jsonString);
       return jsonObj;
     } catch (e) {
       print('readJson err: $e');
@@ -190,44 +250,39 @@ class FileTool {
 
   /// 创建笔记项目
   static Future<String?> createNoteProjectFile(
-      BaseNote baseNote, String readMedia) async {
-    var noteRouteMsg = baseNote.noteRouteMsg;
+      BaseNote baseNote) async {
 
     //TODO 判断权限是否足够
 
-    //判断指定文件是否存在
-    if (fileExists(noteRouteMsg.noteFilePosition)) {
-      return noteRouteMsg.noteFilePosition;
+    //判断笔记内容文件是否存在
+    if (fileExists(baseNote.noteDataPos)) {
+      return baseNote.noteDataPos;
     }
 
-    //资源分类
     List<String> resourceClass = [
-      noteRouteMsg.noteImgDirPosition!,
-      noteRouteMsg.noteConfigDirPosition!,
-      noteRouteMsg.noteVideoDirPosition!,
-      noteRouteMsg.notePdfDirPosition!,
+      baseNote.noteImgPos,
+      baseNote.noteVideoPos,
+      baseNote.noteAudioPos,
+      baseNote.notePdfPos,
+      baseNote.noteMarkdownPos,
+      baseNote.noteTxtPos,
     ];
-
+    ///创建文件夹
     for (String dir in resourceClass) {
       Directory(dir).createSync(recursive: true);
-      if (dir == NotePositionConstant.dirConfig.v) {}
+    }
+    ///初始化笔记内容并写入文件(这里应该提供统一的保存接口,saveRes,本地应该实现写入本地文件,网络应该实现请求保存接口)
+    bool createResult=await writeFile(baseNote.noteDataPos, '[{"insert":" "}]');
+
+    if (createResult == false){
+      return null;
     }
 
-    ///设置阅读媒介的类型，本地、网络
-    ///设置阅读媒介
-    Map<String, String> content = {
-      ReadMedia.flag + Rsource.flag: SourceType.LOCAL.name,
-      ReadMedia.flag: readMedia,
-    };
-    writeJson(noteRouteMsg.noteBaseConfigFilePosition!, mapContent: content);
+    ///保存配置文件(这里应该提供统一的保存接口,saveRes,本地应该实现写入本地文件,网络应该实现请求保存接口)
+    writeJson(baseNote.noteCfgPos, mapContent: baseNote.toJson());
 
-    bool createResult =
-        createFile(noteRouteMsg.noteFilePosition, context: '[{"insert":" "}]');
-    if (createResult) {
-      return noteRouteMsg.noteFilePosition;
-    }
+    return baseNote.noteDataPos;
 
-    return null;
   }
 
   ///获取上一级路径

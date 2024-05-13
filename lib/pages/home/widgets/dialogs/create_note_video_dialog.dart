@@ -2,9 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:note/models/note/base_note.dart';
-import 'package:note/models/r_source.dart';
-import 'package:note/models/read_media.dart';
+import 'package:note/models/note_model/base_note.dart';
+
 import 'package:note/routes/app_pages.dart';
 
 import '../../index.dart';
@@ -24,11 +23,11 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
   String? videoPath;
   String? videoUrl;
 
-  final TextEditingController noteNameEditController = TextEditingController();
-  final TextEditingController noteSavePathEditController =
+  final TextEditingController noteTitleEditCtrl = TextEditingController();
+  final TextEditingController noteProjectParentPosEditCtrl =
       TextEditingController();
-  final TextEditingController videoPathEditController = TextEditingController();
-  final TextEditingController videoUrlEditController = TextEditingController();
+  final TextEditingController noteVideoPosEditCtrl = TextEditingController();
+  final TextEditingController noteVideoUrlPosEditCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: GFTextField(
-                    controller: noteNameEditController,
+                    controller: noteTitleEditCtrl,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderSide: BorderSide(width: 1, color: Colors.grey),
@@ -67,7 +66,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                   children: [
                     Expanded(
                       child: GFTextField(
-                        controller: noteSavePathEditController,
+                        controller: noteProjectParentPosEditCtrl,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderSide:
@@ -85,7 +84,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                             await FilePicker.platform.getDirectoryPath();
 
                         if (selectedDirectory != null) {
-                          noteSavePathEditController.text = selectedDirectory;
+                          noteProjectParentPosEditCtrl.text = selectedDirectory;
                         }
                       },
                       text: "选择",
@@ -116,7 +115,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
             },
             children: [
               GFTextField(
-                controller: videoPathEditController,
+                controller: noteVideoPosEditCtrl,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide(width: 1, color: Colors.grey),
@@ -137,7 +136,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
                   if (result != null) {
                     PlatformFile file = result.files.first;
                     print('文件路径： ${file.path}');
-                    videoPathEditController.text = file.path ?? "";
+                    noteVideoPosEditCtrl.text = file.path ?? "";
                   } else {
                     // 用户取消了选择文件操作
                   }
@@ -159,7 +158,7 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
             },
             children: [
               GFTextField(
-                controller: videoUrlEditController,
+                controller: noteVideoUrlPosEditCtrl,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide(width: 1, color: Colors.grey),
@@ -175,34 +174,19 @@ class CreateNoteVideoDialog extends GetView<HomeController> {
       ),
       actions: <Widget>[
         TextButton(
+          child: Text('创建'),
           onPressed: () async {
             Navigator.of(context).pop();
 
-            //创建笔记文件
-            String noteSavePath = noteSavePathEditController.text;
+            String projectParentPos = noteProjectParentPosEditCtrl.text;
+            String noteTitle = noteTitleEditCtrl.text;
+            String noteVideoPos = noteVideoPosEditCtrl.text;
+            String projectPos = "$projectParentPos/$noteTitle";
 
-            String noteProjectName = noteNameEditController.text;
-            String videoSource = videoSourceType == VideoSourceType.LOCAL
-                ? videoPathEditController.text
-                : videoUrlEditController.text;
+            //创建笔记项目
+            controller.createNoteProject(noteTitle,projectPos,noteVideoPos);
 
-            BaseNote? baseNote = await controller.createNoteProject(
-                noteProjectName,
-                Rsource<String>(sourceType: SourceType.LOCAL, v: noteSavePath),
-                ReadMedia<String>(
-                    rsource: Rsource<String>(
-                        sourceType: SourceType.LOCAL, v: videoSource),
-                    readMediaType: ReadMediaType.video));
-
-            if (baseNote == null) {
-              return;
-            }
-
-            Get.toNamed(AppRoutes.VideoNote, arguments: {
-              BaseNote.flag: baseNote,
-            });
           },
-          child: Text('创建'),
         ),
         TextButton(
           onPressed: () {

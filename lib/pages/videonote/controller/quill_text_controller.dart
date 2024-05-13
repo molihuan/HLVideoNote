@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -13,16 +14,17 @@ import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:note/common/utils/common_tool.dart';
 import 'package:note/common/utils/file_tool.dart';
-import 'package:note/models/note/base_note.dart';
-import 'package:note/models/note/impl/local_note.dart';
-import 'package:note/models/r_source.dart';
-import 'package:note/models/read_media.dart';
+import 'package:note/dao/data_manager.dart';
+
+import 'package:note/models/note_model/base_note.dart';
+
 import 'package:note/pages/home/controller.dart';
 import 'package:note/pages/videonote/controller/multi_split_controller.dart';
 import 'package:note/pages/videonote/controller/video_player_controller.dart';
 import 'package:note/pages/videonote/widgets/dialogs/insert_image_dialog.dart';
 import 'package:note/pages/videonote/widgets/link_blockembed.dart';
-
+import 'package:note/pages/videonote/widgets/my_quill_toolbar.dart';
+///选择类型
 enum _SelectionType {
   none,
   word,
@@ -32,41 +34,46 @@ enum _SelectionType {
 ///状态
 class QuillTextState {
   /// 笔记
-  final _baseNote = Rx<BaseNote>(LocalNote(
-      readMedia: ReadMedia(
-          rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
-          readMediaType: ReadMediaType.video),
-      noteFilePath: "",
-      noteTitle: 'videoLocalNote',
-      noteDescription: 'videoLocalNote',
-      noteUpdateTime: DateTime.now()));
+  final _baseNote = BaseNote(noteDependMediaPos: '/root/baseNote/1.mp4', noteCfgPos: '/root/baseNote/1.cfg', noteTitle: '').obs;
 
-  set baseNote(value) => _baseNote.value = value;
+  // set baseNote(value) => _baseNote.value = value;
+  //
+  // BaseNote get baseNote => _baseNote.value;
 
-  BaseNote get baseNote => _baseNote.value;
+  setBaseNote(value){
+    _baseNote.value = value;
+  }
+  BaseNote getBaseNote(){
+    return _baseNote.value;
+  }
+  Rx<BaseNote> getBaseNoteRx(){
+    return _baseNote;
+  }
+
+  ///是否显示更多toolbar按钮
+  final _showMoreToolbarBtn = DataManager.getShowMoreToolbarBtn().obs;
+
+  set showMoreToolbarBtn(value) => _showMoreToolbarBtn.value = value;
+
+  bool get showMoreToolbarBtn => _showMoreToolbarBtn.value;
 }
 
 ///富文本控制器
 class QuillTextController extends GetxController {
-  ///空内容
-  // static const String EMPTY_DOCUMENT = '[{"insert":" "}]';
 
   final state = QuillTextState();
 
+
   final videoPlayerController = Get.find<VideoPlayerController>();
 
-  late final noteRouteMsg = state.baseNote.noteRouteMsg;
-
-  //创建富文本编辑器
-  late final QuillEditor quillEditor = buildQuillEditor();
+  final _editorFocusNode = FocusNode();
 
   //创建富文本控制器
-  late QuillController quillController = loadNoteFileData();
-
-  final FocusNode _focusNode = FocusNode();
-
-  Timer? _selectAllTimer;
-  _SelectionType _selectionType = _SelectionType.none;
+  late QuillController quillController = QuillController.basic();
+  ///工具栏
+  late MyQuillToolbar quillToolbar = MyQuillToolbar(quillController: quillController, focusNode: _editorFocusNode);
+  //创建富文本编辑器
+  late final QuillEditor quillEditor = buildQuillEditor();
 
   //获取笔记
   BaseNote? getBaseNote() {
@@ -74,7 +81,15 @@ class QuillTextController extends GetxController {
     if (arguments == null) {
       return null;
     }
-    BaseNote baseNote = arguments[BaseNote.flag] as BaseNote;
+    BaseNote baseNote;
+    try{
+      baseNote = arguments[BaseNote.flag] as BaseNote;
+    }catch(e){
+      LogUtil.e("无法转换为BaseNote");
+      return null;
+    }
+
+    state.setBaseNote(baseNote);
 
     return baseNote;
   }
@@ -89,70 +104,36 @@ class QuillTextController extends GetxController {
   }
 
   /// 加载笔记数据
-  QuillController loadNoteFileData({BaseNote? baseNote}) {
-    baseNote = baseNote ?? getBaseNote();
+  Document? loadNoteDataFile(String filePath){
+    File noteDataFile = File(filePath);
 
-    if (baseNote == null) {
-      quillController = QuillController.basic();
-      return quillController;
-    }
-    state.baseNote = baseNote;
-
-    final homeController = Get.find<HomeController>();
-
-    ///持久化笔记到SP中
-    homeController.addToNodeList(baseNote);
-
-    print("获取持久化的note");
-
-    print(getStringAsync(HomeController.NOTE_LIST_PREFIX +
-        baseNote.noteRouteMsg.noteFilePosition));
-
-    final noteFile = File(baseNote.noteRouteMsg.noteFilePosition);
     try {
-      var contents = noteFile.readAsStringSync();
+      var contents = noteDataFile.readAsStringSync();
       var json = jsonDecode(contents);
-      final doc = Document.fromJson(json);
-      print("读取到的hl源文件为:$contents");
-      print("json转换后:$json");
-      quillController = QuillController(
-          document: doc, selection: const TextSelection.collapsed(offset: 0));
+      Document doc = Document.fromJson(json);
+      LogUtil.d("读取到的笔记数据源文件为:$contents");
+      LogUtil.d("转换json后:$json");
+      return doc;
     } catch (error) {
-      print('读取文件错误,文件不是Delta格式:$error');
-      quillController = QuillController.basic();
-      // final doc = Document()..insert(0, '读取文件错误,文件不是Delta格式');
-      // quillController = QuillController(
-      //     document: doc, selection: const TextSelection.collapsed(offset: 0));
+      LogUtil.e('读取文件错误,文件不是Delta格式:$error');
+      return null;
     }
-    return quillController;
   }
 
   ///保存笔记
   bool saveNote() {
     var deltaJson = quillController.document.toDelta().toJson();
-    print(deltaJson);
-
     String jsonString = jsonEncode(deltaJson);
-
-    final file = File(noteRouteMsg.noteFilePosition);
+    final file = File(state.getBaseNote().noteDataPos);
+    LogUtil.d("保存位置:${file.absolute}");
+    LogUtil.d("保存数据为:$deltaJson");
     try {
       file.writeAsStringSync(jsonString);
       return true;
     } catch (e) {
-      print('文件写入失败: $e');
+      LogUtil.d('保存数据失败: $e');
       return false;
     }
-  }
-
-  /// 复制粘贴图片(网络)
-  Future<String> _onImagePaste(Uint8List imageBytes) async {
-    // Saves the image to applications directory
-    String imgDir = noteRouteMsg.noteImgDirPosition!;
-    String fileName = CommonTool.getCurrentTime() + ".jpeg";
-    var allPath = await FileTool.saveImage(imageBytes, imgDir, fileName);
-
-    print("_onImagePaste:保存路径" + allPath!);
-    return allPath;
   }
 
   /// 插入视频节点
@@ -188,13 +169,6 @@ class QuillTextController extends GetxController {
   /// 插入自定义链接
   void insertLinkBlockEmbed(QuillController controller, String string,
       void Function() linkBlockEmbedClick) {
-    // controller.document.insert(controller.selection.extentOffset, '\n');
-    // controller.updateSelection(
-    //   TextSelection.collapsed(
-    //     offset: controller.selection.extentOffset + 1,
-    //   ),
-    //   ChangeSource.LOCAL,
-    // );
 
     controller.document.insert(
       controller.selection.extentOffset,
@@ -217,26 +191,26 @@ class QuillTextController extends GetxController {
     );
   }
 
-  /// 三击
-  bool _onTripleClickSelection() {
-    final controller = quillController!;
+  /// 复制粘贴图片(网络)
+  Future<String?> _onImagePaste(Uint8List imageBytes) async {
+    String imgDir = state.getBaseNote().noteImgPos;
+    String imgName = CommonTool.getCurrentTime() + ".jpeg";
+    String? imgFilePath = await FileTool.saveImage(imageBytes, imgDir, imgName);
+    if (imgFilePath == null){
+      return null;
+    }
+    LogUtil.d("图片保存路径为:$imgFilePath");
+    return imgFilePath;
+  }
 
+  /// 也是三次点击的部分
+  Timer? _selectAllTimer;
+  _SelectionType _selectionType = _SelectionType.none;
+  /// 三次点击
+  bool _onTripleClickSelection() {
+    final controller = quillController;
     _selectAllTimer?.cancel();
     _selectAllTimer = null;
-
-    // If you want to select all text after paragraph, uncomment this line
-    // if (_selectionType == _SelectionType.line) {
-    //   final selection = TextSelection(
-    //     baseOffset: 0,
-    //     extentOffset: controller.document.length,
-    //   );
-
-    //   controller.updateSelection(selection, ChangeSource.REMOTE);
-
-    //   _selectionType = _SelectionType.none;
-
-    //   return true;
-    // }
 
     if (controller.selection.isCollapsed) {
       _selectionType = _SelectionType.none;
@@ -244,7 +218,9 @@ class QuillTextController extends GetxController {
 
     if (_selectionType == _SelectionType.none) {
       _selectionType = _SelectionType.word;
-      _startTripleClickTimer();
+      _selectAllTimer = Timer(const Duration(milliseconds: 900), () {
+        _selectionType = _SelectionType.none;
+      });
       return false;
     }
 
@@ -259,115 +235,14 @@ class QuillTextController extends GetxController {
         baseOffset: offset,
         extentOffset: offset + length,
       );
-
       controller.updateSelection(selection, ChangeSource.remote);
-
-      // _selectionType = _SelectionType.line;
-
       _selectionType = _SelectionType.none;
-
-      _startTripleClickTimer();
-
+      _selectAllTimer = Timer(const Duration(milliseconds: 900), () {
+        _selectionType = _SelectionType.none;
+      });
       return true;
     }
-
     return false;
-  }
-
-  void _startTripleClickTimer() {
-    _selectAllTimer = Timer(const Duration(milliseconds: 900), () {
-      _selectionType = _SelectionType.none;
-    });
-  }
-
-  /// 是否为桌面
-  bool _isDesktop() => !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
-
-  /// 构建富文本工具栏
-  QuillToolbar buildQuillToolbar(BuildContext context) {
-    List<Widget> customQuillCustomButtons = [
-      IconButton(
-          icon: Icon(Icons.screenshot),
-          onPressed: () async {
-            insertVideoAnchor(quillController);
-            String imgDir = noteRouteMsg.noteImgDirPosition!;
-
-            videoPlayerController.videoScreenShot(imgDir, (absolutePath) {
-              insertImageBlockEmbed(absolutePath);
-            });
-          }),
-      IconButton(
-          icon: Icon(Icons.flag),
-          onPressed: () {
-            insertVideoAnchor(quillController);
-          }),
-      IconButton(
-          icon: Icon(Icons.image),
-          onPressed: () {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) => InsertImageDialog(),
-            );
-          }),
-      IconButton(
-          icon: Icon(Icons.movie_creation), onPressed: () {}),
-      IconButton(
-          icon: Icon(Icons.photo_camera), onPressed: () {}),
-      IconButton(
-          icon: Icon(Icons.find_in_page), onPressed: () {}),
-      IconButton(icon: Icon(Icons.mic), onPressed: () {}),
-      IconButton(
-          icon: Icon(Icons.music_note), onPressed: () {}),
-      IconButton(
-          icon: Icon(Icons.live_tv), onPressed: () {}),
-      IconButton(
-          icon: Icon(Icons.unarchive_outlined),
-          onPressed: () {
-            final msc = Get.find<MultiSplitController>();
-            msc.setAxis(Axis.vertical);
-          }),
-      IconButton(
-          icon: Icon(Icons.save),
-          onPressed: () {
-            bool result = saveNote();
-            if (result) {
-              SmartDialog.showToast('保存成功');
-            } else {
-              SmartDialog.showToast('保存失败');
-            }
-          }),
-    ];
-
-    var toolbar = QuillToolbar(
-      configurations: QuillToolbarConfigurations(
-          sharedConfigurations:QuillSharedConfigurations()
-      ),
-      child: Wrap(
-        children: customQuillCustomButtons,
-      ),
-    );
-    if (kIsWeb) {
-      toolbar =  QuillToolbar(
-        configurations: QuillToolbarConfigurations(
-            sharedConfigurations:QuillSharedConfigurations()
-        ),
-        child: Wrap(
-          children: customQuillCustomButtons,
-        ),
-      );
-    }
-    if (_isDesktop()) {
-      toolbar = QuillToolbar(
-        configurations: QuillToolbarConfigurations(
-            sharedConfigurations:QuillSharedConfigurations()
-        ),
-        child: Wrap(
-          children: customQuillCustomButtons,
-        ),
-      );
-    }
-    return toolbar;
   }
 
   /// When inserting an image
@@ -375,6 +250,7 @@ class QuillTextController extends GetxController {
     return (image, controller) async {};
   }
 
+  final FocusNode _focusNode = FocusNode();
   /**
    * 构建富文本编辑器
    */
@@ -451,10 +327,24 @@ class QuillTextController extends GetxController {
     return quillEditor;
   }
 
+  void setNoteContent({BaseNote? baseNote}) {
+    baseNote = baseNote ?? getBaseNote();
+    if (baseNote==null){
+      return ;
+    }
+
+    Document? doc = loadNoteDataFile(baseNote.noteDataPos);
+    if (doc==null){
+      return ;
+    }
+    quillController.document = doc;
+  }
+
   /// 在 widget 内存中分配后立即调用,这和Widget build(BuildContext context)异步,不适合初始化一些耗时操作。
   @override
   Future<void> onInit() async {
     super.onInit();
+    setNoteContent();
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所

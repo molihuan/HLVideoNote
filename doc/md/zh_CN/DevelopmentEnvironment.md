@@ -54,6 +54,8 @@
     • Edge (web)        • edge          • web-javascript • Microsoft Edge 114.0.1823.82 (unsupported)
 ```
 
+
+
 ## 常用命令
 
 ```shell
@@ -70,5 +72,13 @@ flutter build macos
 flutter build apk --split-per-abi
 打包ios
 flutter build ios --release
+```
+
+## 注意在编译一些依赖时需要用到rust请安装并配置好rust
+
+```sh
+rustup 1.27.1 (54dd3d00f 2024-04-24)
+info: This is the version for the rustup toolchain manager, not the rustc compiler.
+info: The currently active `rustc` version is `rustc 1.78.0 (9b00956e5 2024-04-29)
 ```
 

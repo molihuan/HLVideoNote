@@ -1,0 +1,98 @@
+name: Flutter Build
+
+on:
+  push:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: '3.19.3'
+
+jobs:
+  setup:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: 'android'
+            target-platform: 'android-arm64'
+          - os: ubuntu-latest
+            platform: 'linux'
+          - os: windows-latest
+            platform: 'windows'
+          - os: macos-14
+            platform: 'ios'
+          - os: macos-14
+            platform: 'macos'
+    steps:
+      - uses: actions/checkout@v4
+
+
+      - name: Install Flutter SDK 
+        uses: hughware/flutter-action@v1.0.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+          cache-key: flutter-sdk-${{ runner.os }}-${{ env.FLUTTER_VERSION }}
+
+      - run: flutter pub get
+
+      - name: Build for Android
+        if: matrix.platform == 'android'
+        run: flutter build apk --release --target-platform ${{ matrix.target-platform }}
+       
+
+      - name: Build for Linux
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
+          flutter build linux --release
+        
+      - name: Build for Windows
+        if: matrix.platform == 'windows'
+        run: flutter build windows --release
+
+      - name: Build for iOS
+        if: matrix.platform == 'ios'
+        run: flutter build ios --release --no-codesign
+
+      - name: Build for macOS
+        if: matrix.platform == 'macos'
+        run: flutter build macos --release
+
+      - name: Upload Artifact for Android
+        if: matrix.platform == 'android'
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-app
+          path: build/app/outputs/flutter-apk/app-release.apk
+          
+      - name: Upload Artifact for Linux 
+        if: matrix.platform == 'linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-app
+          path: build/linux/*/release/bundle
+
+      - name: Upload Artifact for Windows
+        if: matrix.platform == 'windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-app
+          path: build/windows/x64/runner/Release/*
+
+      - name: Upload Artifact for iOS
+        if: matrix.platform == 'ios'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: build/ios/iphoneos/*.app
+
+      - name: Upload Artifact for macOS
+        if: matrix.platform == 'macos'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-app
+          path: build/macos/Build/Products/Release/*.app

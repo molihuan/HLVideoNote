@@ -2,38 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/common/utils/common_tool.dart';
-import 'package:note/models/note/base_note.dart';
+import 'package:note/models/note_model/base_note.dart';
+
 import 'package:note/pages/home/controller.dart';
 import 'package:note/routes/app_pages.dart';
-
+///笔记列表
 class NoteList extends GetView<HomeController> {
   NoteList({Key? key}) : super(key: key);
 
   final homeController = Get.find<HomeController>();
   late var homeState = homeController.state;
-  late var noteDataList = homeController.getLocalNodeDataList();
+  late var noteDataList = homeState.noteDataList;
 
   @override
   Widget build(BuildContext context) {
-    // controller.state.noteDataList;
-    // var txtLocalNote = LocalNote(
-    //     readMedia: ReadMedia(
-    //         rsource: Rsource<String>(sourceType: SourceType.LOCAL, v: ""),
-    //         readMediaType: ReadMediaType.txt),
-    //     noteFilePath: "",
-    //     noteTitle: 'txtLocalNote',
-    //     noteDescription: 'txtLocalNote',
-    //     noteUpdateTime: DateTime.now());
-    // List<BaseNote> noteDataList = [
-    //   txtLocalNote,
-    // ];
+
 
     return Obx(() => ListView.builder(
-          itemCount: noteDataList.length,
+          itemCount:noteDataList.length,
           itemBuilder: (context, index) {
             final noteDataItem = noteDataList[index];
             final formattedTime =
-                CommonTool.getFormattedTime(noteDataItem.noteUpdateTime);
+                CommonTool.getFormattedTime(noteDataItem.noteUpdateTime!);
 
             return GestureDetector(
               onTap: () {
@@ -52,9 +42,8 @@ class NoteList extends GetView<HomeController> {
                         TextButton(
                           onPressed: () async {
                             Navigator.pop(context);
-
                             ///删除本地文件
-                            homeController.delToNodeList(noteDataList[index]);
+                            homeController.removeNote(noteDataList[index]);
                           },
                           child: Text('确定'),
                         ),

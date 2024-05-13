@@ -4,10 +4,8 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:note/common/utils/file_tool.dart';
 import 'package:note/common/utils/platform_tool.dart';
-import 'package:note/models/note/base_note.dart';
-import 'package:note/models/note/impl/local_note.dart';
-import 'package:note/models/r_source.dart';
-import 'package:note/models/read_media.dart';
+import 'package:note/models/note_model/base_note.dart';
+
 import 'package:note/routes/app_pages.dart';
 
 import '../../index.dart';
@@ -22,7 +20,7 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
   final localExpansionTileController = ExpansionTileController();
   final networkExpansionTileController = ExpansionTileController();
 
-  final TextEditingController noteFilePathEditController =
+  final TextEditingController noteCfgPosEditCtrl =
       TextEditingController();
   final TextEditingController noteFileUrlEditController =
       TextEditingController();
@@ -55,7 +53,7 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
             },
             children: [
               GFTextField(
-                controller: noteFilePathEditController,
+                controller: noteCfgPosEditCtrl,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide(width: 1, color: Colors.grey),
@@ -76,7 +74,7 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
                     if (result != null) {
                       PlatformFile file = result.files.first;
                       print('path： ${file.path}');
-                      noteFilePathEditController.text = file.path ?? "";
+                      noteCfgPosEditCtrl.text = file.path ?? "";
                     }
                   }, other: () async {
                     // 选择本地视频文件
@@ -85,7 +83,7 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
                     if (result != null) {
                       PlatformFile file = result.files.first;
                       print('path： ${file.path}');
-                      noteFilePathEditController.text = file.path ?? "";
+                      noteCfgPosEditCtrl.text = file.path ?? "";
                     }
                   });
                 },
@@ -122,82 +120,14 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
       ),
       actions: <Widget>[
         TextButton(
+          child: Text('打开'),
           onPressed: () {
             Navigator.of(context).pop();
-            // String noteFileSource = noteFileSourceType == FileSourceType.LOCAL
-            //     ? noteFilePathEditController.text
-            //     : noteFileUrlEditController.text;
+            String noteCfgPos = noteCfgPosEditCtrl.text;
+            controller.openNoteProject(noteCfgPos);
 
-            String noteFilePath = noteFilePathEditController.text;
-
-            BaseNote baseNote;
-            switch (noteFileSourceType) {
-              case SourceType.LOCAL:
-                baseNote = LocalNote(
-                    noteTitle: '',
-                    noteDescription: '',
-                    noteUpdateTime: DateTime.now(),
-                    noteFilePath: noteFilePath,
-                    readMedia: ReadMedia(
-                        rsource: Rsource<String>(
-                            sourceType: SourceType.LOCAL, v: ""),
-                        readMediaType: ReadMediaType.video));
-                break;
-
-              case SourceType.HTTP:
-                baseNote = LocalNote(
-                    noteTitle: '',
-                    noteDescription: '',
-                    noteUpdateTime: DateTime.now(),
-                    noteFilePath: noteFilePath,
-                    readMedia: ReadMedia(
-                        rsource: Rsource<String>(
-                            sourceType: SourceType.LOCAL, v: ""),
-                        readMediaType: ReadMediaType.video));
-                break;
-              case SourceType.WEB_SOCKET:
-                baseNote = LocalNote(
-                    noteTitle: '',
-                    noteDescription: '',
-                    noteUpdateTime: DateTime.now(),
-                    noteFilePath: noteFilePath,
-                    readMedia: ReadMedia(
-                        rsource: Rsource<String>(
-                            sourceType: SourceType.LOCAL, v: ""),
-                        readMediaType: ReadMediaType.video));
-            }
-
-            ///读取json
-            var jsonObj = FileTool.readJson(
-                baseNote.noteRouteMsg.noteBaseConfigFilePosition!)!;
-
-            ///获取阅读媒介的值
-            String mediaSource = jsonObj[ReadMedia.flag + Rsource.flag];
-            String mediaValues = jsonObj[ReadMedia.flag];
-
-            if (mediaSource == SourceType.LOCAL.name) {
-              baseNote.readMedia = ReadMedia(
-                  rsource: Rsource<String>(
-                      sourceType: SourceType.LOCAL, v: mediaValues),
-                  readMediaType: ReadMediaType.video);
-            } else if (mediaSource == SourceType.HTTP.name) {
-              baseNote.readMedia = ReadMedia(
-                  rsource: Rsource<String>(
-                      sourceType: SourceType.HTTP, v: mediaValues),
-                  readMediaType: ReadMediaType.video);
-            } else if (mediaSource == SourceType.WEB_SOCKET.name) {
-              baseNote.readMedia = ReadMedia(
-                  rsource: Rsource<String>(
-                      sourceType: SourceType.WEB_SOCKET, v: mediaValues),
-                  readMediaType: ReadMediaType.video);
-            }
-
-            //
-            Get.toNamed(AppRoutes.VideoNote, arguments: {
-              BaseNote.flag: baseNote,
-            });
           },
-          child: Text('打开'),
+          
         ),
         TextButton(
           onPressed: () {

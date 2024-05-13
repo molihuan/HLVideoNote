@@ -1,12 +1,15 @@
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'dart:io';
+
+import 'package:common_utils/common_utils.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:note/common/store/global_store.dart';
 import 'package:note/common/utils/file_tool.dart';
-import 'package:note/models/note/base_note.dart';
-import 'package:note/models/note/impl/local_note.dart';
-import 'package:note/models/note/note_route_msg.dart';
-import 'package:note/models/r_source.dart';
-import 'package:note/models/read_media.dart';
+import 'package:note/dao/data_manager.dart';
+
+import 'package:note/models/note_model/base_note.dart';
+import 'package:note/routes/app_pages.dart';
+
 import 'package:path/path.dart';
 
 import 'index.dart';
@@ -14,130 +17,118 @@ import 'index.dart';
 class HomeController extends GetxController {
   final state = HomeState();
 
-  late final noteDataList = state.noteDataList;
-
-  static const String NOTE_LIST_PREFIX = "NoteList-";
+  static const KEY_NOTE_CFG_POS_LIST = GlobalStore.DATASTORE_KEY_NOTE_CFG_POS_LIST;
 
   ///添加一个笔记到列表中
-  Future<bool> addToNodeList(BaseNote baseNote) async {
-    String targetKey = HomeController.NOTE_LIST_PREFIX +
-        baseNote.noteRouteMsg.noteFilePosition;
-
-    ///判断SP中是否存在key
-    bool exiteKey = sharedPreferences.containsKey(targetKey);
-    if (exiteKey) {
+  Future<bool> addNote(BaseNote baseNote) async {
+    ///持久化笔记到SP中,这里会更新UI
+    bool result=await DataManager.addNoteCfgPosByNote(state.noteDataList, baseNote);
+    if (result == false){
       return false;
     }
-
-    ///持久化笔记到SP中
-    bool saveResult = await setValue(targetKey, baseNote.toJson());
-
-    if (!saveResult) {
-      return false;
-    }
-
-    ///更新UI
-    noteDataList.add(baseNote);
     return true;
   }
 
   ///删除一个笔记从列表中
-  Future<bool> delToNodeList(BaseNote baseNote) async {
-    String targetKey = HomeController.NOTE_LIST_PREFIX +
-        baseNote.noteRouteMsg.noteFilePosition;
-
-    ///判断SP中是否存在key
-    bool exiteKey = sharedPreferences.containsKey(targetKey);
-    if (!exiteKey) {
+  Future<bool> removeNote(BaseNote baseNote) async {
+    ///删除本地文件
+    bool result = FileTool.deleteAll(baseNote.noteProjectPos);
+    if (result == false){
       return false;
     }
-
-    ///删除本地文件
-    FileTool.deleteFiles(baseNote.noteRouteMsg.noteProjectPosition!);
-
     ///删除SP中的记录
-    var resu = await removeKey(targetKey);
-
-    ///更新UI
-    noteDataList.remove(baseNote);
-
+    result = await DataManager.removeNoteCfgPosByNote(state.noteDataList, baseNote);
+    if (result == false){
+      return false;
+    }
     return true;
   }
 
-  ///获取本地的笔记列表
-  List<BaseNote> getLocalNodeDataList() {
-    List<String> noteKeyList =
-        getMatchingSharedPrefKeys(HomeController.NOTE_LIST_PREFIX);
-    noteDataList.clear();
-    noteKeyList.forEach((noteKey) {
-      var noteJson = getJSONAsync(noteKey);
-      var baseNote = BaseNote.fromJson(noteJson);
-      print(baseNote);
-      noteDataList.add(baseNote);
-    });
-    return noteDataList;
+  ///获取笔记列表
+  Future<List<BaseNote>> getNoteDataList() async {
+    state.noteDataList.clear();
+    state.noteDataList.addAll(await DataManager.getNoteList());
+    LogUtil.e(state.noteDataList);
+    return state.noteDataList;
   }
 
   ///创建笔记项目
   ///[noteProjectPosition]笔记项目的位置
-  ///[noteProjectName]笔记项目的名称
+  ///[noteTitle]笔记项目的名称
   ///[readSource]阅读媒介
-  BaseNote? createNoteProject(
-    String noteProjectName,
-    Rsource<String> noteProjectPosition,
-    ReadMedia<String> readMedia,
-  ) {
+  Future<void> createNoteProject(
+    String noteTitle,
+    String noteProjectPos,
+    String noteDependMediaPos,
+  ) async {
+    ///实例化笔记对象
+    BaseNote baseNote= BaseNote(noteDependMediaPos: noteDependMediaPos,
+        noteCfgPos: noteProjectPos+"/$noteTitle.cfg",
+        noteTitle: noteTitle);
+
+    //判断笔记内容文件是否存在
+    if (FileTool.fileExists(baseNote.noteDataPos)) {
+      Get.snackbar("创建错误", "当前目录下已有笔记,无法创建。");
+      return;
+    }
+
+    List<String> resourceClass = [
+      baseNote.noteImgPos,
+      baseNote.noteVideoPos,
+      baseNote.noteAudioPos,
+      baseNote.notePdfPos,
+      baseNote.noteMarkdownPos,
+      baseNote.noteTxtPos,
+    ];
+    ///创建文件夹
+    for (String dir in resourceClass) {
+      Directory(dir).createSync(recursive: true);
+    }
+    ///初始化笔记内容并写入文件(这里应该提供统一的保存接口,saveRes,本地应该实现写入本地文件,网络应该实现请求保存接口)
+    bool result = await FileTool.writeFile(baseNote.noteDataPos, '[{"insert":""}]');
+    if (result == false){
+      return;
+    }
+
+    ///保存配置文件(这里应该提供统一的保存接口,saveRes,本地应该实现写入本地文件,网络应该实现请求保存接口)
+    result = await FileTool.writeMapToFile(baseNote.noteCfgPos, baseNote.toJson());
+    if (result == false){
+      return;
+    }
+    ///在记录中添加笔记
+    result = await addNote(baseNote);
+
+    if(result==false){
+      return;
+    }
+
+    Get.toNamed(AppRoutes.VideoNote, arguments: {
+      BaseNote.flag: baseNote,
+    });
+
+  }
+  ///打开笔记项目
+  Future<void> openNoteProject(
+    String noteCfgPos,
+  ) async {
     late BaseNote baseNote;
 
-    noteProjectPosition.callSwitch<bool, bool Function(Rsource<String>)>(
-      localCallback: (rsource) {
-        ///项目位置在本地
+    var noteJson = await FileTool.readJsonFile(noteCfgPos);
+    if (noteJson!=null){
+      baseNote = BaseNote.fromJson(noteJson);
+      print(baseNote);
+    }
 
-        String noteFileName = noteProjectName + NotePositionConstant.suffixHL.v;
-        String noteFilePath =
-            join(noteProjectPosition.v, noteProjectName, noteFileName);
-
-        ///实例化路径信息
-        baseNote = LocalNote(
-            readMedia: readMedia,
-            noteTitle: noteProjectName,
-            noteDescription: '',
-            noteUpdateTime: DateTime.now(),
-            noteFilePath: noteFilePath);
-
-        readMedia.rsource.callSwitch<void, void Function(Rsource<String>)>(
-            localCallback: (rsource) async {
-              ///阅读媒介在本地
-              ///获取媒体源
-              String readMediaPath = readMedia.rsource.v;
-
-              var result =
-                  await FileTool.createNoteProjectFile(baseNote, readMediaPath);
-              if (result == null) {
-                SmartDialog.showToast("创建笔记项目失败");
-                return;
-              }
-            },
-            httpCallback: (rsource) {},
-            webSocketCallback: (rsource) {});
-
-        return true;
-      },
-      httpCallback: (rsource) {
-        ///未实现
-        return false;
-      },
-      webSocketCallback: (rsource) {
-        return false;
-      },
-    );
-    return baseNote;
+    Get.toNamed(AppRoutes.VideoNote, arguments: {
+      BaseNote.flag: baseNote,
+    });
   }
 
   /// 在 widget 内存中分配后立即调用。
   @override
   void onInit() {
     super.onInit();
+    getNoteDataList();
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所

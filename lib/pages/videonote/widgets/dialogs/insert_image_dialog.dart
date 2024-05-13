@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/components/text_field/gf_text_field.dart';
 import 'package:getwidget/size/gf_size.dart';
-import 'package:note/models/r_source.dart';
+import 'package:note/models/note_model/base_note.dart';
+
 import 'package:note/pages/videonote/controller/quill_text_controller.dart';
 
 class InsertImageDialog extends GetView<QuillTextController> {
