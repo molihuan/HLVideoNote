@@ -37,10 +37,18 @@ jobs:
 
       - run: flutter pub get
 
+
+      - name: Set up Java for Android build
+        if: matrix.platform == 'android'
+        uses: actions/setup-java@v3.13.0
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
       - name: Build for Android
         if: matrix.platform == 'android'
         run: flutter build apk --release --target-platform ${{ matrix.target-platform }}
-       
+
 
       - name: Build for Linux
         if: matrix.platform == 'linux'
