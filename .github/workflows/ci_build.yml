@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-latest
+          - os: ubuntu-20.04
             platform: 'android'
             target-platform: 'android-arm64'
           - os: ubuntu-latest
@@ -47,7 +47,8 @@ jobs:
 
       - name: Build for Android
         if: matrix.platform == 'android'
-        run: flutter build apk --release --target-platform ${{ matrix.target-platform }}
+        #run: flutter build apk --release --target-platform ${{ matrix.target-platform }}
+        run: flutter build apk --split-per-abi
 
 
       - name: Build for Linux
@@ -73,8 +74,8 @@ jobs:
         if: matrix.platform == 'android'
         uses: actions/upload-artifact@v4
         with:
-          name: android-app
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: android-apps
+          path: build/app/outputs/flutter-apk/
           
       - name: Upload Artifact for Linux 
         if: matrix.platform == 'linux'

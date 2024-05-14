@@ -5,10 +5,10 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       # 使用本项目
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       #设置flutter
       - uses: subosito/flutter-action@v2.12.0
@@ -20,14 +20,14 @@ jobs:
 
       # Get flutter dependencies.
       - run: flutter pub get
-      # Build apk.打包各架构版本
-      - run: flutter build macos --release
-      # Upload generated apk to the artifacts.
-      - uses: actions/upload-artifact@v3.1.3
-        with:
-          # Artifact name
-          name: release-mac.tar.gz
-          # 导出文件夹
-          path: build/mac/Build/Products/Release/
-          # The desired behavior if no files are found using the provided path.
 
+      - name: Build for macOS
+        if: matrix.platform == 'macos'
+        run: flutter build macos --release
+
+      - name: Upload Artifact for macOS
+        if: matrix.platform == 'macos'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-app
+          path: build/macos/Build/Products/Release/*.app
