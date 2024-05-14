@@ -5,34 +5,51 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
+    runs-on: ubuntu-20.04
     steps:
       # 使用本项目
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       # 设置jdk
-      - uses: actions/setup-java@v3.13.0
+      - name: Set up JDK
+        uses: actions/setup-java@v3.13.0
         with:
           distribution: 'zulu'
-          # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
           java-version: 17
-      #设置flutter
-      - uses: subosito/flutter-action@v2.12.0
+
+      # 设置flutter
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.12.0
         with:
-          # The Flutter version to make available on the path
           flutter-version: 3.19.3
-          # The Flutter build release channel
           channel: # optional, default is stable
 
-      # Get flutter dependencies.
-      - run: flutter pub get
-      # Build apk.打包各架构版本
-      - run: flutter build apk --split-per-abi
-      # Upload generated apk to the artifacts.
-      - uses: actions/upload-artifact@v4
+      # 获取flutter依赖
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      # 构建apk
+      - name: Build APK
+        run: flutter build apk --split-per-abi
+
+      - name: Upload Artifact x86_64-release.apk
+        uses: actions/upload-artifact@v4
         with:
-          # Artifact name
-          name: release-android.zip
-          # 导出文件夹
-          path: build/app/outputs/flutter-apk/
-          # The desired behavior if no files are found using the provided path.
+          name: app-x86_64-release.zip
+          path: build/app/outputs/flutter-apk/app-x86_64-release.apk
+
+      - name: Upload Artifact armeabi-v7a-release.apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-armeabi-v7a-release.zip
+          path: build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+
+      - name: Upload Artifact arm64-v8a-release.apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-arm64-v8a-release.zip
+          path: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+
+
 
