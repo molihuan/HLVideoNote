@@ -70,13 +70,13 @@
 | Windows                                                      | macOS  |
 | ![win_vedio_note.png](https://z4a.net/images/2023/11/17/win_vedio_note.png) | ![mac-vedio-note.png](https://z4a.net/images/2024/05/11/mac-vedio-note.png) |
 | GNU/Linux                                                    | Web    |
-| 待补充                                                       | 待补充 |
+| ![linux-vedio-note.png](https://z4a.net/images/2024/05/16/linux-vedio-note.png) | 待补充 |
 
 ### 下载
 
 Github：[https://github.com/molihuan/HLVideoNote/releases](https://github.com/molihuan/HLVideoNote/releases)
 
-Gitee：
+Gitee：[https://gitee.com/molihuan/HLVideoNote](https://gitee.com/molihuan/HLVideoNote)
 
 ### 开发目标(努力加班中...)
 
@@ -87,9 +87,10 @@ Gitee：
 - [x] 插入图片(本地和网络)
 - [ ] 图片的编辑(裁剪，大小，涂鸦，标注)
 - [ ] 插入视频(本地和网络)
-- [ ] 网页视频(B站、YouTube)
+- [ ] 网页视频(B站、YouTube....)
 - [ ] 笔记导出其他格式（pdf、图片、markdown、html）
 - [ ] 多端联动，(例如：电脑看视频，平板写笔记，点击平板截屏按钮可一键在笔记中插入电脑视频截图)
+- [ ] 多端数据同步
 - [ ] 视频浮动在页面上，自由缩放移动
 - [ ] 在pdf上做笔记
 - [ ] 国际化(翻译组)
@@ -111,7 +112,7 @@ Gitee：
 - [ ] 荧光笔
 - [ ] 实时语音转文字(可不做)
 - [ ] ChatGPT(可不做)
-- [ ] webdav
+- [ ] webdav(可不做)
 
 ### 显示模式：
 
@@ -136,7 +137,7 @@ Gitee：
 
 ##### Linux版编译注意事项
 
-自测
+[查看](doc/md/zh_CN/CompilationNotes/Linux.md)
 
 ##### Mac版编译注意事项
 
