@@ -43,10 +43,14 @@ class DataManager{
     }
 
     for(var noteCfgPos in noteCfgPosList){
+      //判断配置文件是否真实存在
+      if (!FileTool.fileExists(noteCfgPos)){
+        continue;
+      }
       var noteJson = await FileTool.readJsonFile(noteCfgPos);
       if (noteJson!=null){
         var baseNote = BaseNote.fromJson(noteJson);
-        print(baseNote);
+        LogUtil.d(baseNote);
         noteList.add(baseNote);
       }
     }

@@ -15,9 +15,14 @@ class HomeState {
   //笔记数据列表
   final _noteDataList = <BaseNote>[].obs;
 
+
   set noteDataList(value) => _noteDataList.value = value;
 
   List<BaseNote> get noteDataList => _noteDataList;
+  ///获取真实note列表数据
+  List<BaseNote>getRealNoteDataList(){
+    return _noteDataList.value;
+  }
 
   //笔记路径
   final _noteFilePath = "".obs;

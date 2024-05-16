@@ -2,6 +2,8 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 
+import 'common_tool.dart';
+
 enum RunningPlatform {
   android,
   ios,
@@ -35,6 +37,25 @@ class PlatformTool {
     VoidCallback? other,
   }) {
     callback<void, VoidCallback>(
+        android: android,
+        ios: ios,
+        linux: linux,
+        windows: windows,
+        mac: mac,
+        web: web,
+        other: other);
+  }
+
+  static void voidFcallback({
+    VoidFcallback? android,
+    VoidFcallback? ios,
+    VoidFcallback? linux,
+    VoidFcallback? windows,
+    VoidFcallback? mac,
+    VoidFcallback? web,
+    VoidFcallback? other,
+  }) {
+    fcallback<void, VoidFcallback>(
         android: android,
         ios: ios,
         linux: linux,
@@ -114,6 +135,7 @@ class PlatformTool {
     } else {
       throw Exception('Unsupported platform');
     }
+    return null;
   }
 
   /**

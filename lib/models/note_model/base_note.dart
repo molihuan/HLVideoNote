@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:videonote/common/utils/platform_tool.dart';
 
 import '../../common/utils/common_tool.dart';
 
@@ -6,7 +7,7 @@ import '../../common/utils/common_tool.dart';
 /**
  * --noteProjectName1
  *   --data
- *   --noteProjectName1.cfg
+ *   --noteProjectName1.hlcfg
  *   --resource
  *     --img(存放图片、截图)
  *     --video(存放视频)
@@ -63,7 +64,7 @@ class BaseNote {
   DateTime? noteUpdateTime;
   /// 笔记封面
   String? noteCover;
-
+  ///注意noteDependMediaPos和noteCfgPos在windows下不能有\\需要将\\替换为/
   BaseNote({
     this.noteDependMediaSourceType = SourceType.LOCAL,
     this.noteDependMediaType = MediaType.VIDEO,
@@ -76,8 +77,23 @@ class BaseNote {
     this.noteUpdateTime,
     this.noteCover,
   }){
+
+    updataPosByNoteCfgPos(noteCfgPos);
+
+  }
+  ///根据noteCfgPos更新位置
+  ///[noteCfgPos]笔记配置文件位置
+  void updataPosByNoteCfgPos(String noteCfgPos){
+    ///注意noteDependMediaPos和noteCfgPos在windows下不能有\\需要将\\替换为/
+    PlatformTool.callback(windows: (){
+      this.noteCfgPos = noteCfgPos.replaceAll("\\", "/");
+      noteDependMediaPos = noteDependMediaPos.replaceAll("\\", "/");
+    },other: (){
+      this.noteCfgPos = noteCfgPos;
+    });
+
     noteUpdateTime = DateTime.now();
-    noteProjectPos = CommonTool.getParentPos(noteCfgPos);
+    noteProjectPos = CommonTool.getParentPos(this.noteCfgPos);
     noteDataPos = "$noteProjectPos/data";
     noteResourcePos = "$noteProjectPos/resource";
     noteImgPos = "$noteResourcePos/img";
@@ -86,8 +102,6 @@ class BaseNote {
     notePdfPos = "$noteResourcePos/pdf";
     noteMarkdownPos = "$noteResourcePos/markdown";
     noteTxtPos = "$noteResourcePos/txt";
-
-
   }
 
 

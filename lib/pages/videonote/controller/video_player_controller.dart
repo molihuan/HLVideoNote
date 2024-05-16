@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
@@ -12,9 +13,10 @@ import '../../../models/note_model/base_note.dart';
 
 
 class VideoPlayerController extends GetxController {
+  ///当前视频播放位置
   late Duration currentDuration;
 
-  // 创建视频播放器
+  /// 创建视频播放器
   late final player = Player(
     configuration: PlayerConfiguration(
       // Supply your options:
@@ -48,7 +50,7 @@ class VideoPlayerController extends GetxController {
     return null;
   }
 
-  //视频播放
+  ///视频播放
   void playerOpen(String resource) {
     player.open(Media(resource));
   }
@@ -123,11 +125,12 @@ class VideoPlayerController extends GetxController {
       return;
     }
 
-    print("截屏文件保存在:${allPath}");
+    LogUtil.d("截屏文件保存在:${allPath}");
     callBack(allPath);
   }
 
   /// 在 widget 内存中分配后立即调用。
+  @override
   void onInit() {
     initPlayerSetting();
   }

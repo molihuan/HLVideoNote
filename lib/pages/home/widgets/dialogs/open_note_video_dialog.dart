@@ -122,6 +122,8 @@ class OpenNoteVideoDialog extends GetView<HomeController> {
           onPressed: () {
             Navigator.of(context).pop();
             String noteCfgPos = noteCfgPosEditCtrl.text;
+
+
             controller.openNoteProject(noteCfgPos);
 
           },

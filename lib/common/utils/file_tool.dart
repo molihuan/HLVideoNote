@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:common_utils/common_utils.dart';
 import 'package:external_path/external_path.dart';
 
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:path/path.dart';
+import 'package:videonote/common/utils/str_tool.dart';
 
 import '../../models/note_model/base_note.dart';
 import 'common_tool.dart';
@@ -26,7 +28,7 @@ class FileTool {
       folder.deleteSync(recursive: true);
       return true;
     } else {
-      print('文件夹不存在');
+      LogUtil.d('文件夹不存在');
       return false;
     }
   }
@@ -41,7 +43,18 @@ class FileTool {
       Map<String, dynamic>? jsonData = json.decode(content);
       return jsonData;
     } catch (error) {
-      print('读取文件时出现错误：$error');
+      LogUtil.e('读取文件时出现错误：$error');
+      return null;
+    }
+  }
+  ///读取文件内容
+   static String? readFile(String filePath){
+    try {
+      // 读取文件内容
+      File file = File(filePath);
+      String content = file.readAsStringSync();
+      return content;
+    } catch (error) {
       return null;
     }
   }
@@ -69,25 +82,15 @@ class FileTool {
       // 写入内容
       await file.writeAsString(jsonString);
 
-      print('文件创建成功并写入内容。');
+      LogUtil.d('文件创建成功并写入内容。');
       return true;
     } catch (error) {
-      print('写入文件时出现错误：$error');
+      LogUtil.e('写入文件时出现错误：$error');
       return false;
     }
   }
 
 ///////////////////////////////////////////////////////////////////////////
-  static bool deleteFiles(String folderPath) {
-    Directory folder = Directory(folderPath);
-    if (folder.existsSync()) {
-      folder.deleteSync(recursive: true);
-      return true;
-    } else {
-      print('文件夹不存在');
-      return false;
-    }
-  }
 
   ///保存图片
   ///[imageBytes] 图片数据
@@ -101,6 +104,9 @@ class FileTool {
       directory.createSync(recursive: true);
     }
     String absolutePath = join(dirPath, fileName);
+    /// 处理windows路径
+    absolutePath = StrTool.handleWinPos(absolutePath)!;
+
     File imageFile = File(absolutePath);
 
     try {
@@ -114,29 +120,6 @@ class FileTool {
     }
   }
 
-  ///获取外部存储路径
-  ///仅仅适应Android
-  // static Future<String?> getExternalStoragePath() async {
-  //   String directoryPath;
-  //   try {
-  //     final directory = await getExternalStorageDirectory();
-  //     directoryPath = directory!.path;
-  //   } catch (e) {
-  //     print('Failed to get external storage directory: $e');
-  //     return null;
-  //   }
-  //   return directoryPath;
-  // }
-
-  // static String getProjectRootPath() {
-  //   String projectPath = '';
-  //   try {
-  //     projectPath = path.current;
-  //   } catch (e) {
-  //     print('Failed to get project root path: $e');
-  //   }
-  //   return projectPath;
-  // }
 
   ///获取当前可执行文件路径
   static String? getCurrentAppPath() {
@@ -166,45 +149,6 @@ class FileTool {
     return false;
   }
 
-  /// 将字符串写入文件
-  static bool writeString(String filePath, contents) {
-    final file = File(filePath);
-    try {
-      file.writeAsStringSync(contents);
-      return true;
-    } catch (e) {
-      print('writeString err: $e');
-      return false;
-    }
-  }
-
-  /// 将json覆盖式写入文件
-  /// 内容优先[jsonContent],[jsonContent]和[mapContent]不能同时为null
-  static bool writeJson(String filePath,
-      {Map? mapContent, String? jsonContent}) {
-    final file = File(filePath);
-    try {
-      jsonContent ??= jsonEncode(mapContent!);
-      file.writeAsStringSync(jsonContent);
-      return true;
-    } catch (e) {
-      print('writeJson err: $e');
-      return false;
-    }
-  }
-
-  /// 把文件转换为json
-  static Map<String,dynamic>? readJson(String filePath) {
-    final file = File(filePath);
-    try {
-      var jsonString = file.readAsStringSync();
-      Map<String,dynamic> jsonObj = jsonDecode(jsonString);
-      return jsonObj;
-    } catch (e) {
-      print('readJson err: $e');
-      return null;
-    }
-  }
 
   static Future<String> getAppName() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -213,7 +157,7 @@ class FileTool {
 
   ///获取默认的笔记保存路径
   static Future<String> getDefaultNoteSavePath() {
-    return PlatformTool.callback<Future<String>, FStrCallback>(
+    return PlatformTool.callback<Future<String>, StrFcallback>(
         android: () async {
       String docPath = await ExternalPath.getExternalStoragePublicDirectory(
           ExternalPath.DIRECTORY_DOCUMENTS);
@@ -249,42 +193,6 @@ class FileTool {
    *     --pdf(存放pdf)
    */
 
-  /// 创建笔记项目
-  static Future<String?> createNoteProjectFile(
-      BaseNote baseNote) async {
-
-    //TODO 判断权限是否足够
-
-    //判断笔记内容文件是否存在
-    if (fileExists(baseNote.noteDataPos)) {
-      return baseNote.noteDataPos;
-    }
-
-    List<String> resourceClass = [
-      baseNote.noteImgPos,
-      baseNote.noteVideoPos,
-      baseNote.noteAudioPos,
-      baseNote.notePdfPos,
-      baseNote.noteMarkdownPos,
-      baseNote.noteTxtPos,
-    ];
-    ///创建文件夹
-    for (String dir in resourceClass) {
-      Directory(dir).createSync(recursive: true);
-    }
-    ///初始化笔记内容并写入文件(这里应该提供统一的保存接口,saveRes,本地应该实现写入本地文件,网络应该实现请求保存接口)
-    bool createResult=await writeFile(baseNote.noteDataPos, '[{"insert":" "}]');
-
-    if (createResult == false){
-      return null;
-    }
-
-    ///保存配置文件(这里应该提供统一的保存接口,saveRes,本地应该实现写入本地文件,网络应该实现请求保存接口)
-    writeJson(baseNote.noteCfgPos, mapContent: baseNote.toJson());
-
-    return baseNote.noteDataPos;
-
-  }
 
   ///获取上一级路径
   static String? getParentPath(String path) {

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 ///方法类型
-typedef String StrCallbackStr(String value);
-typedef void CallbackStr(String value);
-typedef String StrCallback();
-typedef bool BoolCallback();
+typedef StrCallbackStr = String Function(String value);
+typedef CallbackStr=void Function(String value);
+typedef StrCallback=String Function();
+typedef BoolCallback=bool Function();
 
 /// 异步方法
-typedef Future<String> FStrCallbackStr(String value);
-typedef Future<void> FCallbackStr(String value);
-typedef Future<String> FStrCallback();
+typedef VoidFcallbackStr = Future<void> Function(String value);
+typedef StrFcallbackStr = Future<String> Function(String value);
+typedef StrFcallback = Future<String> Function();
+typedef VoidFcallback = Future<void> Function();
 
 typedef Widget WgetCallback();
 

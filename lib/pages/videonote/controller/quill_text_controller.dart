@@ -30,7 +30,7 @@ enum _SelectionType {
 ///状态
 class QuillTextState {
   /// 笔记
-  final _baseNote = BaseNote(noteDependMediaPos: '/root/baseNote/1.mp4', noteCfgPos: '/root/baseNote/1.cfg', noteTitle: '').obs;
+  final _baseNote = BaseNote(noteDependMediaPos: '/root/baseNote/1.mp4', noteCfgPos: '/root/baseNote/1.hlcfg', noteTitle: '').obs;
 
   // set baseNote(value) => _baseNote.value = value;
   //
