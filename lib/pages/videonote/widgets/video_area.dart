@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
-import 'base_video_note_view.dart';
+import 'base_video_note_widget.dart';
 
-
-class VideoArea extends BaseVideoNoteView {
+class VideoArea extends BaseVideoNoteWidget {
   VideoArea({Key? key}) : super(key: key);
 
   @override

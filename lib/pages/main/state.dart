@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class MainState {
+class MainPageState {
   // 页面索引
   final _pageIndex = 0.obs;
 

@@ -1,3 +1,3 @@
 library widgets;
 
-export '../../home/widgets/home_appbar.dart';
+export 'main_page_widget.dart';

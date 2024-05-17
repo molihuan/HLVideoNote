@@ -17,7 +17,7 @@ import '../../common/utils/common_tool.dart';
  *     --txt
  *     --doc
  */
-
+///笔记基类
 class BaseNote {
   ///标识用于json传输转换
   static const String flag = "BaseNote";

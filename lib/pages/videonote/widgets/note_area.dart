@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'base_video_note_view.dart';
+import 'base_video_note_widget.dart';
 
-
-class NoteArea extends BaseVideoNoteView {
+class NoteArea extends BaseVideoNoteWidget {
   NoteArea({Key? key}) : super(key: key) {}
-
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +13,11 @@ class NoteArea extends BaseVideoNoteView {
       children: <Widget>[
         kIsWeb
             ? Expanded(
-            child: Container(
-              padding:
-              const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              child: controller.quillToolbar,
-            ))
+                child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                child: controller.quillToolbar,
+              ))
             : Container(child: controller.quillToolbar),
         Expanded(
           flex: 15,

@@ -1,29 +1,37 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:videonote/pages/notes/controller.dart';
+import 'package:videonote/pages/user/controller.dart';
 
 import '../../common/utils/permission_tool.dart';
-import '../home/controller.dart';
-import '../my/controller.dart';
+
+import '../notes/view.dart';
+import '../user/view.dart';
 import 'index.dart';
 
-class MainController extends GetxController {
-  final state = MainState();
+class MainPageController extends GetxController {
+  final state = MainPageState();
+  late final List<Widget> pageList;
 
   /// 在 widget 内存中分配后立即调用。
   @override
   void onInit() {
     super.onInit();
 
-    ///初始化子视图的控制器，不然会报null异常
-    Get.put<HomeController>(HomeController());
-    Get.put<MyController>(MyController());
+    ///注入子视图的控制器,不然会报null异常
+    Get.put<NotesPageController>(NotesPageController());
+    Get.put<UserPageController>(UserPageController());
+
+    ///视图列表
+    pageList = [const NotesPage(), const UserPage()];
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所
   @override
   void onReady() {
     super.onReady();
-    //申请权限
+
+    ///申请权限
     PermissionTool.requestStoragePermission();
   }
 

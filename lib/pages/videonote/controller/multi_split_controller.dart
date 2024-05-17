@@ -4,10 +4,9 @@ import 'package:multi_split_view/multi_split_view.dart';
 
 import '../../../common/utils/platform_tool.dart';
 
-
 ///状态
 class MultiSplitState {
-  // 插入图片源类型
+  /// 对齐方式
   final _multiSplitAxis = Rx<Axis>(Axis.horizontal);
 
   set multiSplitAxis(value) => _multiSplitAxis.value = value;
@@ -50,9 +49,12 @@ class MultiSplitController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    PlatformTool.voidCallback(android: (){
+
+    PlatformTool.voidCallback(android: () {
       setAxis(Axis.vertical);
-    },ios: (){setAxis(Axis.vertical);},other: (){
+    }, ios: () {
+      setAxis(Axis.vertical);
+    }, other: () {
       setAxis(Axis.horizontal);
     });
 

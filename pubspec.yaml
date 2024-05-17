@@ -18,14 +18,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   #ui库
   getwidget: 4.0.0
-
+  #ui
   velocity_x: ^4.1.2
   #视频组件
   media_kit: 1.1.10                             # Primary package.
   media_kit_video: 1.2.4                        # For video rendering.
   media_kit_libs_video: 1.0.4                   # Native video dependencies.
   #markdown组件
-#  flutter_markdown: ^0.6.17+2
+  #flutter_markdown: ^0.6.17+2
   #富文本编辑器组件
   flutter_quill: ^9.3.10
   flutter_quill_extensions: ^9.3.10
@@ -33,8 +33,6 @@ dependencies:
   #路由组件
   #https://github.com/jonataslaw/getx/blob/master/README.zh-cn.md
   get: ^4.6.6
-  #持久化组件
-  # shared_preferences: ^2.2.1
   #路径组件
   path_provider: ^2.1.1
   #安卓路径
@@ -49,19 +47,24 @@ dependencies:
   #吐司弹窗框架
   #https://pub-web.flutter-io.cn/packages/flutter_smart_dialog
   flutter_smart_dialog: ^4.9.5+1
+  #悬浮按钮
+  flutter_speed_dial: ^7.0.0
+  #布局空间分配拖拽控件
+  multi_split_view: ^2.4.0
+  #工具类 包含shared_preferences
+  #https://github.com/bhoominn/nb_utils
+  nb_utils: ^7.0.2
+  #https://github.com/Sky24n/common_utils
+  common_utils: ^2.1.0
+
   #分享
 #  share_plus: ^9.0.0
   #设备信息
   #  device_info_plus: ^9.0.3
   package_info_plus: ^4.2.0
-  #日志
-#  logger: ^2.0.1
-  #打开url
-#  url_launcher: ^6.1.12
   #崩溃信息
   #  sentry_flutter: ^7.9.0
-  #悬浮按钮
-  flutter_speed_dial: ^7.0.0
+
   #pdf
 #  pdf: ^3.10.4
   #白板工具
@@ -78,37 +81,39 @@ dependencies:
 #  record: ^5.0.1
   #插件系统
 #  flutter_js: ^0.8.0
-  #拖拽控件
-  multi_split_view: ^2.4.0
-  #悬浮组件,将视频窗口悬浮
+
+  #悬浮组件,将视频窗口悬浮(移动端使用)
   floating_overlay: ^1.2.1
+  #多窗口(PC端使用)
+  desktop_multi_window: ^0.2.0
+  #窗口生命周期
+  desktop_lifecycle: ^0.1.1
   #搜索框组件
   super_cupertino_navigation_bar: ^1.1.2
-
+  #响应式UI
+  responsive_framework: ^1.1.1
+  #响应式布局
+  #https://pub.dev/packages/tolyui_rx_layout
+#  tolyui_rx_layout: ^1.0.0
   #屏幕工具响应式布局
   flutter_screenutil: ^5.9.0
   #自定义桌面端窗口
-  bitsdojo_window: ^0.1.6
+  #https://pub.dev/packages/bitsdojo_window
+#  bitsdojo_window: ^0.1.6
   #开屏动画
 #  flutter_native_splash: ^2.3.5
-
   #pdf编辑
   #  pdftron_flutter: ^1.0.1-22
   #代码编辑
 #  flutter_code_editor: ^0.3.1
-  #工具类 包含shared_preferences
-  #https://github.com/bhoominn/nb_utils
-  nb_utils: ^7.0.2
-  #https://github.com/Sky24n/common_utils
-  common_utils: ^2.1.0
+
   #网格视图布局组件
-  flutter_staggered_grid_view: ^0.7.0
+#  flutter_staggered_grid_view: ^0.7.0
   #上拉下拉刷新
 #  pull_to_refresh: ^2.0.0
   #底部导航栏
   #  persistent_bottom_nav_bar: ^5.0.2
-  #响应式UI
-  responsive_framework: ^1.1.1
+
   #  #高级屏幕截图
   #  screenshot: ^2.1.0
   #键盘行为

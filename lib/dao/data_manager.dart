@@ -1,11 +1,12 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:videonote/common/mconstant.dart';
 
 import '../common/store/global_store.dart';
 import '../common/utils/file_tool.dart';
 import '../models/note_model/base_note.dart';
 
-
+///数据管理者
 class DataManager{
   static const DATASTORE_KEY_EDITOR_SHOW_MORE_TOOLBAR_BTN = "molihuan_note_DATASTORE_KEY_EDITOR_SHOW_MORE_TOOLBAR_BTN";
 
@@ -18,7 +19,7 @@ class DataManager{
 
   ///设置笔记配置位置列表
   static Future<bool> setNoteCfgPosList(List<String> list){
-    return setValue(GlobalStore.DATASTORE_KEY_NOTE_CFG_POS_LIST, list);
+    return setValue(Mconstant.DATASTORE_KEY_NOTE_CFG_POS_LIST, list);
   }
   static Future<bool> setNoteCfgPosListByNote(List<BaseNote> list){
     List<String>? noteCfgPosList = [];
@@ -29,7 +30,7 @@ class DataManager{
   }
   ///获取笔记配置位置列表
   static List<String>? getNoteCfgPosList(){
-    List<String>? noteCfgPosList = getStringListAsync(GlobalStore.DATASTORE_KEY_NOTE_CFG_POS_LIST);
+    List<String>? noteCfgPosList = getStringListAsync(Mconstant.DATASTORE_KEY_NOTE_CFG_POS_LIST);
     LogUtil.d("获取到的笔记列表为:$noteCfgPosList");
     return noteCfgPosList;
   }

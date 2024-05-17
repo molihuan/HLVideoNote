@@ -3,8 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  bitsdojo_window_windows
   connectivity_plus
+  desktop_lifecycle
+  desktop_multi_window
   file_selector_windows
   gal
   irondash_engine_context

@@ -21,8 +21,6 @@ import '../controller/quill_text_controller.dart';
 import '../controller/video_player_controller.dart';
 import 'dialogs/insert_image_dialog.dart';
 
-
-
 class MyQuillToolbar extends StatelessWidget {
   MyQuillToolbar({
     required this.quillController,
@@ -105,352 +103,319 @@ class MyQuillToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return QuillToolbar(
-      child: Wrap(children: [
-        Obx(() {
-          return Visibility(
-            visible: quillTextController.state.showMoreToolbarBtn,
-            child:
-            IconButton(
-              icon: const Icon(
-                Icons.width_normal,
+      child: Wrap(
+        children: [
+          IconButton(
+              tooltip: "返回",
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Get.back();
+              }),
+          IconButton(
+              tooltip: "保存",
+              icon: Icon(Icons.save),
+              onPressed: () {
+                bool result = quillTextController.saveNote();
+                if (result) {
+                  SmartDialog.showToast('保存成功');
+                } else {
+                  SmartDialog.showToast('保存失败');
+                }
+              }),
+          Obx(() {
+            return Visibility(
+              visible: quillTextController.state.showMoreToolbarBtn,
+              child: QuillToolbarHistoryButton(
+                isUndo: true,
+                controller: quillController,
               ),
-              onPressed: (){
-                quillTextController.state.showMoreToolbarBtn = false;
-                DataManager.setShowMoreToolbarBtn(false);
-              },
-            ),
-          );
-        }),
-
-
-        Obx(() {
-          return Visibility(
-            visible: quillTextController.state.showMoreToolbarBtn,
-            child: QuillToolbarHistoryButton(
-              isUndo: true,
-              controller: quillController,
-          ),);
-        }),
-        Obx(() {
-          return Visibility(
-            visible: quillTextController.state.showMoreToolbarBtn,
-            child:
-            QuillToolbarHistoryButton(
-              isUndo: false,
-              controller: quillController,
-            ),
             );
-        }),
-
-        IconButton(
-            tooltip: "截屏",
-            icon: Icon(Icons.screenshot),
-            onPressed: () async {
-              quillTextController.insertVideoAnchor(quillController);
-              String imgDir =quillTextController.state.getBaseNote().noteImgPos;
-              videoPlayerController.videoScreenShot(imgDir, (absolutePath) {
-                quillTextController.insertImageBlockEmbed(absolutePath);
-              });
-            }),
-        IconButton(
-            tooltip: "插入时间点",
-            icon: Icon(Icons.add_alarm_rounded),
-            onPressed: () {
-              quillTextController.insertVideoAnchor(quillController);
-            }),
-        IconButton(
-            tooltip: "插入图片",
-            icon: Icon(Icons.image),
-            onPressed: () {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) => InsertImageDialog(),
-              );
-            }),
-        Obx(() {
-          return Visibility(
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              IconButton(
+              child: QuillToolbarHistoryButton(
+                isUndo: false,
+                controller: quillController,
+              ),
+            );
+          }),
+          IconButton(
+              tooltip: "截屏",
+              icon: Icon(Icons.screenshot),
+              onPressed: () async {
+                quillTextController.insertVideoAnchor(quillController);
+                String imgDir =
+                    quillTextController.state.getBaseNote().noteImgPos;
+                videoPlayerController.videoScreenShot(imgDir, (absolutePath) {
+                  quillTextController.insertImageBlockEmbed(absolutePath);
+                });
+              }),
+          IconButton(
+              tooltip: "插入时间点",
+              icon: Icon(Icons.add_alarm_rounded),
+              onPressed: () {
+                quillTextController.insertVideoAnchor(quillController);
+              }),
+          Obx(() {
+            return Visibility(
+              visible: quillTextController.state.showMoreToolbarBtn,
+              child: IconButton(
+                  tooltip: "插入图片",
+                  icon: Icon(Icons.image),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) => InsertImageDialog(),
+                    );
+                  }),
+            );
+          }),
+          Obx(() {
+            return Visibility(
+              visible: quillTextController.state.showMoreToolbarBtn,
+              child: IconButton(
                   tooltip: "插入照片",
-                  icon: Icon(Icons.photo_camera), onPressed: () {}),
-          );
-        }),
-
-
-        IconButton(
-            tooltip: "插入音频",
-            icon: Icon(Icons.music_note), onPressed: () {}),
-
-        Obx(() {
-          return Visibility(
+                  icon: Icon(Icons.photo_camera),
+                  onPressed: () {}),
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              IconButton(
-                  tooltip: "插入录音",
-                  icon: Icon(Icons.mic), onPressed: () {}),
-          );
-        }),
-        Obx(() {
-          return Visibility(
+              child: IconButton(
+                  tooltip: "插入音频",
+                  icon: Icon(Icons.music_note),
+                  onPressed: () {}),
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              IconButton(
+              child: IconButton(
+                  tooltip: "插入录音", icon: Icon(Icons.mic), onPressed: () {}),
+            );
+          }),
+          Obx(() {
+            return Visibility(
+              visible: quillTextController.state.showMoreToolbarBtn,
+              child: IconButton(
                   tooltip: "插入视频",
-                  icon: Icon(Icons.movie_creation), onPressed: () {}),
-          );
-        }),
-        Obx(() {
-          return Visibility(
+                  icon: Icon(Icons.movie_creation),
+                  onPressed: () {}),
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              IconButton(
+              child: IconButton(
                   tooltip: "文本查找",
-                  icon: Icon(Icons.find_in_page), onPressed: () {}),
-          );
-        }),
-        Obx(() {
-          return Visibility(
+                  icon: Icon(Icons.find_in_page),
+                  onPressed: () {}),
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              IconButton(
+              child: IconButton(
                   tooltip: "导出",
                   icon: Icon(Icons.unarchive_outlined),
                   onPressed: () {
                     // final msc = Get.find<MultiSplitController>();
                     // msc.setAxis(Axis.vertical);
                   }),
-          );
-        }),
-
-        IconButton(
-            tooltip: "保存",
-            icon: Icon(Icons.save),
-            onPressed: () {
-              bool result = quillTextController.saveNote();
-              if (result) {
-                SmartDialog.showToast('保存成功');
-              } else {
-                SmartDialog.showToast('保存失败');
-              }
-            }),
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarToggleStyleButton(
+              child: QuillToolbarToggleStyleButton(
                 options: const QuillToolbarToggleStyleButtonOptions(),
                 controller: quillController,
                 attribute: Attribute.bold,
               ),
-          );
-        }),
-
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarToggleStyleButton(
+              child: QuillToolbarToggleStyleButton(
                 options: const QuillToolbarToggleStyleButtonOptions(),
                 controller: quillController,
                 attribute: Attribute.italic,
               ),
-          );
-        }),
-
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarToggleStyleButton(
+              child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.underline,
               ),
-          );
-        }),
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarToggleStyleButton(
+              child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.subscript,
               ),
-          );
-        }),
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarToggleStyleButton(
+              child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.superscript,
               ),
-          );
-        }),
-
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarClearFormatButton(
+              child: QuillToolbarClearFormatButton(
                 controller: quillController,
               ),
-          );
-        }),
-
-
-        const VerticalDivider(),
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          const VerticalDivider(),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarColorButton(
+              child: QuillToolbarColorButton(
                 controller: quillController,
                 isBackground: false,
               ),
-          );
-        }),
-
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarColorButton(
+              child: QuillToolbarColorButton(
                 controller: quillController,
                 isBackground: true,
               ),
-          );
-        }),
-
-
-        const VerticalDivider(),
-        QuillToolbarSelectHeaderStyleDropdownButton(
-          controller: quillController,
-          options: QuillToolbarSelectHeaderStyleDropdownButtonOptions(
-              attributes:[
-                Attribute.h1,
-                Attribute.h2,
-                Attribute.h3,
-                Attribute.h4,
-                Attribute.h5,
-                Attribute.h6,
-                Attribute.header,
-              ]
+            );
+          }),
+          QuillToolbarSelectHeaderStyleDropdownButton(
+            controller: quillController,
+            options:
+                QuillToolbarSelectHeaderStyleDropdownButtonOptions(attributes: [
+              Attribute.h1,
+              Attribute.h2,
+              Attribute.h3,
+              Attribute.h4,
+              Attribute.h5,
+              Attribute.h6,
+              Attribute.header,
+            ]),
           ),
-        ),
-        QuillToolbarFontFamilyButton(
-          controller: quillController,
-          options: QuillToolbarFontFamilyButtonOptions(
-              rawItemsMap:{
-                'Amatic': GoogleFonts.amaticSc().fontFamily!,
-                'Annie': GoogleFonts.annieUseYourTelescope().fontFamily!,
-                'Formal': GoogleFonts.petitFormalScript().fontFamily!,
-                'Roboto': GoogleFonts.roboto().fontFamily!
-              }
-          ),
-        ),
-        
-        
-        const VerticalDivider(),
-        QuillToolbarToggleCheckListButton(
-          controller: quillController,
-        ),
-
-        QuillToolbarToggleStyleButton(
-          controller: quillController,
-          attribute: Attribute.ol,
-        ),
-        QuillToolbarToggleStyleButton(
-          controller: quillController,
-          attribute: Attribute.ul,
-        ),
-        QuillToolbarToggleStyleButton(
-          controller: quillController,
-          attribute: Attribute.leftAlignment,
-        ),
-        QuillToolbarToggleStyleButton(
-          controller: quillController,
-          attribute: Attribute.centerAlignment,
-        ),
-        QuillToolbarToggleStyleButton(
-          controller: quillController,
-          attribute: Attribute.rightAlignment,
-        ),
-        QuillToolbarToggleStyleButton(
-          controller: quillController,
-          attribute: Attribute.justifyAlignment,
-        ),
-
-        Obx(() {
-          return Visibility(
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarToggleStyleButton(
+              child: QuillToolbarFontFamilyButton(
+                controller: quillController,
+                options: QuillToolbarFontFamilyButtonOptions(rawItemsMap: {
+                  'Amatic': GoogleFonts.amaticSc().fontFamily!,
+                  'Annie': GoogleFonts.annieUseYourTelescope().fontFamily!,
+                  'Formal': GoogleFonts.petitFormalScript().fontFamily!,
+                  'Roboto': GoogleFonts.roboto().fontFamily!
+                }),
+              ),
+            );
+          }),
+          QuillToolbarToggleCheckListButton(
+            controller: quillController,
+          ),
+          QuillToolbarToggleStyleButton(
+            controller: quillController,
+            attribute: Attribute.ol,
+          ),
+          QuillToolbarToggleStyleButton(
+            controller: quillController,
+            attribute: Attribute.ul,
+          ),
+          QuillToolbarToggleStyleButton(
+            controller: quillController,
+            attribute: Attribute.leftAlignment,
+          ),
+          QuillToolbarToggleStyleButton(
+            controller: quillController,
+            attribute: Attribute.centerAlignment,
+          ),
+          QuillToolbarToggleStyleButton(
+            controller: quillController,
+            attribute: Attribute.rightAlignment,
+          ),
+          QuillToolbarToggleStyleButton(
+            controller: quillController,
+            attribute: Attribute.justifyAlignment,
+          ),
+          Obx(() {
+            return Visibility(
+              visible: quillTextController.state.showMoreToolbarBtn,
+              child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.inlineCode,
               ),
-          );
-        }),
-
-
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarToggleStyleButton(
+              child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.blockQuote,
               ),
-          );
-        }),
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarIndentButton(
+              child: QuillToolbarIndentButton(
                 controller: quillController,
                 isIncrease: true,
               ),
-          );
-        }),
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarIndentButton(
+              child: QuillToolbarIndentButton(
                 controller: quillController,
                 isIncrease: false,
               ),
-          );
-        }),
-
-        const VerticalDivider(),
-        Obx(() {
-          return Visibility(
+            );
+          }),
+          Obx(() {
+            return Visibility(
               visible: quillTextController.state.showMoreToolbarBtn,
-              child:
-              QuillToolbarLinkStyleButton(controller: quillController),
-          );
-        }),
-        Obx(() {
-          return Visibility(
-              visible: !quillTextController.state.showMoreToolbarBtn,
-              child:
-              IconButton(
-                  tooltip: "更多按钮",
-                  icon: Icon(Icons.dashboard_customize), onPressed: () {
-                  quillTextController.state.showMoreToolbarBtn = true;
-                  DataManager.setShowMoreToolbarBtn(true);
-              }),
-          );
-        }),
-
-      ],
+              child: QuillToolbarLinkStyleButton(controller: quillController),
+            );
+          }),
+          Obx(() {
+            // 通过条件判断来决定显示的按钮，并直接在此处处理状态改变，减少重复代码
+            final showMoreBtn = quillTextController.state.showMoreToolbarBtn;
+            return IconButton(
+              // 根据showMoreBtn的值动态设置图标和onPressed事件
+              tooltip: showMoreBtn ? "隐藏按钮" : "更多按钮", // 根据状态改变提示文本
+              icon: showMoreBtn
+                  ? const Icon(Icons.width_normal)
+                  : Icon(Icons.dashboard_customize),
+              onPressed: () {
+                // 动态更改状态，并通知数据变化
+                quillTextController.state.showMoreToolbarBtn = !showMoreBtn;
+                DataManager.setShowMoreToolbarBtn(!showMoreBtn);
+              },
+            );
+          }),
+        ],
       ),
       configurations: QuillToolbarConfigurations(),
     );
-
   }
 }
