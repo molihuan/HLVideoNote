@@ -3,15 +3,16 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  desktop_lifecycle
   desktop_multi_window
   file_selector_linux
   irondash_engine_context
   media_kit_libs_linux
   media_kit_video
   nb_utils
+  screen_retriever
   super_native_extensions
   url_launcher_linux
+  window_manager
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

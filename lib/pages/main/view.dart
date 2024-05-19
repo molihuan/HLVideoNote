@@ -5,7 +5,7 @@ import 'index.dart';
 import 'widgets/main_page_widget.dart';
 
 ///主要显示区
-class MainPage extends GetView {
+class MainPage extends GetView<MainPageController> {
   const MainPage({Key? key}) : super(key: key);
 
   @override

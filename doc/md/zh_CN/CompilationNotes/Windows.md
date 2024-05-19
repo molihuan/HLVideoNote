@@ -63,3 +63,26 @@ create . 重新添加。
 ~~注意以下文件夹下的子文件夹必须为链接~~
 ~~windows/flutter/ephemeral/.plugin_symlinks/~~
 ~~linux/flutter/ephemeral/.plugin_symlinks/~~
+
+#### 5、多窗口
+
+为了使第二个窗口也能使用插件需要修改windows/runner/flutter_window.cpp
+
+头文件需要拷贝windows/flutter/generated_plugin_registrant.cc中的到windows/runner/flutter_window.cpp
+
+修改windows/runner/flutter_window.cpp中的OnCreate()
+
+```c++
+RegisterPlugins(flutter_controller_->engine());
+///  https://github.com/MixinNetwork/flutter-plugins/issues/58
+/// Multi window registration plugin start
+DesktopMultiWindowSetWindowCreatedCallback([](void* controller) {
+auto* flutter_view_controller = reinterpret_cast<flutter::FlutterViewController*>(controller);
+auto* registry = flutter_view_controller->engine();
+RegisterPlugins(registry);
+});
+/// Multi window registration plugin end
+
+SetChildContent(flutter_controller_->view()->GetNativeWindow());
+```
+

@@ -84,6 +84,22 @@ class PlatformTool {
         other: other);
   }
 
+  static E? callbackPhonePC<E, T extends Function>({
+    T? phone,
+    T? pc,
+    T? web,
+    T? other,
+  }) {
+    return callback<E, T>(
+        android: phone,
+        ios: phone,
+        linux: pc,
+        windows: pc,
+        mac: pc,
+        web: web,
+        other: other);
+  }
+
   ///平台回调
   ///[E] 返回类型
   ///[T] 方法类型,请看:common_tool.dart,也可自定义

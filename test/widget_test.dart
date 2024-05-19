@@ -8,9 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:videonote/main.dart';
-import 'package:videonote/windows/main_window.dart';
-
-
+import 'package:videonote/multiwindow/windows/main_window.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

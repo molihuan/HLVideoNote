@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:videonote/pages/notes/controller.dart';
@@ -13,6 +14,22 @@ class MainPageController extends GetxController {
   final state = MainPageState();
   late final List<Widget> pageList;
 
+  ///获取默认传入页面的参数
+  Map? getArguments() {
+    LogUtil.d("MainPageController获取到的所有GetPage为${Get.routeTree.routes}");
+    LogUtil.d("MainPageController获取到的当前路由路径为${Get.currentRoute}");
+
+    for (var route in Get.routeTree.routes) {
+      if (route.name == Get.currentRoute) {
+        if (route.arguments != null) {
+          return route.arguments as Map;
+        }
+      }
+    }
+
+    return null;
+  }
+
   /// 在 widget 内存中分配后立即调用。
   @override
   void onInit() {
@@ -23,7 +40,9 @@ class MainPageController extends GetxController {
     Get.put<UserPageController>(UserPageController());
 
     ///视图列表
-    pageList = [const NotesPage(), const UserPage()];
+    pageList = [const NotesPage(), UserPage()];
+
+    getArguments();
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所

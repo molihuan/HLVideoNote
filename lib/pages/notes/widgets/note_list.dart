@@ -4,7 +4,7 @@ import 'package:getwidget/getwidget.dart';
 
 import '../../../common/utils/common_tool.dart';
 import '../../../models/note_model/base_note.dart';
-import '../../../routes/app_pages.dart';
+import '../../app_pages.dart';
 import '../controller.dart';
 
 ///笔记列表

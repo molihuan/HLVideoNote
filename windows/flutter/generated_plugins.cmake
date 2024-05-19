@@ -4,7 +4,6 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
-  desktop_lifecycle
   desktop_multi_window
   file_selector_windows
   gal
@@ -14,8 +13,10 @@ list(APPEND FLUTTER_PLUGIN_LIST
   nb_utils
   permission_handler_windows
   screen_brightness_windows
+  screen_retriever
   super_native_extensions
   url_launcher_windows
+  window_manager
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

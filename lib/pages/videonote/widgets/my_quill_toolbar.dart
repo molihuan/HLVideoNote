@@ -17,8 +17,8 @@ import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
 
 import '../../../dao/data_manager.dart';
-import '../controller/quill_text_controller.dart';
-import '../controller/video_player_controller.dart';
+import '../controllers/quill_text_controller.dart';
+import '../controllers/video_player_controller.dart';
 import 'dialogs/insert_image_dialog.dart';
 
 class MyQuillToolbar extends StatelessWidget {

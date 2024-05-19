@@ -13,7 +13,7 @@ import '../../common/store/global_store.dart';
 import '../../common/utils/file_tool.dart';
 import '../../dao/data_manager.dart';
 import '../../models/note_model/base_note.dart';
-import '../../routes/app_pages.dart';
+import '../app_pages.dart';
 import 'index.dart';
 
 class NotesPageController extends GetxController {

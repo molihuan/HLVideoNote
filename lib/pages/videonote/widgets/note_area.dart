@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import 'base_video_note_widget.dart';
+import '../controllers/quill_text_controller.dart';
 
-class NoteArea extends BaseVideoNoteWidget {
-  NoteArea({Key? key}) : super(key: key) {}
+///写笔记区域
+class NoteArea extends GetView<QuillTextController> {
+  const NoteArea({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class NoteArea extends BaseVideoNoteWidget {
           child: Container(
             color: Colors.white,
             // padding: const EdgeInsets.only(left: 5, right: 5),
-            child: quillTextController.quillEditor,
+            child: controller.quillEditor,
           ),
         ),
       ],

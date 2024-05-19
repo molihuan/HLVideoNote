@@ -5,7 +5,7 @@ import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/components/text_field/gf_text_field.dart';
 import 'package:getwidget/size/gf_size.dart';
 
-import '../../../routes/app_pages.dart';
+import '../../app_pages.dart';
 
 //弹窗
 class PopupDialogDemo extends StatefulWidget {
@@ -193,15 +193,6 @@ class _PopupDialogDemoState extends State<PopupDialogDemo> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-
-                        //视频类型、视频路径或地址
-                        Get.toNamed(AppRoutes.VideoNotePage, arguments: {
-                          'videoType': videoSourceType,
-                          'videoSource':
-                              videoSourceType == VideoSourceType.LOCAL
-                                  ? videoPathEditController.text
-                                  : videoUrlEditController.text
-                        });
                       },
                       child: Text('创建'),
                     ),

@@ -3,6 +3,22 @@
 #include <optional>
 
 #include "flutter/generated_plugin_registrant.h"
+///need copy generated_plugin_registrant.cc include
+#include <connectivity_plus/connectivity_plus_windows_plugin.h>
+#include <desktop_multi_window/desktop_multi_window_plugin.h>
+#include <file_selector_windows/file_selector_windows.h>
+#include <gal/gal_plugin_c_api.h>
+#include <irondash_engine_context/irondash_engine_context_plugin_c_api.h>
+#include <media_kit_libs_windows_video/media_kit_libs_windows_video_plugin_c_api.h>
+#include <media_kit_video/media_kit_video_plugin_c_api.h>
+#include <nb_utils/nb_utils_plugin.h>
+#include <permission_handler_windows/permission_handler_windows_plugin.h>
+#include <screen_brightness_windows/screen_brightness_windows_plugin.h>
+#include <screen_retriever/screen_retriever_plugin.h>
+#include <super_native_extensions/super_native_extensions_plugin_c_api.h>
+#include <url_launcher_windows/url_launcher_windows.h>
+#include <window_manager/window_manager_plugin.h>
+
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
@@ -25,6 +41,43 @@ bool FlutterWindow::OnCreate() {
     return false;
   }
   RegisterPlugins(flutter_controller_->engine());
+  ///  https://github.com/MixinNetwork/flutter-plugins/issues/58
+  /// Multi window registration plugin start
+  ///不能在这里注册自己即DesktopMultiWindowPlugin
+    DesktopMultiWindowSetWindowCreatedCallback([](void *controller) {
+        auto *flutter_view_controller =
+                reinterpret_cast<flutter::FlutterViewController *>(controller);
+        auto *registry = flutter_view_controller->engine();
+        ConnectivityPlusWindowsPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("ConnectivityPlusWindowsPlugin"));
+        FileSelectorWindowsRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("FileSelectorWindows"));
+        GalPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("GalPluginCApi"));
+        IrondashEngineContextPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("IrondashEngineContextPluginCApi"));
+        MediaKitLibsWindowsVideoPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("MediaKitLibsWindowsVideoPluginCApi"));
+        MediaKitVideoPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("MediaKitVideoPluginCApi"));
+        NbUtilsPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("NbUtilsPlugin"));
+        PermissionHandlerWindowsPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("PermissionHandlerWindowsPlugin"));
+        ScreenBrightnessWindowsPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("ScreenBrightnessWindowsPlugin"));
+        ScreenRetrieverPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("ScreenRetrieverPlugin"));
+        SuperNativeExtensionsPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("SuperNativeExtensionsPluginCApi"));
+        UrlLauncherWindowsRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("UrlLauncherWindows"));
+        WindowManagerPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("WindowManagerPlugin"));
+    });
+
+  /// Multi window registration plugin end
+
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {

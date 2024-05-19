@@ -6,8 +6,7 @@ import 'package:getwidget/components/text_field/gf_text_field.dart';
 import 'package:getwidget/size/gf_size.dart';
 
 import '../../../../models/note_model/base_note.dart';
-import '../../controller/quill_text_controller.dart';
-
+import '../../controllers/quill_text_controller.dart';
 
 class InsertImageDialog extends GetView<QuillTextController> {
   // final controller = Get.find<VideoNoteController>();
