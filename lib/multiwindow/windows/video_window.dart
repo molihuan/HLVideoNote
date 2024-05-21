@@ -8,7 +8,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:videonote/models/note_model/base_note.dart';
-import 'package:videonote/multiwindow/windows_manager.dart';
+import 'package:videonote/multiwindow/app_windows_manager.dart';
 
 import '../../common/langs/translation_service.dart';
 import '../../pages/videonote/bindings/video_player_binding.dart';
@@ -25,7 +25,10 @@ class VideoWindow extends StatelessWidget {
   BaseNote baseNote;
 
   Widget _build() {
-    WindowsManager.receiveDataFromWindow("flag1", (data) {});
+    /// 其他窗口向此窗口发送消息可以在这里获取
+    AppWindowsManager.receiveWindowDataCallback(
+        AppWindows.MainWindow, (fromId, data) {},
+        windowController: windowController);
 
     return Column(
       children: [
@@ -37,8 +40,8 @@ class VideoWindow extends StatelessWidget {
               child: Text("关闭")),
           ElevatedButton(
               onPressed: () {
-                // DesktopMultiWindow.invokeMethod(0, "onSend", "arguments");
-                WindowsManager.sendDataToWindow("0", "onSend", "data1");
+                AppWindowsManager.sendDataToMainWindow(
+                    AppWindows.VideoWindow, "data2");
               },
               child: Text("向主页面发消息")),
         ]),

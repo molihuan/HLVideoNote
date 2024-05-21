@@ -124,8 +124,6 @@ dependencies:
   #  keyboard_actions: ^4.2.0
   #  设置UI
   #  settings_ui: ^2.0.2
-  #服务器组件
-  #  shelf: ^1.4.1
   #websocket 跨端通信
   web_socket_channel: ^2.4.0
   #  socket_io_client: ^2.0.3+1

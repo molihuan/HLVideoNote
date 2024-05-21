@@ -9,8 +9,18 @@ import 'package:media_kit_video/media_kit_video.dart';
 import '../../../common/utils/common_tool.dart';
 import '../../../common/utils/file_tool.dart';
 import '../../../models/note_model/base_note.dart';
+import '../../editor/base_editor_controller.dart';
+import '../base_media_display_controller.dart';
+import 'state.dart';
 
-class VideoPlayerController extends GetxController {
+class MediaKitPlayerController
+    extends BaseMediaDisplayController<Duration, VideoController> {
+  MediaKitPlayerController({required this.editorController});
+
+  BaseEditorController editorController;
+
+  final state = MediaKitPlayerState();
+
   ///当前视频播放位置
   late Duration currentDuration;
 
@@ -27,6 +37,11 @@ class VideoPlayerController extends GetxController {
 
   // 创建视频控制器
   late final videoController = VideoController(player);
+
+  @override
+  VideoController? getVideoController() {
+    return videoController;
+  }
 
   //获取视频地址或路径
   String? getVideoPos() {
@@ -91,53 +106,6 @@ class VideoPlayerController extends GetxController {
     );
   }
 
-  ///调整进度
-  Future<void> playerSeek(
-      {Duration? duration,
-      String? durationStr,
-      int day = 0,
-      int hour = 0,
-      int minute = 0,
-      int second = 0,
-      int millisecond = 0,
-      int microsecond = 0}) async {
-    if (durationStr != null) {
-      duration = CommonTool.str2Duration(durationStr);
-    }
-
-    await player.seek(
-      duration ??
-          Duration(
-              days: day,
-              hours: hour,
-              minutes: minute,
-              seconds: second,
-              milliseconds: millisecond,
-              microseconds: microsecond),
-    );
-  }
-
-  ///获取当前进度
-  Duration getCurrentDuration() {
-    return currentDuration;
-  }
-
-  ///截屏
-  void videoScreenShot(String path, CallbackStr callBack) async {
-    final Uint8List? screenshotData =
-        await player.screenshot(format: "image/jpeg");
-    final String fileName = CommonTool.getCurrentTime() + ".jpeg";
-
-    var allPath = await FileTool.saveImage(screenshotData!, path, fileName);
-    if (allPath == null) {
-      SmartDialog.showToast("截屏失败");
-      return;
-    }
-
-    LogUtil.d("截屏文件保存在:${allPath}");
-    callBack(allPath);
-  }
-
   /// 在 widget 内存中分配后立即调用。
   @override
   void onInit() {
@@ -147,7 +115,6 @@ class VideoPlayerController extends GetxController {
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所
-
   @override
   void onReady() {
     super.onReady();
@@ -167,5 +134,38 @@ class VideoPlayerController extends GetxController {
     LogUtil.d("视频播放器页面销毁");
     player.dispose();
     super.dispose();
+  }
+
+  @override
+  Future<bool> screenShot(String imgDirPos, CallbackStr callback) async {
+    final Uint8List? screenshotData =
+        await player.screenshot(format: "image/jpeg");
+    final String fileName = CommonTool.getCurrentTime() + ".jpeg";
+
+    var allPath =
+        await FileTool.saveImage(screenshotData!, imgDirPos, fileName);
+    if (allPath == null) {
+      SmartDialog.showToast("截屏失败");
+      return false;
+    }
+
+    LogUtil.d("截屏文件保存在:${allPath}");
+    callback(allPath);
+    return true;
+  }
+
+  @override
+  Duration getCurrentPos() {
+    return currentDuration;
+  }
+
+  @override
+  Future<bool> setCurrentPos(Duration pos) async {
+    try {
+      await player.seek(pos);
+      return true;
+    } on Exception catch (e) {
+      return false;
+    }
   }
 }

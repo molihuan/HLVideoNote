@@ -2,7 +2,8 @@
 
 #### 1、Visual Studio版本
 
-编译环境需要C++ 20，请注意Visual Studio版本(必须使用2022及以上)，cmake需要3.23及以上，请到cmake官网下载安装包并替换Visual
+编译环境需要C++ 20，请注意Visual Studio版本(必须使用2022及以上)
+，cmake需要3.23及以上，请到cmake官网下载安装包并替换Visual
 Studio中的cmake(3.22)
 
 #### 2、nuget配置
@@ -12,7 +13,8 @@ Studio中的cmake(3.22)
 
 #### 3、super_native_extensions_plugin编译错误
 
-编译可能会出现super_native_extensions_plugin编译错误，可能是依赖没有下载下拉,请配置代理,或者多运行几次(在我的电脑上就需要多运行几次就可以了)。
+编译可能会出现super_native_extensions_plugin编译错误，可能是依赖没有下载下拉,请配置代理,或者多运行几次(
+在我的电脑上就需要多运行几次就可以了)。
 
 #### 4、media_kit依赖无法下载成功
 
@@ -71,18 +73,47 @@ create . 重新添加。
 头文件需要拷贝windows/flutter/generated_plugin_registrant.cc中的到windows/runner/flutter_window.cpp
 
 修改windows/runner/flutter_window.cpp中的OnCreate()
+类似
 
 ```c++
-RegisterPlugins(flutter_controller_->engine());
-///  https://github.com/MixinNetwork/flutter-plugins/issues/58
-/// Multi window registration plugin start
-DesktopMultiWindowSetWindowCreatedCallback([](void* controller) {
-auto* flutter_view_controller = reinterpret_cast<flutter::FlutterViewController*>(controller);
-auto* registry = flutter_view_controller->engine();
-RegisterPlugins(registry);
-});
-/// Multi window registration plugin end
+  RegisterPlugins(flutter_controller_->engine());
+  ///  https://github.com/MixinNetwork/flutter-plugins/issues/58
+  /// Multi window registration plugin start
+  ///不能在这里注册自己即DesktopMultiWindowPlugin
+    DesktopMultiWindowSetWindowCreatedCallback([](void *controller) {
+        auto *flutter_view_controller =
+                reinterpret_cast<flutter::FlutterViewController *>(controller);
+        auto *registry = flutter_view_controller->engine();
+        ConnectivityPlusWindowsPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("ConnectivityPlusWindowsPlugin"));
+        FileSelectorWindowsRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("FileSelectorWindows"));
+        GalPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("GalPluginCApi"));
+        IrondashEngineContextPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("IrondashEngineContextPluginCApi"));
+        MediaKitLibsWindowsVideoPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("MediaKitLibsWindowsVideoPluginCApi"));
+        MediaKitVideoPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("MediaKitVideoPluginCApi"));
+        NbUtilsPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("NbUtilsPlugin"));
+        PermissionHandlerWindowsPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("PermissionHandlerWindowsPlugin"));
+        ScreenBrightnessWindowsPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("ScreenBrightnessWindowsPlugin"));
+        ScreenRetrieverPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("ScreenRetrieverPlugin"));
+        SuperNativeExtensionsPluginCApiRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("SuperNativeExtensionsPluginCApi"));
+        UrlLauncherWindowsRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("UrlLauncherWindows"));
+        WindowManagerPluginRegisterWithRegistrar(
+                registry->GetRegistrarForPlugin("WindowManagerPlugin"));
+    });
 
-SetChildContent(flutter_controller_->view()->GetNativeWindow());
+  /// Multi window registration plugin end
+
+  SetChildContent(flutter_controller_->view()->GetNativeWindow());
 ```
 

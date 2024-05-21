@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:videonote/multiwindow/windows/note_window.dart';
 import 'package:videonote/multiwindow/windows/video_window.dart';
 
 import '../models/note_model/base_note.dart';
@@ -54,7 +53,7 @@ class MultiWindowMsg {
 }
 
 ///多窗口管理者
-class WindowsManager {
+class AppWindowsManager {
   ///显示窗口
   static showWindow(List args) async {
     ///初始化
@@ -98,32 +97,56 @@ class WindowsManager {
     }
   }
 
+  ///创建窗口
+  ///[args]参数
+  static Future<WindowController> createWindow(Map args) async {
+    final WindowController window =
+        await DesktopMultiWindow.createWindow(jsonEncode(args));
+    return window;
+  }
+
+  ///创建并显示窗口
+  static Future<WindowController> createShowWindow(Map args,
+      {windowsOffset = const Offset(0, 0),
+      windowSize = const Size(1280, 720)}) async {
+    final WindowController window = await createWindow(args);
+    window
+      ..setFrame(windowsOffset & windowSize)
+      ..center()
+      ..setTitle(args[MultiWindowMsg.WINDOW_TITLE_KEY])
+      ..show();
+
+    return window;
+  }
+
   ///发送数据到窗口
+  ///[windowId]窗口id, [flag]标识, [arguments]参数
   static Future<dynamic> sendDataToWindow(String windowId, String flag,
       [dynamic arguments]) {
     return DesktopMultiWindow.invokeMethod(windowId.toInt(), flag, arguments);
   }
 
-  ///接收窗口发送的数据
-  static void receiveDataFromWindow(String flag, Function(dynamic) callback) {
+  ///发送数据到主窗口
+  ///[flag]标识, [arguments]数据
+  static Future<dynamic> sendDataToMainWindow(String flag,
+      [dynamic arguments]) {
+    return sendDataToWindow("0", flag, arguments);
+  }
+
+  ///接收窗口数据回调
+  ///[flag]标识, [callback]回调
+  static void receiveWindowDataCallback(
+      String flag, Function(int, dynamic) callback,
+      {WindowController? windowController}) {
     ///监听窗口发送的数据
     DesktopMultiWindow.setMethodHandler(
         (MethodCall call, int fromWindowId) async {
       if (call.method == flag) {
         final data = call.arguments; // 接收到的数据
-        LogUtil.d("窗口收到来自$fromWindowId发送的数据:$data");
-        callback(data);
+        LogUtil.d(
+            "${windowController?.windowId}窗口收到来自$fromWindowId发送的数据:$data");
+        callback(fromWindowId, data);
       }
     });
   }
-
-// final windowId = 1; // 窗口的 ID
-// final data = 'Hello, world!'; // 要发送的数据
-// DesktopMultiWindow.invokeMethod(windowId, 'onSend', data);
-
-// DesktopMultiWindow.setMethodHandler((MethodCall call, int fromWindowId) async {
-//   if (call.method == 'onSend') {
-//     final data = call.arguments; // 接收到的数据
-//   }
-// });
 }

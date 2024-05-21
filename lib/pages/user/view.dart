@@ -12,7 +12,7 @@ import '../../middlewares/websocket/client/socket_client.dart';
 import '../../middlewares/websocket/service/socket_service.dart';
 
 import '../../models/note_model/base_note.dart';
-import '../../multiwindow/windows_manager.dart';
+import '../../multiwindow/app_windows_manager.dart';
 import 'index.dart';
 
 ///用户页面
@@ -21,9 +21,10 @@ class UserPage extends GetView<UserPageController> {
 
   // 主视图
   Widget _buildView() {
-    WindowsManager.receiveDataFromWindow("onSend", (data) {
-      LogUtil.d("");
-    });
+    /// 其他窗口向此窗口发送消息可以在这里获取
+    AppWindowsManager.receiveWindowDataCallback(
+        AppWindows.VideoWindow, (fromId, data) {},
+        windowController: WindowController.main());
 
     return Column(
       children: [
@@ -55,20 +56,16 @@ class UserPage extends GetView<UserPageController> {
                   noteTitle: '');
 
               final WindowController window =
-                  await DesktopMultiWindow.createWindow(jsonEncode({
+                  await AppWindowsManager.createShowWindow({
                 MultiWindowMsg.WINDOW_TITLE_KEY: AppWindows.VideoWindow,
                 BaseNote.flag: _baseNote,
-              }));
-              window
-                ..setFrame(const Offset(0, 0) & const Size(1280, 720))
-                ..center()
-                ..setTitle('视频窗口')
-                ..show();
+              });
             }),
         GFButton(
             text: "向视频窗口发送数据",
             onPressed: () async {
-              WindowsManager.sendDataToWindow("1", "flag1", "data1");
+              AppWindowsManager.sendDataToWindow(
+                  "1", AppWindows.MainWindow, "data1");
             }),
       ],
     );
