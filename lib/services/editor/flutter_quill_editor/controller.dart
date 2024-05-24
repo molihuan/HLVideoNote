@@ -12,41 +12,47 @@ import '../../../models/note_model/base_note.dart';
 import '../../media_display/base_media_display_controller.dart';
 import '../base_editor_controller.dart';
 import 'state.dart';
-import 'widgets/flutter_quill_editor_toolbar.dart';
-import 'widgets/flutter_quill_editor_widget.dart';
+import 'widgets/quill_editor_toolbar_widget.dart';
+import 'widgets/quill_editor_widget.dart';
 import 'widgets/link_blockembed.dart';
 
 class FlutterQuillEditorController extends GetxController
     with BaseEditorController {
-  ///需要传入媒体展示控制器
-  FlutterQuillEditorController({required this.mediaDisplayController});
+  FlutterQuillEditorController();
 
   final state = FlutterQuillEditorState();
-
-  final BaseMediaDisplayController mediaDisplayController;
 
   //创建富文本控制器
   late QuillController quillController = QuillController.basic();
 
   final _editorFocusNode = FocusNode();
 
-  ///工具栏
-  late FlutterQuillEditorToolbar quillToolbar = FlutterQuillEditorToolbar(
-    quillController: quillController,
-    flutterQuillEditorController: this,
-    mediaDisplayController: mediaDisplayController,
-    focusNode: _editorFocusNode,
-  );
+  ///工具栏视图
+  late QuillEditorToolbarWidget quillToolbarWidget;
 
-  //创建富文本编辑器
-  late final FlutterQuillEditorWidget quillEditor = FlutterQuillEditorWidget(
-    quillController: quillController,
-    flutterQuillEditorController: this,
-    mediaDisplayController: mediaDisplayController,
-    focusNode: _editorFocusNode,
-  );
+  //富文本编辑器视图
+  late QuillEditorWidget quillEditorWidget;
 
-  //获取笔记
+  @override
+  void setMediaDisplayController(BaseMediaDisplayController controller) {
+    super.setMediaDisplayController(controller);
+
+    quillToolbarWidget = QuillEditorToolbarWidget(
+      quillController: quillController,
+      flutterQuillEditorController: this,
+      mediaDisplayController: mediaDisplayController,
+      focusNode: _editorFocusNode,
+    );
+
+    quillEditorWidget = QuillEditorWidget(
+      quillController: quillController,
+      flutterQuillEditorController: this,
+      mediaDisplayController: mediaDisplayController,
+      focusNode: _editorFocusNode,
+    );
+  }
+
+  ///获取笔记
   BaseNote? getBaseNote() {
     Map? arguments = getArguments();
     if (arguments == null) {
@@ -59,7 +65,7 @@ class FlutterQuillEditorController extends GetxController
       LogUtil.e("无法转换为BaseNote");
       return null;
     }
-
+    // LogUtil.d("加载的笔记为:" + baseNote.toJson().toString());
     state.setBaseNote(baseNote);
 
     return baseNote;
@@ -147,6 +153,7 @@ class FlutterQuillEditorController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    setNoteContent();
   }
 
   /// 在 onInit() 之后调用 1 帧。这是进入的理想场所
@@ -211,5 +218,15 @@ class FlutterQuillEditorController extends GetxController
       LogUtil.d('保存数据失败: $e');
       return false;
     }
+  }
+
+  @override
+  QuillEditorWidget getQuillEditorWidget() {
+    return quillEditorWidget;
+  }
+
+  @override
+  QuillEditorToolbarWidget getQuillToolbarWidget() {
+    return quillToolbarWidget;
   }
 }

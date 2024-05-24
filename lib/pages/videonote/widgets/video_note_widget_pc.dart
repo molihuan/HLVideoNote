@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
+import '../../../services/editor/flutter_quill_editor/widget.dart';
+import '../../../services/editor/flutter_quill_editor/widgets/simple_screen.dart';
+import '../../../services/media_display/media_kit_player/widget.dart';
 import '../controllers/multi_split_controller.dart';
-
-import 'note_area.dart';
-import 'video_area.dart';
 
 class VideoNoteWidgetPC extends GetView<MultiSplitController> {
   VideoNoteWidgetPC({Key? key}) : super(key: key);
@@ -21,8 +21,8 @@ class VideoNoteWidgetPC extends GetView<MultiSplitController> {
                 axis: controller.state.multiSplitAxis,
                 controller: controller.multiSplitViewController,
                 children: [
-                  VideoArea(),
-                  NoteArea(),
+                  MediaKitPlayerView(),
+                  SimpleScreen(),
                 ])));
 
     return multiSplitView;

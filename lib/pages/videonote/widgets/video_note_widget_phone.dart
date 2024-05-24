@@ -3,10 +3,9 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
+import '../../../services/editor/flutter_quill_editor/widget.dart';
+import '../../../services/media_display/media_kit_player/widget.dart';
 import '../controllers/multi_split_controller.dart';
-
-import 'note_area.dart';
-import 'video_area.dart';
 
 class VideoNoteWidgetPhone extends GetView<MultiSplitController> {
   VideoNoteWidgetPhone({Key? key}) : super(key: key);
@@ -22,8 +21,8 @@ class VideoNoteWidgetPhone extends GetView<MultiSplitController> {
                 axis: controller.state.multiSplitAxis,
                 controller: controller.multiSplitViewController,
                 children: [
-                  VideoArea(),
-                  NoteArea(),
+                  MediaKitPlayerView(),
+                  FlutterQuillEditorView(),
                 ])));
 
     return multiSplitView;

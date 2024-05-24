@@ -6,9 +6,8 @@ import 'package:getwidget/components/text_field/gf_text_field.dart';
 import 'package:getwidget/size/gf_size.dart';
 
 import '../../../../models/note_model/base_note.dart';
-import '../../controllers/quill_text_controller.dart';
 
-class InsertImageDialog extends GetView<QuillTextController> {
+class InsertImageDialog extends StatelessWidget {
   // final controller = Get.find<VideoNoteController>();
 
   SourceType imgSourceType = SourceType.LOCAL;
@@ -103,9 +102,9 @@ class InsertImageDialog extends GetView<QuillTextController> {
         TextButton(
           onPressed: () {
             //插入图片
-            controller.insertImageBlockEmbed(imgSourceType == SourceType.LOCAL
-                ? imgPathEditController.text
-                : imgUrlEditController.text);
+            // controller.insertImageBlockEmbed(imgSourceType == SourceType.LOCAL
+            //     ? imgPathEditController.text
+            //     : imgUrlEditController.text);
 
             Navigator.of(context).pop();
           },

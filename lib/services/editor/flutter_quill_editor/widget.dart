@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
+import '../base_editor_controller.dart';
 import 'controller.dart';
 
-class FlutterQuillEditorView extends GetView<FlutterQuillEditorController> {
+class FlutterQuillEditorView extends GetView<BaseEditorController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,15 +25,15 @@ class FlutterQuillEditorView extends GetView<FlutterQuillEditorController> {
                 child: Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-                child: controller.quillToolbar,
+                child: controller.getQuillToolbarWidget(),
               ))
-            : Container(child: controller.quillToolbar),
+            : Container(child: controller.getQuillToolbarWidget()),
         Expanded(
           flex: 15,
           child: Container(
             color: Colors.white,
             // padding: const EdgeInsets.only(left: 5, right: 5),
-            child: controller.quillEditor,
+            child: controller.getQuillEditorWidget(),
           ),
         ),
       ],

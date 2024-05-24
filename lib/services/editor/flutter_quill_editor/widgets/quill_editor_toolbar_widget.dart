@@ -1,37 +1,43 @@
-import 'dart:io' as io show File;
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-
-import 'package:flutter_quill/extensions.dart' show isAndroid, isIOS, isWeb;
+import 'package:flutter_quill/extensions.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+import 'package:flutter_quill_extensions/extensions/controller_ext.dart';
+import 'package:flutter_quill_extensions/utils/utils.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:image_cropper/image_cropper.dart';
-
+import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
 
-import '../../../dao/data_manager.dart';
-import '../controllers/quill_text_controller.dart';
-import '../controllers/video_player_controller.dart';
-import 'dialogs/insert_image_dialog.dart';
+import '../../../media_display/base_media_display_controller.dart';
+import '../controller.dart';
 
-class MyQuillToolbar extends StatelessWidget {
-  MyQuillToolbar({
-    required this.quillController,
-    required this.focusNode,
+class QuillEditorToolbarWidget extends StatelessWidget {
+  const QuillEditorToolbarWidget({
     super.key,
+    required this.quillController,
+    required this.flutterQuillEditorController,
+    required this.mediaDisplayController,
+    required this.focusNode,
   });
 
+  ///官方富文本控制器
   final QuillController quillController;
+
+  ///自己整个富文本控制器
+  final FlutterQuillEditorController flutterQuillEditorController;
+
+  ///媒体展示控制器
+  final BaseMediaDisplayController mediaDisplayController;
+
+  ///焦点
   final FocusNode focusNode;
-  final videoPlayerController = Get.find<VideoPlayerController>();
-  final quillTextController = Get.find<QuillTextController>();
 
   Future<void> onImageInsertWithCropping(
     String image,
@@ -71,7 +77,7 @@ class MyQuillToolbar extends StatelessWidget {
       controller.insertImageBlock(imageSource: newImage);
       return;
     }
-    final newSavedImage = await saveImage(io.File(newImage));
+    final newSavedImage = await saveImage(File(newImage));
     controller.insertImageBlock(imageSource: newSavedImage);
   }
 
@@ -80,7 +86,7 @@ class MyQuillToolbar extends StatelessWidget {
       controller.insertImageBlock(imageSource: image);
       return;
     }
-    final newSavedImage = await saveImage(io.File(image));
+    final newSavedImage = await saveImage(File(image));
     controller.insertImageBlock(imageSource: newSavedImage);
   }
 
@@ -88,7 +94,7 @@ class MyQuillToolbar extends StatelessWidget {
   /// to applications directory
   ///
   /// for desktop platforms, it will do the same but from user files this time
-  Future<String> saveImage(io.File file) async {
+  Future<String> saveImage(File file) async {
     final appDocDir = await getApplicationDocumentsDirectory();
     final fileExt = path.extension(file.path);
     final newFileName = '${DateTime.now().toIso8601String()}$fileExt';
@@ -98,6 +104,10 @@ class MyQuillToolbar extends StatelessWidget {
     );
     final copiedFile = await file.copy(newPath);
     return copiedFile.path;
+  }
+
+  bool needMoreToolbar() {
+    return flutterQuillEditorController.state.needMoreToolbar;
   }
 
   @override
@@ -115,7 +125,7 @@ class MyQuillToolbar extends StatelessWidget {
               tooltip: "保存",
               icon: Icon(Icons.save),
               onPressed: () {
-                bool result = quillTextController.saveNote();
+                bool result = flutterQuillEditorController.saveNote();
                 if (result) {
                   SmartDialog.showToast('保存成功');
                 } else {
@@ -124,7 +134,7 @@ class MyQuillToolbar extends StatelessWidget {
               }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarHistoryButton(
                 isUndo: true,
                 controller: quillController,
@@ -133,7 +143,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarHistoryButton(
                 isUndo: false,
                 controller: quillController,
@@ -144,22 +154,22 @@ class MyQuillToolbar extends StatelessWidget {
               tooltip: "截屏",
               icon: Icon(Icons.screenshot),
               onPressed: () async {
-                quillTextController.insertVideoAnchor(quillController);
+                flutterQuillEditorController.insertVideoAnchor();
                 String imgDir =
-                    quillTextController.state.getBaseNote().noteImgPos;
-                videoPlayerController.videoScreenShot(imgDir, (absolutePath) {
-                  quillTextController.insertImageBlockEmbed(absolutePath);
+                    flutterQuillEditorController.state.getBaseNote().noteImgPos;
+                mediaDisplayController.screenShot(imgDir, (absolutePath) {
+                  flutterQuillEditorController.insertImage(absolutePath);
                 });
               }),
           IconButton(
               tooltip: "插入时间点",
               icon: Icon(Icons.add_alarm_rounded),
               onPressed: () {
-                quillTextController.insertVideoAnchor(quillController);
+                flutterQuillEditorController.insertTimeAnchor();
               }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: IconButton(
                   tooltip: "插入图片",
                   icon: Icon(Icons.image),
@@ -167,14 +177,17 @@ class MyQuillToolbar extends StatelessWidget {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
-                      builder: (BuildContext context) => InsertImageDialog(),
+                      builder: (BuildContext context) {
+                        // InsertImageDialog();
+                        return Text("data");
+                      },
                     );
                   }),
             );
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: IconButton(
                   tooltip: "插入照片",
                   icon: Icon(Icons.photo_camera),
@@ -183,7 +196,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: IconButton(
                   tooltip: "插入音频",
                   icon: Icon(Icons.music_note),
@@ -192,14 +205,14 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: IconButton(
                   tooltip: "插入录音", icon: Icon(Icons.mic), onPressed: () {}),
             );
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: IconButton(
                   tooltip: "插入视频",
                   icon: Icon(Icons.movie_creation),
@@ -208,7 +221,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: IconButton(
                   tooltip: "文本查找",
                   icon: Icon(Icons.find_in_page),
@@ -217,19 +230,16 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: IconButton(
                   tooltip: "导出",
                   icon: Icon(Icons.unarchive_outlined),
-                  onPressed: () {
-                    // final msc = Get.find<MultiSplitController>();
-                    // msc.setAxis(Axis.vertical);
-                  }),
+                  onPressed: () {}),
             );
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarToggleStyleButton(
                 options: const QuillToolbarToggleStyleButtonOptions(),
                 controller: quillController,
@@ -239,7 +249,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarToggleStyleButton(
                 options: const QuillToolbarToggleStyleButtonOptions(),
                 controller: quillController,
@@ -249,7 +259,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.underline,
@@ -258,7 +268,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.subscript,
@@ -267,7 +277,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.superscript,
@@ -276,7 +286,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarClearFormatButton(
                 controller: quillController,
               ),
@@ -285,7 +295,7 @@ class MyQuillToolbar extends StatelessWidget {
           const VerticalDivider(),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarColorButton(
                 controller: quillController,
                 isBackground: false,
@@ -294,7 +304,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarColorButton(
                 controller: quillController,
                 isBackground: true,
@@ -316,7 +326,7 @@ class MyQuillToolbar extends StatelessWidget {
           ),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarFontFamilyButton(
                 controller: quillController,
                 options: QuillToolbarFontFamilyButtonOptions(rawItemsMap: {
@@ -357,7 +367,7 @@ class MyQuillToolbar extends StatelessWidget {
           ),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.inlineCode,
@@ -366,7 +376,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarToggleStyleButton(
                 controller: quillController,
                 attribute: Attribute.blockQuote,
@@ -375,7 +385,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarIndentButton(
                 controller: quillController,
                 isIncrease: true,
@@ -384,7 +394,7 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarIndentButton(
                 controller: quillController,
                 isIncrease: false,
@@ -393,13 +403,13 @@ class MyQuillToolbar extends StatelessWidget {
           }),
           Obx(() {
             return Visibility(
-              visible: quillTextController.state.showMoreToolbarBtn,
+              visible: needMoreToolbar(),
               child: QuillToolbarLinkStyleButton(controller: quillController),
             );
           }),
           Obx(() {
             // 通过条件判断来决定显示的按钮，并直接在此处处理状态改变，减少重复代码
-            final showMoreBtn = quillTextController.state.showMoreToolbarBtn;
+            final showMoreBtn = needMoreToolbar();
             return IconButton(
               // 根据showMoreBtn的值动态设置图标和onPressed事件
               tooltip: showMoreBtn ? "隐藏按钮" : "更多按钮", // 根据状态改变提示文本
@@ -408,8 +418,9 @@ class MyQuillToolbar extends StatelessWidget {
                   : Icon(Icons.dashboard_customize),
               onPressed: () {
                 // 动态更改状态，并通知数据变化
-                quillTextController.state.showMoreToolbarBtn = !showMoreBtn;
-                DataManager.setShowMoreToolbarBtn(!showMoreBtn);
+                flutterQuillEditorController.state.needMoreToolbar =
+                    !showMoreBtn;
+                // DataManager.setShowMoreToolbarBtn(!showMoreBtn);
               },
             );
           }),

@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
 
 import '../../common/utils/common_tool.dart';
+import '../editor/base_editor_controller.dart';
 
 ///媒体展示接口
 abstract class BaseMediaDisplayController<CP, VC> extends GetxController {
+  late final BaseEditorController editorController;
+
   ///截屏
   ///[imgDirPos]表示截屏图片保存的文件夹
   ///[callback]表示回调,参数为截屏图片保存的完整位置
@@ -19,5 +22,10 @@ abstract class BaseMediaDisplayController<CP, VC> extends GetxController {
 
   VC? getVideoController() {
     return null;
+  }
+
+  ///设置编辑器控制器
+  void setEditorController(BaseEditorController controller) {
+    editorController = controller;
   }
 }

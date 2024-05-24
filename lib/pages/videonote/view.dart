@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../common/utils/common_tool.dart';
 import '../../common/utils/platform_tool.dart';
-import 'controllers/quill_text_controller.dart';
+
 import 'widgets/video_note_widget_pc.dart';
 import 'widgets/video_note_widget_phone.dart';
 

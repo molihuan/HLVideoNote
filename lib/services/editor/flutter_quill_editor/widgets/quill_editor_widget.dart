@@ -24,8 +24,8 @@ import '../../../media_display/base_media_display_controller.dart';
 import '../controller.dart';
 import 'link_blockembed.dart';
 
-class FlutterQuillEditorWidget extends StatelessWidget {
-  const FlutterQuillEditorWidget({
+class QuillEditorWidget extends StatelessWidget {
+  const QuillEditorWidget({
     super.key,
     required this.quillController,
     required this.flutterQuillEditorController,

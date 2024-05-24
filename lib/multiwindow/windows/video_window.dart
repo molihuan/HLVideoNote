@@ -11,9 +11,8 @@ import 'package:videonote/models/note_model/base_note.dart';
 import 'package:videonote/multiwindow/app_windows_manager.dart';
 
 import '../../common/langs/translation_service.dart';
-import '../../pages/videonote/bindings/video_player_binding.dart';
-import '../../pages/videonote/widgets/video_area.dart';
 import '../../pages/app_pages.dart';
+import '../../services/media_display/media_kit_player/widget.dart';
 
 ///视频窗口
 class VideoWindow extends StatelessWidget {
@@ -45,7 +44,7 @@ class VideoWindow extends StatelessWidget {
               },
               child: Text("向主页面发消息")),
         ]),
-        Expanded(child: VideoArea()),
+        Expanded(child: MediaKitPlayerView()),
       ],
     );
   }
@@ -68,7 +67,6 @@ class VideoWindow extends StatelessWidget {
         GetPage(
           name: AppRoutes.VideoArea,
           page: _build,
-          binding: VideoPlayerBinding(),
           arguments: {
             BaseNote.flag: baseNote,
           },

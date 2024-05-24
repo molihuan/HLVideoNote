@@ -2,8 +2,6 @@
 
 import 'package:get/get.dart';
 import 'package:videonote/pages/user/index.dart';
-import 'package:videonote/pages/videonote/bindings/quill_text_binding.dart';
-import 'package:videonote/pages/videonote/bindings/video_player_binding.dart';
 
 import 'main/bindings.dart';
 import 'main/view.dart';
@@ -13,8 +11,6 @@ import 'user/bindings.dart';
 
 import 'videonote/bindings/multi_split_binding.dart';
 import 'videonote/view.dart';
-import 'videonote/widgets/note_area.dart';
-import 'videonote/widgets/video_area.dart';
 
 part 'app_routes.dart';
 
@@ -52,8 +48,6 @@ class AppPages {
       page: () => VideoNotePage(),
       bindings: [
         MultiSplitBinding(),
-        QuillTextBinding(),
-        VideoPlayerBinding(),
       ],
     ),
   ];

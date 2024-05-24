@@ -15,9 +15,7 @@ import 'state.dart';
 
 class MediaKitPlayerController
     extends BaseMediaDisplayController<Duration, VideoController> {
-  MediaKitPlayerController({required this.editorController});
-
-  BaseEditorController editorController;
+  MediaKitPlayerController();
 
   final state = MediaKitPlayerState();
 
